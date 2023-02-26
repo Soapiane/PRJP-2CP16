@@ -4,13 +4,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/image.dart';
-import 'package:merge_images/merge_images.dart';
 import 'dart:ui' as ui;
-import 'package:provider/provider.dart';
-import 'src/app_lifecycle/appLifcycle.dart';
 import 'package:game_levels_scrolling_map/game_levels_scrolling_map.dart';
 import 'package:game_levels_scrolling_map/model/point_model.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 
 class MyHomePage extends StatefulWidget {
@@ -105,16 +101,11 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
 
 
-    print(MediaQuery.of(context).size.width);
-    print(MediaQuery.of(context).size.height);
-
 
     return Scaffold(
-      body: AppLifecycleObserver(
-        child: Container(
+      body: Container(
           child: map,
         ),
-      ),
     );
 
 
