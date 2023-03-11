@@ -1,14 +1,16 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import '../MainScreen/MainScreen.dart';
+import 'package:projet2cp/Zone/Zones.dart';
+import '../Zone/ZoneMainScreen.dart';
 import 'package:flutter/src/widgets/image.dart';
 import 'dart:ui' as ui;
 
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+  const SplashScreen({Key? key, this.order = 0}) : super(key: key);
 
+  final int order;
 
   @override
   _SplashState createState() => _SplashState();
@@ -25,26 +27,25 @@ class _SplashState extends State<SplashScreen>{
   navigateToHome()async{
     await Future.delayed(Duration(milliseconds: 2000),(){
 
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context)=> const ZoneMainScreen(zone: Zones.ville)
+          )
+      );
     });
-    Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-            builder: (context)=> MyHomePage(
-              title: "Flutter Demo",
-            )
-        )
-    );
   }
 
 
   @override
   Widget build(BuildContext context) {
+    String text = 'Splash Screen ' + widget.order!.toString();
     return Scaffold(
       body: Center(
         child: Container(
           child: Text(
-            'Splash Screen',
-            style: TextStyle(
+            text,
+            style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold
             ),

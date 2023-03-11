@@ -35,10 +35,13 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
+  flame: ^1.6.0
+  flame_tiled: ^1.9.1
 
   game_levels_scrolling_map: ^0.0.7
 
-
+dependency_overrides:
+  xml: ^6.1.0
 
 
 dev_dependencies:
@@ -60,6 +63,9 @@ flutter:
 
   assets:
     - assets/
+    - assets/images/
+    - assets/images/TurningPipes/
+    - assets/tiles/
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
