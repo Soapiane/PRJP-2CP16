@@ -75,12 +75,6 @@ class _ZoneMainScreenState extends State<ZoneMainScreen> {
   }
 
 
-  void putLevel(){
-    setState(() {
-      foreground = TurningPipesGame();
-    });
-  }
-
 
 
 }

@@ -10,17 +10,28 @@ class MiniGameMainScreen extends StatelessWidget {
 
   final int miniGameOrder;
   late Widget game;
+  late MiniGameHUD hud;
   final Zones zone;
   late String backgroundImageUrl;
 
 
   MiniGameMainScreen({super.key,required this.miniGameOrder,  required this.zone}){
     getBackgroundImageUrl();
+    getHUD();
     getMiniGame();
   }
 
+  void getHUD(){
+    hud = MiniGameHUD(
+      zone: zone,
+      countdown: 60,
+      onPause: (){},
+      onTimeOut: (){},
+    );
+  }
+
   void getMiniGame(){
-    game = const TurningPipesGame();
+    game =  TurningPipesGame(onFinished: hud.onFinished,);
   }
 
   void getBackgroundImageUrl(){
@@ -40,7 +51,7 @@ class MiniGameMainScreen extends StatelessWidget {
             ),
           ),
         ),
-        MiniGameHUD(zone),
+        hud,
         game,
       ],
     );

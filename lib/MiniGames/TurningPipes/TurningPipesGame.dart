@@ -5,7 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:projet2cp/MiniGames/TurningPipes/TurningPipes.dart';
 
 class TurningPipesGame extends StatefulWidget {
-  const TurningPipesGame({Key? key}) : super(key: key);
+
+  final Function? onFinished;
+
+  TurningPipesGame({Key? key, this.onFinished}) : super(key: key);
 
   @override
   _TurningPipesState createState() => _TurningPipesState();
@@ -14,6 +17,16 @@ class TurningPipesGame extends StatefulWidget {
 
 
 class _TurningPipesState extends State<TurningPipesGame>{
+
+  late TurningPipes game;
+
+  @override
+  void initState() {
+    super.initState();
+    game = TurningPipes(
+        onFinished: endLevel,
+    );
+  }
 
   void endLevel(){
     setState(() {
@@ -39,9 +52,7 @@ class _TurningPipesState extends State<TurningPipesGame>{
   @override
   Widget build(BuildContext context) {
     return GameWidget(
-          game: TurningPipes(
-            onEnd: endLevel,
-          )
+          game: game,
     );
   }
 

@@ -16,10 +16,10 @@ class TurningPipes extends FlameGame with HasTappables{
   static const double tileSize = 61.0;
   late bool finished;
 
-  Function onEnd;
+  Function onFinished;
 
 
-  TurningPipes({required this.onEnd});
+  TurningPipes({required this.onFinished});
 
   @override
   Color backgroundColor() => Colors.transparent;
@@ -116,7 +116,7 @@ class TurningPipes extends FlameGame with HasTappables{
     }
     print("FINISHED: " + finished.toString());
     if (finished){
-      onEnd.call();
+      onFinished.call();
     }
   }
 
