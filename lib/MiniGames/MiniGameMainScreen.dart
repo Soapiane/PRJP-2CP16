@@ -1,15 +1,17 @@
 
 
+import 'package:flame/game.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:projet2cp/MiniGames/MiniGame.dart';
 import 'package:projet2cp/MiniGames/MiniGameHUD.dart';
-import 'package:projet2cp/MiniGames/TurningPipes/TurningPipesGame.dart';
+import 'package:projet2cp/MiniGames/TurningPipes/TurningPipes.dart';
 import 'package:projet2cp/Zone/Zones.dart';
 
 class MiniGameMainScreen extends StatelessWidget {
 
   final int miniGameOrder;
-  late Widget game;
+  late MiniGame game;
   late MiniGameHUD hud;
   final Zones zone;
   late String backgroundImageUrl;
@@ -24,14 +26,11 @@ class MiniGameMainScreen extends StatelessWidget {
   void getHUD(){
     hud = MiniGameHUD(
       zone: zone,
-      countdown: 60,
-      onPause: (){},
-      onTimeOut: (){},
     );
   }
 
   void getMiniGame(){
-    game =  TurningPipesGame(onFinished: hud.onFinished,);
+    game =  TurningPipes(hud: hud);
   }
 
   void getBackgroundImageUrl(){
@@ -51,8 +50,8 @@ class MiniGameMainScreen extends StatelessWidget {
             ),
           ),
         ),
+        GameWidget(game: game),
         hud,
-        game,
       ],
     );
   }

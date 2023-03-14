@@ -1,10 +1,7 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:projet2cp/Zone/Zones.dart';
 import '../Zone/ZoneMainScreen.dart';
-import 'package:flutter/src/widgets/image.dart';
-import 'dart:ui' as ui;
 
 
 class SplashScreen extends StatefulWidget {
@@ -39,7 +36,7 @@ class _SplashState extends State<SplashScreen>{
 
   @override
   Widget build(BuildContext context) {
-    String text = 'Splash Screen ' + widget.order!.toString();
+    String text = 'Splash Screen ' + widget.order.toString();
     return Scaffold(
       body: Center(
         child: Container(

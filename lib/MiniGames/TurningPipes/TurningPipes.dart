@@ -6,20 +6,26 @@ import 'dart:ui';
 import 'package:flame/game.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flutter/material.dart';
+import 'package:projet2cp/MiniGames/MiniGame.dart';
 import 'SolutionPipe.dart';
 import 'Pipe.dart';
 
-class TurningPipes extends FlameGame with HasTappables{
+class TurningPipes extends MiniGame with HasTappables{
 
   late TiledComponent _mapComponent;
   late List<SolutionPipe> solutions = [];
   static const double tileSize = 61.0;
   late bool finished;
 
-  Function onFinished;
+
+  TurningPipes({required super.hud}){
+
+  }
 
 
-  TurningPipes({required this.onFinished});
+
+
+
 
   @override
   Color backgroundColor() => Colors.transparent;
@@ -27,11 +33,13 @@ class TurningPipes extends FlameGame with HasTappables{
   @override
   FutureOr<void> onLoad() async {
 
+
     finished = false;
     _mapComponent = await TiledComponent.load('TurningPipesVille.tmx', Vector2.all(tileSize));
 
 
     _mapComponent.center = size/2;
+
 
     loadPipes();
 
@@ -45,6 +53,11 @@ class TurningPipes extends FlameGame with HasTappables{
     loadNormalPipes(false);
     loadSolutionPipes();
   }
+
+
+
+
+
 
   void loadNormalPipes(bool locked){
 
@@ -62,6 +75,9 @@ class TurningPipes extends FlameGame with HasTappables{
           pipeWidth: tileSize,
           posY: obj.y-tileSize/2+ _mapComponent.y,
           posX: obj.x+tileSize/2 + _mapComponent.x,
+          onTurn: (){
+            modifyPoints(points: -1);
+          }
       ));
 
 
@@ -94,7 +110,11 @@ class TurningPipes extends FlameGame with HasTappables{
           pipeWidth: tileSize,
           posY: obj.y-tileSize/2+ _mapComponent.y,
           posX: obj.x+tileSize/2 + _mapComponent.x,
-          onTurn: checkSolution,
+          onTurn: (){
+            checkSolution();
+            modifyPoints(points: 1);
+
+          },
       );
       solutions.add(solutionPipe);
       add(solutionPipe);
@@ -116,9 +136,10 @@ class TurningPipes extends FlameGame with HasTappables{
     }
     print("FINISHED: " + finished.toString());
     if (finished){
-      onFinished.call();
+      onFinished();
     }
   }
+
 
 
 
