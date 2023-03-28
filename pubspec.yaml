@@ -39,6 +39,8 @@ dependencies:
   flame_tiled: ^1.9.1
 
   game_levels_scrolling_map: ^0.0.7
+  flutter_svg: ^1.1.6
+  flutter_svg_provider: ^1.0.3
 
 dependency_overrides:
   xml: ^6.1.0
@@ -60,6 +62,11 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
+
+  fonts:
+    - family: PoppinsBold
+      fonts:
+        - asset: assets/fonts/Poppins-Bold.ttf
 
   assets:
     - assets/

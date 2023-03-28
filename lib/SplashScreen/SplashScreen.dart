@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:projet2cp/Authentification/AuthMainScreen.dart';
 import 'package:projet2cp/Zone/Zones.dart';
 import '../Zone/ZoneMainScreen.dart';
 
@@ -27,7 +28,7 @@ class _SplashState extends State<SplashScreen>{
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (context)=> const ZoneMainScreen(zone: Zones.ville)
+              builder: (context)=> AuthMainScreen()
           )
       );
     });

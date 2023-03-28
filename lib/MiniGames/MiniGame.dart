@@ -1,5 +1,3 @@
-
-
 import 'package:flame/game.dart';
 import 'package:projet2cp/MiniGames/MiniGameHUD.dart';
 
@@ -19,8 +17,10 @@ abstract class MiniGame extends FlameGame {
 
 
    void onPaused(){
-
      pauseEngine();
+
+
+
    }
 
    void onResume(){
