@@ -8,50 +8,53 @@ import 'package:flutter_svg_provider/flutter_svg_provider.dart' as svg_provider;
 
 class ImageGenerator extends Generator{
 
-  late Widget image;
 
   ImageGenerator({required super.context});
 
 
-  Positioned generateImage({
+  Widget generateImage({
     required double height,
     required double width,
-    required double xPos,
-    required double yPos,
+    double? xPos,
+    double? yPos,
     required String imagePath,
   }){
 
-    Size dims = calculateDimensions(height, width);
-    double imageWidth = dims.width;
-    double imageHeight = dims.height;
+    Widget image;
 
-    Vector2 coords = calculateCoordinates(xPos, yPos);
-    double x = coords.x;
-    double y = coords.y;
-
-
+    Vector2 dims = calculateXY(width, height);
 
 
     List<String> splattedPath = imagePath.split('.');
     if (splattedPath.last.compareTo("svg") == 0){
 
       image = SvgPicture.asset(imagePath,
-        height: imageHeight,
-        width: imageWidth,
+        height: dims.y,
+        width: dims.x,
       );
     } else {
       image = Image.asset(imagePath,
-        height: imageHeight,
-        width: imageWidth,
+        height: dims.y,
+        width: dims.x,
       );
     }
 
+    if (xPos != null || yPos != null){
 
-    return Positioned(
-      left: x,
-      top: y,
-      child: image,
-    );
+
+      Vector2 coords = calculateXY(xPos, yPos);
+
+
+
+      return Positioned(
+        left: coords.x,
+        top:  coords.y,
+        child: image,
+      );
+    }
+
+    return image;
+
 
 
   }

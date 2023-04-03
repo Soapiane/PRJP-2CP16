@@ -18,27 +18,30 @@ class Generator {
   }
 
 
+  double calculateX(double? x){
+    return deviceWidth*(x??=0)/800;
+  }
 
-
-  Size calculateDimensions(double height, double width){
-
-
-    double buttonWidth = deviceWidth*width/800;
-    double buttonHeight = deviceHeight*height/360;
-
-    return Size(buttonWidth, buttonHeight);
+  double calculateY(double? y){
+    return deviceHeight*(y??=0)/360;
   }
 
 
-  Vector2 calculateCoordinates(double xPos, double yPos){
 
 
-    double x = deviceWidth*xPos/800;
-    double y = deviceHeight*yPos/360;
+  Vector2 calculateXY(double? x, double? y){
 
 
-    return Vector2(x, y);
+    double xRelative = calculateX(x);
+    double yRelative = calculateY(y);
+
+
+    return Vector2(xRelative, yRelative);
   }
+
+
+
+
 
 }
 

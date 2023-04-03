@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:projet2cp/MiniGames/MiniGame.dart';
 import 'package:projet2cp/MiniGames/MiniGameHUD.dart';
 import 'package:projet2cp/MiniGames/TurningPipes/TurningPipes.dart';
-import 'package:projet2cp/Zone/Zones.dart';
+import 'package:projet2cp/Zones.dart';
 
 class MiniGameMainScreen extends StatelessWidget {
 

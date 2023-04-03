@@ -67,12 +67,19 @@ flutter:
     - family: PoppinsBold
       fonts:
         - asset: assets/fonts/Poppins-Bold.ttf
+    - family: PoppinsRegular
+      fonts:
+        - asset: assets/fonts/Poppins-Regular.ttf
+    - family: PoppinsMedium
+      fonts:
+        - asset: assets/fonts/Poppins-Medium.ttf
 
   assets:
     - assets/
     - assets/images/
     - assets/images/TurningPipes/
     - assets/tiles/
+    - assets/zones/cards/
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

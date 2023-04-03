@@ -5,7 +5,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:projet2cp/Zone/Zones.dart';
+import 'package:projet2cp/Zones.dart';
 
 class MiniGameHUD extends StatefulWidget{
 

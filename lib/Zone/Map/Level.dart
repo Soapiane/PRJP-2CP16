@@ -7,7 +7,7 @@ import 'package:projet2cp/MiniGames/MiniGameMainScreen.dart';
 import 'package:projet2cp/SplashScreen/SplashScreen.dart';
 import 'package:projet2cp/MiniGames/TurningPipes/TurningPipesGame.dart' as TurningPipesGame;
 import 'package:projet2cp/Zone/ZoneMainScreen.dart';
-import 'package:projet2cp/Zone/Zones.dart';
+import 'package:projet2cp/Zones.dart';
 
 
 

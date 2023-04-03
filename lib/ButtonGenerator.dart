@@ -2,11 +2,11 @@
 
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:flutter_svg_provider/flutter_svg_provider.dart' as svg_provider;
 import 'package:projet2cp/Generator.dart';
+import 'package:projet2cp/Margin.dart';
 import 'package:projet2cp/TextStyles.dart';
-import 'Color.dart' as color;
+import 'package:projet2cp/Color.dart' as color;
+import 'package:flutter_svg_provider/flutter_svg_provider.dart' as svg_provider;
 
 class ButtonGenerator extends Generator{
 
@@ -18,95 +18,154 @@ class ButtonGenerator extends Generator{
 
 
 
-  Positioned generateTextButton({
+  Widget generateTextButton({
     required double height,
     required double width,
-    required double xPos,
-    required double yPos,
+    double? xPos,
+    double? yPos,
     String text= "",
     color.Color textColor = color.Color.white,
+    double textSize = 21,
     color.Color backgroundColor = color.Color.transparent,
     double cornerRadius  = 50,
+    Function? onTap,
+    Margin? margin,
   }){
 
 
 
-    Size dims = calculateDimensions(height, width);
-    double buttonWidth = dims.width;
-    double buttonHeight = dims.height;
 
 
+    Vector2 dims = calculateXY(width, height);
+    double buttonWidth = dims.x;
+    double buttonHeight = dims.y;
 
-    Vector2 coords = calculateCoordinates(xPos, yPos);
-    double x = coords.x;
-    double y = coords.y;
+    margin??=Margin(context: context);
 
-
-    return Positioned(
-        left: x,
-        top: y,
-        child: ElevatedButton(
-          onPressed: (){},
-          style: ElevatedButton.styleFrom(
-            elevation: 2,
-            backgroundColor: backgroundColor.color,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(cornerRadius),
-            ),
-            minimumSize: Size.zero,
-            fixedSize: Size(
-                buttonWidth,
-                buttonHeight
-            ),
-            padding: EdgeInsets.zero,
+    Widget buttonWidget = Container(
+      margin: EdgeInsets.fromLTRB(margin.left, margin.top, margin.right, margin.bottom),
+      child: ElevatedButton(
+        onPressed: (){
+          onTap?.call();
+        },
+        style: ElevatedButton.styleFrom(
+          elevation: 2,
+          backgroundColor: backgroundColor.color,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(cornerRadius),
           ),
-          child: Text(text,
-            maxLines: 1,
-            textAlign: TextAlign.center,
-            style: TextStyles.buttonsTextStyle(
-              color: textColor,
-            ),
+          minimumSize: Size.zero,
+          fixedSize: Size(
+              buttonWidth,
+              buttonHeight
           ),
+          padding: EdgeInsets.zero,
         ),
-      );
-  }
-
-  Positioned generateImageButtom({
-    required double height,
-    required double width,
-    required double xPos,
-    required double yPos,
-    required ImageProvider imageProvider,
-    BorderRadius? borderRadius,
-  }){
-
-    Size dims = calculateDimensions(height, width);
-    double buttonWidth = dims.width;
-    double buttonHeight = dims.height;
-
-
-    Vector2 coords = calculateCoordinates(xPos, yPos);
-    double x = coords.x;
-    double y = coords.y;
-
-    return Positioned(
-      left: x,
-      top: y,
-      child: Material(
-        color: Colors.transparent,
-        elevation: 2,
-        borderRadius: borderRadius,
-        clipBehavior: Clip.antiAliasWithSaveLayer,
-        child: InkWell(
-          onTap: (){},
-          child: Ink.image(
-            image: imageProvider,
-            height: buttonHeight,
-            width: buttonWidth,
+        child: Text(text,
+          maxLines: 1,
+          textAlign: TextAlign.center,
+          style: TextStyles.buttonsTextStyle(
+            color: textColor,
+            fontSize: textSize,
           ),
         ),
       ),
     );
+
+
+    if (xPos != null || yPos != null){
+
+
+      Vector2 coords = calculateXY(xPos, yPos);
+
+
+
+      return Positioned(
+        left: coords.x,
+        top:  coords.y,
+        child: buttonWidget,
+      );
+    }
+
+    return buttonWidget;
+
+
+
+  }
+
+  Widget generateImageButtom({
+    required double height,
+    required double width,
+    double? xPos,
+    double? yPos,
+    required String imagePath,
+    BorderRadius? borderRadius,
+    Function? onTap,
+    color.Color backgroundColor = color.Color.transparent,
+    double elevation = 2,
+    double paddingVertical = 0,
+    double paddingHorizontal = 0,
+  }){
+    Vector2 dims = calculateXY(width, height);
+
+    Widget image;
+    List<String> splattedPath = imagePath.split('.');
+    if (splattedPath.last.compareTo("svg") == 0){
+
+       image = Ink.image(
+        image: svg_provider.Svg(imagePath,
+          size: Size(
+            dims.x,
+            dims.y,
+          ),
+        ),
+        height: dims.y+paddingVertical,
+        width: dims.x+paddingHorizontal,
+      );
+    } else {
+      image = Image.asset(imagePath,
+        height: dims.x,
+        width: dims.y,
+      );
+    }
+
+
+    Widget buttonWidget = Wrap(
+      children: [Material(
+
+        type: MaterialType.button,
+        color: backgroundColor.color,
+        elevation: elevation,
+        borderRadius: borderRadius,
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        child: InkWell(
+          onTap: (){
+            onTap?.call();
+          },
+          borderRadius: borderRadius,
+          child: image,
+
+        ),
+      )],
+    );
+
+
+    if (xPos != null || yPos != null){
+
+
+      Vector2 coords = calculateXY(xPos, yPos);
+
+
+
+      return Positioned(
+        left: coords.x,
+        top:  coords.y,
+        child: buttonWidget,
+      );
+    }
+
+    return buttonWidget;
+
   }
 
 

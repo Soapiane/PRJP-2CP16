@@ -2,7 +2,7 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:projet2cp/Zone/Zones.dart';
+import 'package:projet2cp/Zones.dart';
 import './Map/Zone.dart' as zoneModel;
 
 
