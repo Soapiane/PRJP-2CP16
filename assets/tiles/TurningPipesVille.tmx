@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="8" height="3" tilewidth="61" tileheight="61" infinite="0" nextlayerid="7" nextobjectid="41">
+ <tileset firstgid="1" source="TurningPipesVille.tsx"/>
+ <objectgroup id="2" name="unlockedPipes">
+  <object id="3" class="42" gid="3221225475" x="183" y="61" width="61" height="61"/>
+  <object id="13" class="20" gid="7" x="244" y="183" width="61" height="61"/>
+  <object id="14" class="20" gid="7" x="305" y="183" width="61" height="61"/>
+  <object id="23" class="33" gid="2147483656" x="244" y="61" width="61" height="61"/>
+ </objectgroup>
+ <objectgroup id="6" name="solutionPipes">
+  <object id="33" name="up" class="20" gid="7" x="183" y="122" width="61" height="61"/>
+  <object id="34" name="down" class="20" gid="7" x="183" y="183" width="61" height="61"/>
+  <object id="35" name="up,down" class="01" gid="1" x="122" y="122" width="61" height="61"/>
+  <object id="36" name="left" class="70" gid="2147483652" x="122" y="61" width="61" height="61"/>
+  <object id="37" name="right" class="70" gid="2147483652" x="122" y="183" width="61" height="61"/>
+  <object id="38" name="up,down" class="40" gid="3" x="244" y="122" width="61" height="61"/>
+  <object id="39" name="left" class="60" gid="4" x="305" y="122" width="61" height="61"/>
+  <object id="40" name="right" class="62" gid="1073741828" x="305" y="61" width="61" height="61"/>
+ </objectgroup>
+ <objectgroup id="5" name="lockedPipes">
+  <object id="28" class="01" gid="1" x="427" y="61" width="61" height="61"/>
+  <object id="29" class="01" gid="1" x="366" y="61" width="61" height="61"/>
+  <object id="30" class="01" gid="1" x="61" y="61" width="61" height="61"/>
+  <object id="31" class="01" gid="1" x="0" y="61" width="61" height="61"/>
+ </objectgroup>
+</map>

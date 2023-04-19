@@ -34,7 +34,24 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
+
   cupertino_icons: ^1.0.2
+  flame: ^1.6.0
+  flame_tiled: ^1.9.1
+
+  sqflite: ^2.2.6
+
+  firebase_auth: ^1.0.0
+  firebase_core_platform_interface: 4.5.1
+  firebase_core: ^1.10.0
+
+  game_levels_scrolling_map: ^0.0.7
+  flutter_svg: ^1.1.6
+  flutter_svg_provider: ^1.0.3
+
+dependency_overrides:
+  xml: ^6.1.0
+
 
 dev_dependencies:
   flutter_test:
@@ -52,6 +69,26 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
+
+  fonts:
+    - family: PoppinsBold
+      fonts:
+        - asset: assets/fonts/Poppins-Bold.ttf
+    - family: PoppinsRegular
+      fonts:
+        - asset: assets/fonts/Poppins-Regular.ttf
+    - family: PoppinsMedium
+      fonts:
+        - asset: assets/fonts/Poppins-Medium.ttf
+
+  assets:
+    - assets/
+    - assets/images/
+    - assets/images/TurningPipes/
+    - assets/tiles/
+    - assets/zones/
+    - assets/zones/cards/
+    - assets/hud/
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
