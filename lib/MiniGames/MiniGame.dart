@@ -94,6 +94,10 @@ abstract class MiniGame extends FlameGame {
     return hud.getPoints();
   }
 
+  void setPointsAsset({required String asset}){
+    hud.pointsAsset = asset;
+  }
+
   void setStars({required int stars}){
     hud.setStars(stars: stars);
   }
