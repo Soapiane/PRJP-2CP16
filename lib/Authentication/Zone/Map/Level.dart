@@ -5,8 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:game_levels_scrolling_map/model/point_model.dart';
 import 'package:projet2cp/MiniGames/MiniGameMainScreen.dart';
 import 'package:projet2cp/SplashScreen/SplashScreen.dart';
-import 'package:projet2cp/MiniGames/TurningPipes/TurningPipesGame.dart' as TurningPipesGame;
-import 'package:projet2cp/Zone/ZoneMainScreen.dart';
+import 'package:projet2cp/Authentication/Zone/ZoneMainScreen.dart';
 import 'package:projet2cp/Zones.dart';
 
 
@@ -62,7 +61,7 @@ class Level extends PointModel{
 
   void _levelTaped(){
     if (unlocked){
-      Navigator.pushReplacement(
+      Navigator.push(
           context,
           MaterialPageRoute(
             builder: builder(number),

@@ -8,11 +8,12 @@ import 'package:projet2cp/Generator.dart';
 import 'package:projet2cp/Margin.dart';
 import 'package:projet2cp/Color.dart' as color;
 import 'package:flutter_svg_provider/flutter_svg_provider.dart' as svg_provider;
+import 'package:projet2cp/main.dart' as main;
 
 class TextGenerator extends Generator {
   TextGenerator({required super.context});
 
-  Widget generateTextView({
+  ({ Widget widget, Text text}) generateTextView({
     double? xPos,
     double? yPos,
     required List<String> texts,
@@ -25,6 +26,7 @@ class TextGenerator extends Generator {
   }){
 
 
+    Text textView = Text("");
     onSpansTap??=[];
     textStyle ??= TextStyle(
       color: color.color,
@@ -54,13 +56,20 @@ class TextGenerator extends Generator {
         };
       }
 
+      TextSpan textSpan;
 
       if (i%2 == 0) {
+        textSpan = TextSpan(
+          text: texts[i],
+        );
+
         textsSpan.add(
           TextSpan(
             text: texts[i],
           ),
         );
+
+        if (i==0) textView = textSpan as Text;
       } else {
         textsSpan.add(
           TextSpan(
@@ -93,18 +102,18 @@ class TextGenerator extends Generator {
 
 
 
-      return Positioned(
+      return (widget: Positioned(
         left: coords.x,
         top:  coords.y,
         child: textWidget,
-      );
+      ),text: textView);
     }
 
-    return textWidget;
+    return (widget: textWidget, text: textView);
 
   }
 
-  Widget generateTextField({
+  ({Widget widget, TextField textField}) generateTextField({
     required double height,
     required double width,
     double? xPos,
@@ -145,7 +154,49 @@ class TextGenerator extends Generator {
     icon ??= Icons.person;
     margin??=Margin(context: super.context);
 
-    return Container(
+    final myController = TextEditingController();
+    final FocusNode focusNode = FocusNode();
+    focusNode.addListener(() {
+      main.setLandscapeMode();
+    });
+    TextField textField = TextField(
+      onTap: () {
+        focusNode.requestFocus();
+        main.setLandscapeMode();
+      },
+      focusNode: focusNode,
+      controller: myController,
+      autofillHints: const [],
+      obscureText: hide,
+      enableSuggestions: false,
+      autocorrect: false,
+      style: TextStyle(
+        fontFamily: "PoppinsRegular",
+        fontSize: fontSize,
+        color: color.Color.black.color,
+      ),
+      textAlignVertical: TextAlignVertical.center,
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.all(0),
+        alignLabelWithHint: true,
+        prefixIcon: Padding(
+          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+          child: Icon(
+            icon,
+          ),
+        ),
+        hintText: hintText,
+        hintStyle: TextStyle(
+          fontFamily: "PoppinsRegular",
+          fontSize: fontSize,
+          color: textColor.color,
+        ),
+        border: InputBorder.none,
+      ),
+    );
+
+    return
+      ( widget: Container(
       margin: EdgeInsets.fromLTRB(margin.left, margin.top , margin.right, margin.bottom),
       width: dims.x,
       height: dims.y,
@@ -165,39 +216,13 @@ class TextGenerator extends Generator {
             Container(
               height: dims.y,
               width: dims.x - rightButtonDim-rightButtonPaddingHorizontal*2-10,
-              child: TextField(
-                obscureText: hide,
-                enableSuggestions: !hide,
-                autocorrect: !hide,
-                style: TextStyle(
-                  fontFamily: "PoppinsRegular",
-                  fontSize: fontSize,
-                  color: color.Color.black.color,
-                ),
-                textAlignVertical: TextAlignVertical.center,
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.all(0),
-                  alignLabelWithHint: true,
-                  prefixIcon: Padding(
-                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                    child: Icon(
-                      icon,
-                    ),
-                  ),
-                  hintText: hintText,
-                  hintStyle: TextStyle(
-                    fontFamily: "PoppinsRegular",
-                    fontSize: fontSize,
-                    color: textColor.color,
-                  ),
-                  border: InputBorder.none,
-                ),
-              ),
+              child: textField,
             ),
             showPasswordBtn,
           ],
         ),
       ),
+      ), textField: textField,
     );
   }
 

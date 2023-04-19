@@ -1,6 +1,7 @@
 
 
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:projet2cp/Authentication/Body.dart';
@@ -32,6 +33,33 @@ class RegisterBody extends Body {
 
     Margin formMargin = Margin(context: context, bottom: 19);
 
+
+    final userName = textGenerator.generateTextField(
+      height: 39,
+      width: 257,
+      hintText: "Nom d'utilisateur",
+      icon: Icons.person,
+      margin: formMargin,
+    );
+    final email = textGenerator.generateTextField(
+      height: 39,
+      width: 257,
+      hintText: "E-mail",
+      icon: Icons.email,
+      margin: formMargin,
+    );
+    final password = textGenerator.generateTextField(
+      height: 39,
+      width: 257,
+      hintText: "Mot de passe",
+      icon: Icons.password,
+      margin: formMargin,
+      hide: true,
+      rightButtonImagePath: "assets/closed_eye.svg",
+      rightButtonPaddingHorizontal: 5,
+      rightButtonPaddingVertical: 5,
+    );
+
     return MaterialApp(
       theme: ThemeData().copyWith(
         colorScheme: ThemeData().colorScheme.copyWith(primary: Colors.green),
@@ -51,31 +79,9 @@ class RegisterBody extends Body {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  textGenerator.generateTextField(
-                    height: 39,
-                    width: 257,
-                    hintText: "Nom d’utilisateur",
-                    icon: Icons.person,
-                    margin: formMargin,
-                  ),
-                  textGenerator.generateTextField(
-                    height: 39,
-                    width: 257,
-                    hintText: "Email",
-                    icon: Icons.email,
-                    margin: formMargin,
-                  ),
-                  textGenerator.generateTextField(
-                    height: 39,
-                    width: 257,
-                    hintText: "Mot de passe",
-                    icon: Icons.password,
-                    margin: formMargin,
-                    hide: true,
-                    rightButtonImagePath: "assets/closed_eye.svg",
-                    rightButtonPaddingHorizontal: 5,
-                    rightButtonPaddingVertical: 5,
-                  ),
+                  userName.widget,
+                  email.widget,
+                  password.widget,
                   buttonGenerator.generateTextButton(
                     height: 39,
                     width: 257,
@@ -83,7 +89,11 @@ class RegisterBody extends Body {
                     text: "inscription",
                     margin: formMargin,
                     onTap: (){
-                      onRegister.call();
+
+                      FirebaseAuth.instance.createUserWithEmailAndPassword(
+                        email: email.textField.controller!.text,
+                        password: password.textField.controller!.text,
+                      ).then((value) => onRegister.call()).catchError((e) => print("Error: $e"));
                     },
                   ),
                 ],

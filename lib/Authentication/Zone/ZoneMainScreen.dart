@@ -2,39 +2,32 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:projet2cp/Authentication/Body.dart';
 import 'package:projet2cp/Zones.dart';
 import './Map/Zone.dart' as zoneModel;
 
 
-class ZoneMainScreen extends StatefulWidget {
+class ZoneMainScreen extends Body {
 
   final Zones zone;
 
-  const ZoneMainScreen({super.key, required this.zone});
-
-  @override
-  State<ZoneMainScreen> createState() => _ZoneMainScreenState();
-}
-
-class _ZoneMainScreenState extends State<ZoneMainScreen> {
 
   late Widget? foreground;
   late String backgroundImageUrl;
   late List<double> yZone, xZone;
 
-  @override
-  void initState() {
-    super.initState();
 
+  ZoneMainScreen({super.key, required this.zone}){
     _getBackgroundImageUrl();
 
     _getXYValues();
-    foreground = zoneModel.Zone(zone: widget.zone,levelsNumber: 7, levelReached: 3, xValues: xZone, yValues: yZone);
+    foreground = zoneModel.Zone(zone: zone,levelsNumber: 7, levelReached: 3, xValues: xZone, yValues: yZone);
   }
 
+
   void _getXYValues(){
-    xZone = [275.47 , 415.31 , 758.82 , 1034.78 , 1315 , 1037.52 , 641.46 ];
-    yZone = [ 583.4 , 351.05 , 283.32 , 144.2 , 427.67 , 724.45 , 869.04 ];
+    xZone = [175.021  , 903.0769  , 1768.5874  , 2463.4126  , 3280.5874  , 4250.3217  , 5154.0981  ];
+    yZone = [ 780.2238  , 406.6294  , 849.2028  , 334.1259 ,  846.1818  , 403.6084  , 876.3916  ];
   }
 
   void _getBackgroundImageUrl(){

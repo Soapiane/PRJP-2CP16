@@ -1,4 +1,6 @@
 
+import 'dart:math';
+
 import 'package:flame/effects.dart';
 import 'package:flame/input.dart';
 import 'package:flame/components.dart';
@@ -94,6 +96,25 @@ class Pipe extends SpriteComponent with Tappable{
 
     }
     return super.onTapDown(info);
+  }
+
+
+  void shuffle(){
+    if (!locked) {
+      if (!rotating!) {
+        int rand = Random().nextInt(4);
+        rotating = true;
+        super.add(RotateEffect.to(
+            rand*(-1)*math.pi/2,
+            EffectController(duration: rotateDuration),
+            onComplete: () {
+              rotating = false;
+              pipeAngle = Angle.values[rand];
+            },
+        )
+        );
+      }
+    }
   }
 
 

@@ -2,7 +2,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:game_levels_scrolling_map/game_levels_scrolling_map.dart';
-import 'package:projet2cp/Zone/Map/Level.dart';
+import 'package:projet2cp/Authentication/Zone/Map/Level.dart';
 import 'package:projet2cp/Zones.dart';
 
 class Zone extends StatefulWidget {
@@ -72,7 +72,7 @@ class _ZoneState extends State<Zone>{
     }
 
     map = GameLevelsScrollingMap.scrollable(
-      imageUrl: "assets/transparent.png" ,
+      imageUrl: "assets/zones/levels_path.png",
       x_values: widget.xValues,
       y_values: widget.yValues,
       points: levels,

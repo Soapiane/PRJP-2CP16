@@ -7,6 +7,7 @@ import 'package:projet2cp/Authentication/AuthMainBody.dart';
 import 'package:projet2cp/Authentication/Body.dart';
 import 'package:projet2cp/Authentication/LogInBody.dart';
 import 'package:projet2cp/Authentication/RegisterBody.dart';
+import 'package:projet2cp/Authentication/Zone/ZoneMainScreen.dart';
 import 'package:projet2cp/Authentication/ZoneSelectionBody.dart';
 import 'package:projet2cp/ButtonGenerator.dart';
 import 'package:projet2cp/ImageGenerator.dart';
@@ -17,6 +18,7 @@ import 'package:projet2cp/TextStyles.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart' as svg_provider;
 import 'package:projet2cp/Color.dart' as color;
+import 'package:projet2cp/Zones.dart';
 
 class AuthMainScreen extends StatefulWidget {
 
@@ -45,6 +47,7 @@ class _AuthMainState extends State<AuthMainScreen> {
   late LogInBody logInBody;
   late RegisterBody registerBody;
   late ZoneSelectionBody zoneSelectionBody;
+  late ZoneMainScreen zoneMainScreen;
 
 
   void goToZoneSelection(){
@@ -61,6 +64,23 @@ class _AuthMainState extends State<AuthMainScreen> {
   }
 
 
+  void goToZoneMainScreen(Zones zone){
+    setState(() {
+      blur = ImageFilter.blur(
+        sigmaX: 10,
+        sigmaY: 10,
+      );
+
+      zoneMainScreen = ZoneMainScreen(zone: zone);
+
+      zoneMainScreen.lastScreen = zoneSelectionBody;
+
+      body = zoneMainScreen;
+
+    });
+  }
+
+
   @override
   void initState() {
     super.initState();
@@ -70,7 +90,13 @@ class _AuthMainState extends State<AuthMainScreen> {
       sigmaY: 0,
     );
 
-    zoneSelectionBody = ZoneSelectionBody();
+
+
+    zoneSelectionBody = ZoneSelectionBody(
+      onCardTap: goToZoneMainScreen,
+    );
+
+
 
     registerBody = RegisterBody(
       onRegister: (){

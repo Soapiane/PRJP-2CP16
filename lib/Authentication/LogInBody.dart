@@ -1,5 +1,6 @@
 
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:projet2cp/ButtonGenerator.dart';
@@ -28,7 +29,28 @@ class LogInBody extends Body {
     ButtonGenerator buttonGenerator = ButtonGenerator(context: context);
     TextGenerator textGenerator = TextGenerator(context: context);
 
-    Margin formMargin = Margin(context: context, bottom: 19);
+    Margin formMargin = Margin(context: context, bottom: 13);
+
+    final email = textGenerator.generateTextField(
+      height: 39,
+      width: 257,
+      hintText: "E-mail",
+      icon: Icons.person,
+      margin: formMargin,
+    );
+    final password = textGenerator.generateTextField(
+      height: 39,
+      width: 257,
+      hintText: "Mot de passe",
+      icon: Icons.password,
+      margin: formMargin,
+      hide: true,
+      rightButtonImagePath: "assets/closed_eye.svg",
+      rightButtonPaddingHorizontal: 5,
+      rightButtonPaddingVertical: 5,
+    );
+
+
     
     return MaterialApp(
       theme: ThemeData().copyWith(
@@ -49,24 +71,8 @@ class LogInBody extends Body {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    textGenerator.generateTextField(
-                      height: 39,
-                      width: 257,
-                      hintText: "Nom d’utilisateur",
-                      icon: Icons.person,
-                      margin: formMargin,
-                    ),
-                    textGenerator.generateTextField(
-                      height: 39,
-                      width: 257,
-                      hintText: "Mot de passe",
-                      icon: Icons.password,
-                      margin: formMargin,
-                      hide: true,
-                      rightButtonImagePath: "assets/closed_eye.svg",
-                      rightButtonPaddingHorizontal: 5,
-                      rightButtonPaddingVertical: 5,
-                    ),
+                    email.widget,
+                    password.widget,
                     buttonGenerator.generateTextButton(
                       height: 39,
                       width: 257,
@@ -74,8 +80,17 @@ class LogInBody extends Body {
                       text: "Connexion",
                       margin: formMargin,
                       onTap: (){
-                        onConnexion.call();
-                      },
+                        print("EMAIL: ${email.textField.controller?.text}");
+                        print("PASSWORD: ${password.textField.controller?.text}");
+
+                        FirebaseAuth.instance.signInWithEmailAndPassword(
+                            email: email.textField.controller!.text,
+                          password: password.textField.controller!.text,
+                        ).then((value) => onConnexion.call()).catchError((e) => print("Error: $e"));
+
+
+
+                    },
                     ),
                     textGenerator.generateTextView(
                       texts: ["pas de compte?", " s'inscrire! "],
@@ -94,7 +109,7 @@ class LogInBody extends Body {
                       onSpansTap: [
                         onRegister,
                       ],
-                    ),
+                    ).widget,
                   ],
                 ),
               ),
@@ -103,4 +118,7 @@ class LogInBody extends Body {
         ),
       );
     }
+
+
+
 }

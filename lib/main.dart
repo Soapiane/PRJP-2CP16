@@ -1,13 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:projet2cp/Authentication/AuthMainScreen.dart';
 import 'package:projet2cp/SplashScreen/SplashScreen.dart';
-
-void main() {
-
-  WidgetsFlutterBinding.ensureInitialized(); //this line is to make sure that the main widget is fully initialized
+import 'package:projet2cp/firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 
+
+void setLandscapeMode() {
 
   /*
       * this code locks the rotation into landscape mode
@@ -28,6 +29,18 @@ void main() {
   /*******************************************/
 
 
+}
+
+Future<void> main() async {
+
+  WidgetsFlutterBinding.ensureInitialized(); //this line is to make sure that the main widget is fully initialized
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  setLandscapeMode();
+
   runApp(const MyApp());
 }
 
@@ -42,7 +55,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: AuthMainScreen(),
+      home: SplashScreen(),
     );
   }
 }

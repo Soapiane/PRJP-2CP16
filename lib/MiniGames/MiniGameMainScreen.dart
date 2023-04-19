@@ -29,12 +29,38 @@ class MiniGameMainScreen extends StatelessWidget {
     );
   }
 
+
+
   void getMiniGame(){
+    //chose the game based on the zone and the order
+    switch (zone) {
+      case Zones.ville:
+        switch (miniGameOrder) {
+          case 1:
+            game = TurningPipes(hud: hud);
+            break;
+          default:
+            game = TurningPipes(hud: hud);
+            break;
+        }
+        break;
+      default:
+        game = TurningPipes(hud: hud);
+        break;
+    }
     game =  TurningPipes(hud: hud);
   }
 
   void getBackgroundImageUrl(){
-    backgroundImageUrl = "assets/ville.png";
+    //the background image is based on the zone
+    switch (zone) {
+      case Zones.ville:
+        backgroundImageUrl = "assets/ville.png";
+        break;
+      default:
+        backgroundImageUrl = "assets/ville.png";
+        break;
+    }
   }
 
 

@@ -6,24 +6,69 @@ import 'dart:ui';
 import 'package:flame/game.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flutter/material.dart';
+import 'package:projet2cp/Difficulty.dart';
 import 'package:projet2cp/MiniGames/MiniGame.dart';
 import 'SolutionPipe.dart';
 import 'Pipe.dart';
 
 class TurningPipes extends MiniGame with HasTappables{
 
+
   late TiledComponent _mapComponent;
   late List<SolutionPipe> solutions = [];
+  late List<Pipe> normals = [];
   static const double tileSize = 61.0;
   late bool finished;
+  late int time;
 
 
   TurningPipes({required super.hud}){
+    switch (difficulty){
+      case Difficulty.EASY:
+        time = 60;
+        break;
+      case Difficulty.MEDIUM:
+        time = 30;
+        break;
+      case Difficulty.HARD:
+        time = 15;
+        break;
+    }
+    addTimer(seconds: time);
+    setInitStars(initStars: 3);
 
   }
 
 
 
+
+  @override
+  void onRestart() {
+    shufflePipes();
+    super.onRestart();
+  }
+
+  @override
+  void onTimeUpdate(Duration duration) {
+    // TODO: implement onTimeUpdate
+    super.onTimeUpdate(duration);
+    if(duration.inSeconds < 0){
+      setStars(stars: 0);
+    } else if(duration.inSeconds < time/4){
+      setStars(stars: 1);
+    } else if (duration.inSeconds < time/2){
+      setStars(stars: 2);
+    }
+
+
+  }
+
+  @override
+  void onTimeOut() {
+    // TODO: implement onTimeOut
+    super.onTimeOut();
+    setStars(stars: 0);
+  }
 
 
 
@@ -46,6 +91,8 @@ class TurningPipes extends MiniGame with HasTappables{
     loadPipes();
 
 
+    shufflePipes();
+    onStart();
 
 
   }
@@ -61,15 +108,18 @@ class TurningPipes extends MiniGame with HasTappables{
 
 
 
+
   void loadNormalPipes(bool locked){
 
     String src = "lockedPipes";
     if (!locked) src = "unlockedPipes";
 
+    Pipe normalPipe;
+
     final objGroup = _mapComponent.tileMap.getLayer<ObjectGroup>(src);
 
     for (final obj in objGroup!.objects){
-      add(Pipe(
+      normalPipe = Pipe(
           locked: locked,
           type: Type.values[int.parse(obj.class_)~/10],
           pipeAngle: Angle.values[int.parse(obj.class_)%10],
@@ -78,9 +128,10 @@ class TurningPipes extends MiniGame with HasTappables{
           posY: obj.y-tileSize/2+ _mapComponent.y,
           posX: obj.x+tileSize/2 + _mapComponent.x,
           onTurn: (){
-            modifyPoints(points: -1);
           }
-      ));
+      );
+      normals.add(normalPipe);
+      add(normalPipe);
 
 
     }
@@ -114,7 +165,6 @@ class TurningPipes extends MiniGame with HasTappables{
           posX: obj.x+tileSize/2 + _mapComponent.x,
           onTurn: (){
             checkSolution();
-            modifyPoints(points: 1);
 
           },
       );
@@ -126,6 +176,16 @@ class TurningPipes extends MiniGame with HasTappables{
 
     print("Solution pipes count: " + solutions.length.toString());
 
+  }
+
+
+  void shufflePipes(){
+    for (var pipe in normals){
+      pipe.shuffle();
+    }
+    for (var pipe in solutions){
+      pipe.shuffle();
+    }
   }
 
   void checkSolution(){
