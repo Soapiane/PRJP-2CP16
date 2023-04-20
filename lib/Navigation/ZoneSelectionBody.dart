@@ -1,9 +1,9 @@
 import 'package:flame/components.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:projet2cp/Authentication/Body.dart';
+import 'package:projet2cp/Body.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart' as svg_provider;
-import 'package:projet2cp/Authentication/Zone/ZoneMainScreen.dart';
+import 'package:projet2cp/Navigation/Zone/ZoneBody.dart';
 import 'package:projet2cp/ButtonGenerator.dart';
 import 'package:projet2cp/Generator.dart';
 import 'package:projet2cp/Zones.dart';
@@ -12,7 +12,7 @@ class ZoneSelectionBody extends Body {
 
   Function(Zones zone) onCardTap;
 
-  ZoneSelectionBody({super.key, required this.onCardTap});
+  ZoneSelectionBody({super.key, required this.onCardTap, super.isBlured = true});
 
   @override
   Widget build(BuildContext context) {

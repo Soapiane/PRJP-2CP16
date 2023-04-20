@@ -2,7 +2,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:game_levels_scrolling_map/game_levels_scrolling_map.dart';
-import 'package:projet2cp/Authentication/Zone/Map/Level.dart';
+import 'package:projet2cp/Navigation/Zone/Map/Level.dart';
 import 'package:projet2cp/Zones.dart';
 
 class Zone extends StatefulWidget {

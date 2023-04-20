@@ -4,11 +4,13 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:projet2cp/Authentication/AuthMainBody.dart';
-import 'package:projet2cp/Authentication/Body.dart';
+import 'package:projet2cp/Authentication/AvatarSelectionBody.dart';
+import 'package:projet2cp/Body.dart';
+import 'package:projet2cp/Authentication/DifficultySelectionBody.dart';
 import 'package:projet2cp/Authentication/LogInBody.dart';
 import 'package:projet2cp/Authentication/RegisterBody.dart';
-import 'package:projet2cp/Authentication/Zone/ZoneMainScreen.dart';
-import 'package:projet2cp/Authentication/ZoneSelectionBody.dart';
+import 'package:projet2cp/Navigation/Zone/ZoneBody.dart';
+import 'package:projet2cp/Navigation/ZoneSelectionBody.dart';
 import 'package:projet2cp/ButtonGenerator.dart';
 import 'package:projet2cp/ImageGenerator.dart';
 import 'package:projet2cp/Language.dart';
@@ -20,64 +22,92 @@ import 'package:flutter_svg_provider/flutter_svg_provider.dart' as svg_provider;
 import 'package:projet2cp/Color.dart' as color;
 import 'package:projet2cp/Zones.dart';
 
-class AuthMainScreen extends StatefulWidget {
+class MainScreen extends StatefulWidget {
 
 
 
-  AuthMainScreen({super.key});
+  const MainScreen({super.key});
 
 
 
   @override
   State<StatefulWidget> createState() {
 
-    return _AuthMainState();
+    return _MainState();
   }
 
 }
 
 
-class _AuthMainState extends State<AuthMainScreen> {
+class _MainState extends State<MainScreen> {
 
-
+  static const double blurRadius = 2;
   late StandardWidgets standardWidgets;
   late Body body;
   late ImageFilter blur;
   late AuthMainBody authMainBody;
   late LogInBody logInBody;
   late RegisterBody registerBody;
+  late DifficultySelectionBody difficultySelectionBody;
   late ZoneSelectionBody zoneSelectionBody;
-  late ZoneMainScreen zoneMainScreen;
+  late ZoneBody zoneBody;
+  late AvatarSelectionBody avatarSelectionBody;
 
 
-  void goToZoneSelection(){
+  // void goToZoneSelection(){
+  //   setState(() {
+  //     blur = ImageFilter.blur(
+  //       sigmaX: 10,
+  //       sigmaY: 10,
+  //     );
+  //
+  //     zoneSelectionBody.lastScreen = body;
+  //     body = zoneSelectionBody;
+  //
+  //   });
+  // }
+
+
+
+
+  void goToZoneBody(Zones zone){
     setState(() {
-      blur = ImageFilter.blur(
-        sigmaX: 10,
-        sigmaY: 10,
-      );
 
-      zoneSelectionBody.lastScreen = body;
-      body = zoneSelectionBody;
+      zoneBody = ZoneBody(zone: zone);
+
+      changeBodyWithBlur(newBody: zoneBody);
 
     });
   }
 
-
-  void goToZoneMainScreen(Zones zone){
+  void changeBodyWithBlur({required Body newBody, Body? lastBody}){
     setState(() {
+
       blur = ImageFilter.blur(
-        sigmaX: 10,
-        sigmaY: 10,
+        sigmaX: blurRadius,
+        sigmaY: blurRadius,
       );
-
-      zoneMainScreen = ZoneMainScreen(zone: zone);
-
-      zoneMainScreen.lastScreen = zoneSelectionBody;
-
-      body = zoneMainScreen;
-
+      changeBody(newBody: newBody, lastBody: lastBody);
     });
+  }
+
+  void changeBodyWithNoBlur({required Body newBody, Body? lastBody}){
+    setState(() {
+
+      blur = ImageFilter.blur(
+        sigmaX: 0,
+        sigmaY: 0,
+      );
+      changeBody(newBody: newBody, lastBody: lastBody);
+    });
+  }
+
+
+  void changeBody({required Body newBody, Body? lastBody}){
+      lastBody ??= body;
+      newBody.lastScreen = lastBody;
+      body = newBody;
+
   }
 
 
@@ -93,45 +123,50 @@ class _AuthMainState extends State<AuthMainScreen> {
 
 
     zoneSelectionBody = ZoneSelectionBody(
-      onCardTap: goToZoneMainScreen,
+      onCardTap: goToZoneBody,
     );
 
+    avatarSelectionBody = AvatarSelectionBody(
+      onFinally: (){
+        changeBodyWithBlur(newBody: zoneSelectionBody);
+      },
+    );
+
+    difficultySelectionBody = DifficultySelectionBody(
+      onContinue: (){
+          changeBodyWithNoBlur(newBody: avatarSelectionBody);
+      },
+    );
 
 
     registerBody = RegisterBody(
       onRegister: (){
-        goToZoneSelection();
+        changeBodyWithNoBlur(newBody: difficultySelectionBody);
       }
     );
 
-    zoneSelectionBody.lastScreen = registerBody;
 
     logInBody = LogInBody(
       onConnexion: (){
-        goToZoneSelection();
+        changeBodyWithBlur(newBody: zoneSelectionBody);
       },
       onRegister: (){
-        setState(() {
-          body = registerBody;
-        });
+        changeBodyWithNoBlur(newBody: registerBody);
       },
     );
 
-    registerBody.lastScreen = logInBody;
 
     authMainBody = AuthMainBody(
       onConnexionPressed: (){
-        setState(() {
-          body = logInBody;
-        });
+        changeBodyWithNoBlur(newBody: logInBody);
       },
       onPlay: (){
-        goToZoneSelection();
-
+        changeBodyWithBlur(newBody: zoneSelectionBody);
       },
     );
 
-    logInBody.lastScreen = authMainBody;
+
+
 
 
     body = authMainBody;
@@ -150,8 +185,8 @@ class _AuthMainState extends State<AuthMainScreen> {
     Function? onBackButtonTapped = body.toString().compareTo("AuthMainBody") == 0 ? null : (){
       setState(() {
         blur = ImageFilter.blur(
-          sigmaX: 0,
-          sigmaY: 0,
+          sigmaX: body.lastScreen!.isBlured ? blurRadius : 0,
+          sigmaY: body.lastScreen!.isBlured ? blurRadius : 0,
         );
         body = body.lastScreen ?? body;
       });
@@ -168,7 +203,7 @@ class _AuthMainState extends State<AuthMainScreen> {
         ),
       ),
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 0, sigmaY: 0),
+        filter: blur,
         child: body,
       ),
     );
@@ -188,6 +223,8 @@ class _AuthMainState extends State<AuthMainScreen> {
       ),
     );
   }
+
+
 
 
   Widget createForeground({

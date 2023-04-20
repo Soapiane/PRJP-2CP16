@@ -40,10 +40,15 @@ dependencies:
   flame_tiled: ^1.9.1
 
   sqflite: ^2.2.6
+  shared_preferences: ^2.1.0
+
+
+  uuid: ^3.0.7
 
   firebase_auth: ^1.0.0
   firebase_core_platform_interface: 4.5.1
   firebase_core: ^1.10.0
+  firebase_database: ^7.1.0
 
   game_levels_scrolling_map: ^0.0.7
   flutter_svg: ^1.1.6
@@ -89,6 +94,7 @@ flutter:
     - assets/zones/
     - assets/zones/cards/
     - assets/hud/
+    - assets/avatars/
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

@@ -1,5 +1,10 @@
 enum Difficulty {
-  EASY,
-  MEDIUM,
-  HARD;
+  EASY("Facile"),
+  MEDIUM("Moyen"),
+  HARD("Difficile");
+
+  final String name;
+
+  const Difficulty(this.name);
+
 }

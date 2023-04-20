@@ -2,12 +2,12 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:projet2cp/Authentication/Body.dart';
+import 'package:projet2cp/Body.dart';
 import 'package:projet2cp/Zones.dart';
-import './Map/Zone.dart' as zoneModel;
+import 'Map/Zone.dart' as zoneModel;
 
 
-class ZoneMainScreen extends Body {
+class ZoneBody extends Body {
 
   final Zones zone;
 
@@ -17,7 +17,7 @@ class ZoneMainScreen extends Body {
   late List<double> yZone, xZone;
 
 
-  ZoneMainScreen({super.key, required this.zone}){
+  ZoneBody({super.key, required this.zone}){
     _getBackgroundImageUrl();
 
     _getXYValues();

@@ -8,7 +8,7 @@ import 'package:projet2cp/ImageGenerator.dart';
 import 'package:projet2cp/Color.dart' as color;
 import 'package:projet2cp/Margin.dart';
 import 'package:projet2cp/TextGenerator.dart';
-import 'package:projet2cp/Authentication/Body.dart';
+import 'package:projet2cp/Body.dart';
 
 class LogInBody extends Body {
 
@@ -71,8 +71,8 @@ class LogInBody extends Body {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    email.widget,
-                    password.widget,
+                    email.first,
+                    password.first,
                     buttonGenerator.generateTextButton(
                       height: 39,
                       width: 257,
@@ -80,18 +80,17 @@ class LogInBody extends Body {
                       text: "Connexion",
                       margin: formMargin,
                       onTap: (){
-                        print("EMAIL: ${email.textField.controller?.text}");
-                        print("PASSWORD: ${password.textField.controller?.text}");
+                        print("EMAIL: ${email.second.controller?.text}");
+                        print("PASSWORD: ${password.second.controller?.text}");
 
                         FirebaseAuth.instance.signInWithEmailAndPassword(
-                            email: email.textField.controller!.text,
-                          password: password.textField.controller!.text,
+                            email: email.second.controller!.text,
+                          password: password.second.controller!.text,
                         ).then((value) => onConnexion.call()).catchError((e) => print("Error: $e"));
 
 
-
                     },
-                    ),
+                    ).first,
                     textGenerator.generateTextView(
                       texts: ["pas de compte?", " s'inscrire! "],
                       fontSize: 11,
@@ -109,7 +108,7 @@ class LogInBody extends Body {
                       onSpansTap: [
                         onRegister,
                       ],
-                    ).widget,
+                    ).first,
                   ],
                 ),
               ),

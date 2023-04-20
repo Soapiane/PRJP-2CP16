@@ -2,7 +2,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:projet2cp/Authentication/Body.dart';
+import 'package:projet2cp/Body.dart';
 import 'package:projet2cp/ButtonGenerator.dart';
 import 'package:projet2cp/ImageGenerator.dart';
 import 'package:projet2cp/TextGenerator.dart';
@@ -44,7 +44,7 @@ class AuthMainBody extends Body {
             onTap: (){
               onConnexionPressed.call();
             },
-        ),
+        ).first,
         buttonsGenerator.generateTextButton(
           height: 45,
           width: 216,
@@ -55,7 +55,7 @@ class AuthMainBody extends Body {
           onTap: (){
             onPlay.call();
           },
-        ),
+        ).first,
 
       ],
     );

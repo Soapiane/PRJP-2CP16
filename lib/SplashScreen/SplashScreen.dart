@@ -1,8 +1,10 @@
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:projet2cp/Authentication/AuthMainScreen.dart';
+import 'package:projet2cp/Authentication/MainScreen.dart';
+import 'package:projet2cp/Repository/DatabaseRepository.dart';
 import 'package:projet2cp/Zones.dart';
-import '../Authentication/Zone/ZoneMainScreen.dart';
+import 'package:sqflite/sqflite.dart';
 
 
 class SplashScreen extends StatefulWidget {
@@ -19,16 +21,26 @@ class _SplashState extends State<SplashScreen>{
   @override
   void initState(){
     super.initState();
+
+
     navigateToHome();
   }
 
   navigateToHome()async{
+
+
+
+    // await DatabaseRepository().openDB();
+    await DatabaseRepository().deleteDB();
+    await FirebaseAuth.instance.signOut();
+
+
     await Future.delayed(Duration(milliseconds: 2000),(){
 
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (context)=> AuthMainScreen()
+              builder: (context)=> MainScreen()
           )
       );
     });

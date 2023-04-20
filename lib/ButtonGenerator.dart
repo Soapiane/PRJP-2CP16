@@ -2,11 +2,13 @@
 
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
+import 'package:projet2cp/Couple.dart';
 import 'package:projet2cp/Generator.dart';
 import 'package:projet2cp/Margin.dart';
 import 'package:projet2cp/TextStyles.dart';
 import 'package:projet2cp/Color.dart' as color;
 import 'package:flutter_svg_provider/flutter_svg_provider.dart' as svg_provider;
+import 'package:projet2cp/Triple.dart';
 
 class ButtonGenerator extends Generator{
 
@@ -18,12 +20,13 @@ class ButtonGenerator extends Generator{
 
 
 
-  Widget generateTextButton({
+  Triple generateTextButton({
     required double height,
     required double width,
     double? xPos,
     double? yPos,
     String text= "",
+    TextStyle? textStyle,
     color.Color textColor = color.Color.white,
     double textSize = 21,
     color.Color backgroundColor = color.Color.transparent,
@@ -34,7 +37,10 @@ class ButtonGenerator extends Generator{
 
 
 
-
+    textStyle??=TextStyles.buttonsTextStyle(
+      color: textColor,
+      fontSize: textSize,
+    );
 
     Vector2 dims = calculateXY(width, height);
     double buttonWidth = dims.x;
@@ -42,34 +48,33 @@ class ButtonGenerator extends Generator{
 
     margin??=Margin(context: context);
 
+    ElevatedButton elevatedButton = ElevatedButton(
+      onPressed: (){
+        onTap?.call();
+      },
+      style: ElevatedButton.styleFrom(
+        elevation: 2,
+        backgroundColor: backgroundColor.color,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(cornerRadius),
+        ),
+        minimumSize: Size.zero,
+        fixedSize: Size(
+            buttonWidth,
+            buttonHeight
+        ),
+        padding: EdgeInsets.zero,
+      ),
+      child: Text(text,
+        maxLines: 1,
+        textAlign: TextAlign.center,
+        style: textStyle,
+      ),
+    );
+
     Widget buttonWidget = Container(
       margin: EdgeInsets.fromLTRB(margin.left, margin.top, margin.right, margin.bottom),
-      child: ElevatedButton(
-        onPressed: (){
-          onTap?.call();
-        },
-        style: ElevatedButton.styleFrom(
-          elevation: 2,
-          backgroundColor: backgroundColor.color,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(cornerRadius),
-          ),
-          minimumSize: Size.zero,
-          fixedSize: Size(
-              buttonWidth,
-              buttonHeight
-          ),
-          padding: EdgeInsets.zero,
-        ),
-        child: Text(text,
-          maxLines: 1,
-          textAlign: TextAlign.center,
-          style: TextStyles.buttonsTextStyle(
-            color: textColor,
-            fontSize: textSize,
-          ),
-        ),
-      ),
+      child: elevatedButton,
     );
 
 
@@ -80,14 +85,22 @@ class ButtonGenerator extends Generator{
 
 
 
-      return Positioned(
-        left: coords.x,
-        top:  coords.y,
-        child: buttonWidget,
+      return Triple(
+        Positioned(
+          left: coords.x,
+          top:  coords.y,
+          child: buttonWidget,
+        ),
+        elevatedButton,
+        textStyle,
       );
     }
 
-    return buttonWidget;
+    return Triple(
+      buttonWidget,
+      elevatedButton,
+      textStyle,
+    );
 
 
 
