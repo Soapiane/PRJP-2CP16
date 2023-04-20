@@ -7,6 +7,7 @@ import 'package:projet2cp/ButtonGenerator.dart';
 import 'package:projet2cp/ImageGenerator.dart';
 import 'package:projet2cp/Color.dart' as color;
 import 'package:projet2cp/Margin.dart';
+import 'package:projet2cp/Repository/DatabaseRepository.dart';
 import 'package:projet2cp/TextGenerator.dart';
 import 'package:projet2cp/Body.dart';
 
@@ -86,7 +87,7 @@ class LogInBody extends Body {
                         FirebaseAuth.instance.signInWithEmailAndPassword(
                             email: email.second.controller!.text,
                           password: password.second.controller!.text,
-                        ).then((value) => onConnexion.call()).catchError((e) => print("Error: $e"));
+                        ).then((value) => _onConnexion()).catchError((e) => print("Error: $e"));
 
 
                     },
@@ -116,6 +117,13 @@ class LogInBody extends Body {
           ],
         ),
       );
+    }
+
+
+    void _onConnexion() async {
+      await DatabaseRepository().openDB();
+      await DatabaseRepository().download();
+      onConnexion.call();
     }
 
 

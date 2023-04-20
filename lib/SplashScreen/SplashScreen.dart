@@ -30,9 +30,6 @@ class _SplashState extends State<SplashScreen>{
 
 
 
-    // await DatabaseRepository().openDB();
-    await DatabaseRepository().deleteDB();
-    await FirebaseAuth.instance.signOut();
 
 
     await Future.delayed(Duration(milliseconds: 2000),(){
@@ -40,7 +37,7 @@ class _SplashState extends State<SplashScreen>{
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (context)=> MainScreen()
+              builder: (context)=> MainScreen(signedIn: FirebaseAuth.instance.currentUser != null)
           )
       );
     });

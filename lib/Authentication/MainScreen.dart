@@ -14,6 +14,7 @@ import 'package:projet2cp/Navigation/ZoneSelectionBody.dart';
 import 'package:projet2cp/ButtonGenerator.dart';
 import 'package:projet2cp/ImageGenerator.dart';
 import 'package:projet2cp/Language.dart';
+import 'package:projet2cp/Repository/DatabaseRepository.dart';
 import 'package:projet2cp/StandardWidgets.dart';
 import 'package:projet2cp/TextGenerator.dart';
 import 'package:projet2cp/TextStyles.dart';
@@ -24,9 +25,10 @@ import 'package:projet2cp/Zones.dart';
 
 class MainScreen extends StatefulWidget {
 
+  bool signedIn;
 
 
-  const MainScreen({super.key});
+  MainScreen({super.key, this.signedIn = false});
 
 
 
@@ -128,7 +130,7 @@ class _MainState extends State<MainScreen> {
 
     avatarSelectionBody = AvatarSelectionBody(
       onFinally: (){
-        changeBodyWithBlur(newBody: zoneSelectionBody);
+        changeBodyWithBlur(newBody: zoneSelectionBody, lastBody: authMainBody);
       },
     );
 
@@ -169,7 +171,7 @@ class _MainState extends State<MainScreen> {
 
 
 
-    body = authMainBody;
+    body = widget.signedIn ? zoneSelectionBody : authMainBody;
 
   }
 
@@ -179,18 +181,54 @@ class _MainState extends State<MainScreen> {
 
 
     standardWidgets = StandardWidgets(context: context);
+    Function? onBackButtonTapped;
+
+    switch (body.toString()){
+      case "AuthMainBody":{
+        onBackButtonTapped = null;
+      }
+      break;
+      case "ZoneSelectionBody":{
+        onBackButtonTapped = () {
+          setState(() {
+            body.lastScreen = authMainBody;
+            blur = ImageFilter.blur(
+              sigmaX: body.lastScreen!.isBlured ? blurRadius : 0,
+              sigmaY: body.lastScreen!.isBlured ? blurRadius : 0,
+            );
+            body = body.lastScreen ?? body;
+            signOut();
+
+          });
+        };
+
+      }
+      break;
+      default:{
+        onBackButtonTapped = () {
+          setState(() {
+            blur = ImageFilter.blur(
+              sigmaX: body.lastScreen!.isBlured ? blurRadius : 0,
+              sigmaY: body.lastScreen!.isBlured ? blurRadius : 0,
+            );
+            body = body.lastScreen ?? body;
+          });
+        };
+      }
+      break;
+    }
 
 
 
-    Function? onBackButtonTapped = body.toString().compareTo("AuthMainBody") == 0 ? null : (){
-      setState(() {
-        blur = ImageFilter.blur(
-          sigmaX: body.lastScreen!.isBlured ? blurRadius : 0,
-          sigmaY: body.lastScreen!.isBlured ? blurRadius : 0,
-        );
-        body = body.lastScreen ?? body;
-      });
-    };
+    // onBackButtonTapped = body.toString().compareTo("AuthMainBody") == 0 ? null : (){
+    //   setState(() {
+    //     blur = ImageFilter.blur(
+    //       sigmaX: body.lastScreen!.isBlured ? blurRadius : 0,
+    //       sigmaY: body.lastScreen!.isBlured ? blurRadius : 0,
+    //     );
+    //     body = body.lastScreen ?? body;
+    //   });
+    // };
 
 
     Widget foreground = createForeground(onBackButtonTapped: onBackButtonTapped);
@@ -222,6 +260,10 @@ class _MainState extends State<MainScreen> {
         ],
       ),
     );
+  }
+
+  Future<void> signOut() async {
+    await DatabaseRepository().signOut();
   }
 
 

@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class User {
   static final User _instance = User._internal();
 
+  late String _id = "guest";
   late Difficulty _difficulty = Difficulty.EASY;
   late String _name = "";
   late Avatar _avatar = Avatar.avatar0;
@@ -24,7 +25,7 @@ class User {
 
   set difficulty(Difficulty value) {
     _difficulty = value;
-    _saveUserInfo();
+    DatabaseRepository().saveUserInfo();
   }
 
 
@@ -32,7 +33,7 @@ class User {
 
   set name(String value) {
     _name = value;
-    _saveUserInfo();
+    DatabaseRepository().saveUserInfo();
   }
 
 
@@ -40,21 +41,11 @@ class User {
 
   set avatar(Avatar value) {
     _avatar = value;
-    _saveUserInfo();
+    DatabaseRepository().saveUserInfo();
   }
 
 
-  void signOut(){
-    DatabaseRepository().deleteDB();
-    FirebaseAuth.instance.signOut();
-  }
 
-  Future<void> _saveUserInfo() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('name', _name);
-    await prefs.setInt('avatar', _avatar.index);
-    await prefs.setInt('difficulty', _difficulty.index);
-  }
 
 }
 
