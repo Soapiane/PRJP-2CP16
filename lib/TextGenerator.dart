@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:projet2cp/ButtonGenerator.dart';
+import 'package:projet2cp/Couple.dart';
 import 'package:projet2cp/Generator.dart';
 import 'package:projet2cp/Margin.dart';
 import 'package:projet2cp/Color.dart' as color;
@@ -13,7 +14,7 @@ import 'package:projet2cp/main.dart' as main;
 class TextGenerator extends Generator {
   TextGenerator({required super.context});
 
-  ({ Widget widget, Text text}) generateTextView({
+  Couple generateTextView({
     double? xPos,
     double? yPos,
     required List<String> texts,
@@ -26,7 +27,7 @@ class TextGenerator extends Generator {
   }){
 
 
-    Text textView = Text("");
+    TextSpan textView = TextSpan();
     onSpansTap??=[];
     textStyle ??= TextStyle(
       color: color.color,
@@ -69,7 +70,7 @@ class TextGenerator extends Generator {
           ),
         );
 
-        if (i==0) textView = textSpan as Text;
+        if (i==0) textView = textSpan;
       } else {
         textsSpan.add(
           TextSpan(
@@ -102,18 +103,18 @@ class TextGenerator extends Generator {
 
 
 
-      return (widget: Positioned(
+      return Couple( Positioned(
         left: coords.x,
         top:  coords.y,
         child: textWidget,
-      ),text: textView);
+      ), textView);
     }
 
-    return (widget: textWidget, text: textView);
+    return Couple( textWidget,  textView);
 
   }
 
-  ({Widget widget, TextField textField}) generateTextField({
+  Couple generateTextField({
     required double height,
     required double width,
     double? xPos,
@@ -196,7 +197,7 @@ class TextGenerator extends Generator {
     );
 
     return
-      ( widget: Container(
+      Couple(Container(
       margin: EdgeInsets.fromLTRB(margin.left, margin.top , margin.right, margin.bottom),
       width: dims.x,
       height: dims.y,
@@ -222,7 +223,8 @@ class TextGenerator extends Generator {
           ],
         ),
       ),
-      ), textField: textField,
+      ),
+        textField,
     );
   }
 

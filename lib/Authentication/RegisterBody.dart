@@ -2,19 +2,25 @@
 
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:projet2cp/Authentication/Body.dart';
+import 'package:projet2cp/Body.dart';
 import 'package:projet2cp/ButtonGenerator.dart';
+import 'package:projet2cp/Couple.dart';
 import 'package:projet2cp/ImageGenerator.dart';
 import 'package:projet2cp/Margin.dart';
+import 'package:projet2cp/Repository/DatabaseRepository.dart';
 import 'package:projet2cp/TextGenerator.dart';
 import 'package:projet2cp/Color.dart' as color;
+import 'package:projet2cp/User.dart' as user;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterBody extends Body {
 
 
   Function onRegister;
+  late Couple userName;
   RegisterBody({Key? key, required this.onRegister, super.lastScreen}) : super(key: key);
 
 
@@ -34,7 +40,7 @@ class RegisterBody extends Body {
     Margin formMargin = Margin(context: context, bottom: 19);
 
 
-    final userName = textGenerator.generateTextField(
+    userName = textGenerator.generateTextField(
       height: 39,
       width: 257,
       hintText: "Nom d'utilisateur",
@@ -79,9 +85,9 @@ class RegisterBody extends Body {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  userName.widget,
-                  email.widget,
-                  password.widget,
+                  userName.first,
+                  email.first,
+                  password.first,
                   buttonGenerator.generateTextButton(
                     height: 39,
                     width: 257,
@@ -89,13 +95,13 @@ class RegisterBody extends Body {
                     text: "inscription",
                     margin: formMargin,
                     onTap: (){
-
+                      //
                       FirebaseAuth.instance.createUserWithEmailAndPassword(
-                        email: email.textField.controller!.text,
-                        password: password.textField.controller!.text,
-                      ).then((value) => onRegister.call()).catchError((e) => print("Error: $e"));
+                        email: email.second.controller!.text,
+                        password: password.second.controller!.text,
+                      ).then((value) => register()).catchError((e) => print("Error: $e"));
                     },
-                  ),
+                  ).first,
                 ],
               ),
             ),
@@ -104,4 +110,12 @@ class RegisterBody extends Body {
       ),
     );
   }
+  Future<void> register() async {
+    user.User().name = userName.second.controller!.text;
+    await DatabaseRepository().openDB();
+    await DatabaseRepository().upload();
+    onRegister.call();
+  }
+
+
 }

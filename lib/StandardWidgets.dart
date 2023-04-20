@@ -36,7 +36,7 @@ class StandardWidgets {
       backgroundColor: color.Color.white,
       cornerRadius: 23,
 
-    );
+    ).first;
   }
 
   Widget backButton({Function? onBackButtonTapped}){
