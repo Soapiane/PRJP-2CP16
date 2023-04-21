@@ -1,5 +1,6 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:projet2cp/Authentication/MainScreen.dart';
 import 'package:projet2cp/Repository/DatabaseRepository.dart';
@@ -29,6 +30,7 @@ class _SplashState extends State<SplashScreen>{
   navigateToHome()async{
 
 
+    await DatabaseRepository().openDB();
 
 
 

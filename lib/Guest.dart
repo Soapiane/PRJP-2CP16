@@ -4,39 +4,31 @@ import 'package:projet2cp/Avatar.dart';
 import 'package:projet2cp/Difficulty.dart';
 import 'package:projet2cp/Info.dart';
 import 'package:projet2cp/Repository/DatabaseRepository.dart';
+import 'package:projet2cp/Repository/GuestRepository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class User extends Info {
-  static final User _instance = User._internal();
-
-  late String _name = "";
+class Guest extends Info {
+  static final Guest _instance = Guest._internal();
 
 
 
-  factory User() {
+
+  factory Guest() {
     return _instance;
   }
 
-  User._internal();
-
+  Guest._internal();
 
   set difficulty(Difficulty value) {
     difficulty = value;
-    DatabaseRepository().saveUserInfo();
+    GuestRepository().saveUserInfo();
   }
 
-
-  String get name => _name;
-
-  set name(String value) {
-    _name = value;
-    DatabaseRepository().saveUserInfo();
-  }
 
 
   set avatar(Avatar value) {
     avatar = value;
-    DatabaseRepository().saveUserInfo();
+    GuestRepository().saveUserInfo();
   }
 
 

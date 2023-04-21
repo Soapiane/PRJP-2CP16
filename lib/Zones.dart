@@ -12,4 +12,9 @@ enum Zones {
     required this.cardImagePath,
   });
 
+  int get id => index+1;
+
+
+
+
 }

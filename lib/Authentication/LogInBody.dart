@@ -10,6 +10,7 @@ import 'package:projet2cp/Margin.dart';
 import 'package:projet2cp/Repository/DatabaseRepository.dart';
 import 'package:projet2cp/TextGenerator.dart';
 import 'package:projet2cp/Body.dart';
+import 'package:projet2cp/User.dart' as user;
 
 class LogInBody extends Body {
 

@@ -29,20 +29,25 @@ enum Trophies {
     this.imagePath,
   );
 
+
+  int get id => index+1;
+
 }
 
 class Trophy {
 
-  final int id;
   final bool isUnlocked;
   late Trophies trophy;
 
   Trophy({
-    required this.id,
     required this.isUnlocked,
-  }) {
-    this.trophy = Trophies.values[id];
-  }
+    required this.trophy,
+  });
+
+
+  int get id => trophy.id;
+
+
 
 
 }
