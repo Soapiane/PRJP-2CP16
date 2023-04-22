@@ -19,17 +19,20 @@ class Guest extends Info {
 
   Guest._internal();
 
-  set difficulty(Difficulty value) {
-    difficulty = value;
+  void setDifficulty(Difficulty value) {
+    super.setDifficulty(value);
     GuestRepository().saveUserInfo();
   }
 
 
 
-  set avatar(Avatar value) {
-    avatar = value;
+  @override
+  void setAvatar(Avatar value) {
+    super.setAvatar(value);
     GuestRepository().saveUserInfo();
   }
+
+
 
 
 

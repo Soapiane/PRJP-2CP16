@@ -129,7 +129,7 @@ class _AvatarSelectionBodyState extends State<_AvatarSelectionBody> {
   }
 
   Future<void> _onFinally() async {
-    User().avatar = Avatar.values[_selectedIndex];
+    User().setAvatar(Avatar.values[_selectedIndex]);
     DatabaseRepository().uploadUserInfo();
     widget.onFinally.call();
   }

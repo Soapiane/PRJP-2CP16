@@ -4,7 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:projet2cp/Body.dart';
 import 'package:projet2cp/ButtonGenerator.dart';
+import 'package:projet2cp/Guest.dart';
 import 'package:projet2cp/ImageGenerator.dart';
+import 'package:projet2cp/Repository/GuestRepository.dart';
 import 'package:projet2cp/TextGenerator.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart' as svg_provider;
 import 'package:projet2cp/Color.dart' as color;
@@ -53,13 +55,22 @@ class AuthMainBody extends Body {
           text: "Jouer",
           backgroundColor: color.Color.yellow,
           onTap: (){
-            onPlay.call();
+            onPlayPressed();
           },
         ).first,
 
       ],
     );
   }
+
+  Future<void> onPlayPressed() async {
+    GuestRepository().openDB();
+    onPlay.call();
+  }
+
+
+
+
 
 
 }

@@ -111,7 +111,7 @@ class RegisterBody extends Body {
     );
   }
   Future<void> register() async {
-    user.User().name = userName.second.controller!.text;
+    user.User().setName(userName.second.controller!.text);
     await DatabaseRepository().openDB();
     await DatabaseRepository().upload();
     onRegister.call();

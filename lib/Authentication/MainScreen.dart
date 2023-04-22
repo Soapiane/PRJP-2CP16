@@ -2,6 +2,7 @@
 
 import 'dart:ui';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:projet2cp/Authentication/AuthMainBody.dart';
 import 'package:projet2cp/Authentication/AvatarSelectionBody.dart';
@@ -15,6 +16,7 @@ import 'package:projet2cp/ButtonGenerator.dart';
 import 'package:projet2cp/ImageGenerator.dart';
 import 'package:projet2cp/Language.dart';
 import 'package:projet2cp/Repository/DatabaseRepository.dart';
+import 'package:projet2cp/Repository/GuestRepository.dart';
 import 'package:projet2cp/StandardWidgets.dart';
 import 'package:projet2cp/TextGenerator.dart';
 import 'package:projet2cp/TextStyles.dart';
@@ -263,7 +265,11 @@ class _MainState extends State<MainScreen> {
   }
 
   Future<void> signOut() async {
-    await DatabaseRepository().signOut();
+    if (FirebaseAuth.instance.currentUser != null) {
+      await DatabaseRepository().signOut();
+    } else {
+      await GuestRepository().closeDB();
+    }
   }
 
 

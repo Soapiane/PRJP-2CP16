@@ -20,24 +20,28 @@ class User extends Info {
   User._internal();
 
 
-  set difficulty(Difficulty value) {
-    difficulty = value;
+
+  @override
+  void setDifficulty(Difficulty value) {
+    super.setDifficulty(value);
     DatabaseRepository().saveUserInfo();
   }
 
 
   String get name => _name;
 
-  set name(String value) {
+
+  void setName(String value) {
     _name = value;
     DatabaseRepository().saveUserInfo();
   }
 
-
-  set avatar(Avatar value) {
-    avatar = value;
+  @override
+  void setAvatar(Avatar value) {
+    super.setAvatar(value);
     DatabaseRepository().saveUserInfo();
   }
+
 
 
 

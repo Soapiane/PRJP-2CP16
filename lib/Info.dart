@@ -13,7 +13,8 @@ abstract class Info {
 
   Difficulty get difficulty => _difficulty;
 
-  set difficulty(Difficulty value) {
+
+  void setDifficulty(Difficulty value) {
     _difficulty = value;
   }
 
@@ -21,12 +22,8 @@ abstract class Info {
 
   Avatar get avatar => _avatar;
 
-  set avatar(Avatar value) {
+  void setAvatar(Avatar value) {
     _avatar = value;
   }
-
-
-
-
 }
 
