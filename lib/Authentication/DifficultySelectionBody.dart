@@ -1,15 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:projet2cp/Body.dart';
+import 'package:projet2cp/Navigation/Body.dart';
 import 'package:projet2cp/ButtonGenerator.dart';
 import 'package:projet2cp/Color.dart';
-import 'package:projet2cp/Difficulty.dart';
+import 'package:projet2cp/Info/Difficulty.dart';
 import 'package:projet2cp/Color.dart' as color;
 import 'package:projet2cp/Margin.dart';
 import 'package:projet2cp/Repository/DatabaseRepository.dart';
 import 'package:projet2cp/TextGenerator.dart';
 import 'package:projet2cp/Triple.dart';
-import 'package:projet2cp/User.dart';
+import 'package:projet2cp/Info/User.dart';
 
 
 class DifficultySelectionBody extends Body {

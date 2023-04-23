@@ -6,7 +6,7 @@ import 'package:game_levels_scrolling_map/model/point_model.dart';
 import 'package:projet2cp/MiniGames/MiniGameMainScreen.dart';
 import 'package:projet2cp/SplashScreen/SplashScreen.dart';
 import 'package:projet2cp/Navigation/Zone/ZoneBody.dart';
-import 'package:projet2cp/Zones.dart';
+import 'package:projet2cp/Navigation/Zones.dart';
 
 
 

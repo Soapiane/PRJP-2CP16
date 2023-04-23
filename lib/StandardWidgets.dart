@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:projet2cp/ButtonGenerator.dart';
 import 'package:projet2cp/Color.dart' as color;
-import 'package:projet2cp/Language.dart';
+import 'package:projet2cp/Info/Language.dart';
 
 class StandardWidgets {
   BuildContext context;

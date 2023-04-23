@@ -2,19 +2,26 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:projet2cp/Body.dart';
+import 'package:projet2cp/Navigation/Body.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart' as svg_provider;
 import 'package:projet2cp/Navigation/Zone/ZoneBody.dart';
 import 'package:projet2cp/ButtonGenerator.dart';
 import 'package:projet2cp/Generator.dart';
+import 'package:projet2cp/Repository/DatabaseRepository.dart';
 import 'package:projet2cp/Repository/GuestRepository.dart';
-import 'package:projet2cp/Zones.dart';
+import 'package:projet2cp/Navigation/Zones.dart';
 
 class ZoneSelectionBody extends Body {
 
   Function(Zones zone) onCardTap;
 
   ZoneSelectionBody({super.key, required this.onCardTap, super.isBlured = true});
+
+  Future<void> testQuery() async {
+    await DatabaseRepository().printDB();
+    var result = (await DatabaseRepository().database!.rawQuery("SELECT * FROM level WHERE zone_id = ? ORDER BY level ASC", [3])).toList();
+    print("and value is: $result");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +33,10 @@ class ZoneSelectionBody extends Body {
 
 
 
-    if (FirebaseAuth.instance.currentUser == null){
-      GuestRepository().printDB();
+    if (FirebaseAuth.instance.currentUser != null){
+      testQuery();
+
+
     }
 
 

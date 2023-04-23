@@ -1,13 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:projet2cp/Avatar.dart';
-import 'package:projet2cp/Difficulty.dart';
-import 'package:projet2cp/Guest.dart';
+import 'package:projet2cp/Info/Avatar.dart';
+import 'package:projet2cp/Info/Difficulty.dart';
+import 'package:projet2cp/Info/Guest.dart';
 import 'package:projet2cp/Repository/Repository.dart';
-import 'package:projet2cp/Zones.dart';
+import 'package:projet2cp/Navigation/Zones.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import 'package:projet2cp/User.dart' as user;
 import 'package:projet2cp/Collectables/Trophy.dart';
 import 'package:uuid/uuid.dart';
 

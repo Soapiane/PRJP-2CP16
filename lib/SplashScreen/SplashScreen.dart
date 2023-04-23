@@ -4,7 +4,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:projet2cp/Authentication/MainScreen.dart';
 import 'package:projet2cp/Repository/DatabaseRepository.dart';
-import 'package:projet2cp/Zones.dart';
+import 'package:projet2cp/Navigation/Zones.dart';
 import 'package:sqflite/sqflite.dart';
 
 
@@ -32,6 +32,20 @@ class _SplashState extends State<SplashScreen>{
 
     await DatabaseRepository().openDB();
 
+    await DatabaseRepository().database!.update("level", {
+      "stars": 2,
+      },
+      where: "id = ?",
+      whereArgs: [17],
+
+    );
+
+    await DatabaseRepository().printDB();
+
+
+    if (FirebaseAuth.instance.currentUser != null) {
+      await DatabaseRepository().syncZone(Zones.foret);
+    }
 
 
     await Future.delayed(Duration(milliseconds: 2000),(){

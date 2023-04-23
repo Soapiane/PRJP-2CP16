@@ -1,13 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:projet2cp/Avatar.dart';
-import 'package:projet2cp/Difficulty.dart';
+import 'package:projet2cp/Info/Avatar.dart';
+import 'package:projet2cp/Info/Difficulty.dart';
 import 'package:projet2cp/Repository/Repository.dart';
-import 'package:projet2cp/Zones.dart';
+import 'package:projet2cp/Navigation/Zones.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import 'package:projet2cp/User.dart' as user;
+import 'package:projet2cp/Info/User.dart' as user;
 import 'package:projet2cp/Collectables/Trophy.dart';
 import 'package:uuid/uuid.dart';
 
@@ -41,9 +41,6 @@ class DatabaseRepository extends Repository {
   }
 
 
-
-
-
   Future<void> signOut() async {
     await deleteDB();
 
@@ -60,20 +57,36 @@ class DatabaseRepository extends Repository {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     user.User().setName(prefs.getString("name") ?? "Player");
     user.User().setAvatar(Avatar.values[prefs.getInt("avatar") ?? 0]);
-    user.User().setDifficulty(Difficulty.values[prefs.getInt("difficulty") ?? 0]);
+    user.User().setDifficulty(
+        Difficulty.values[prefs.getInt("difficulty") ?? 0]);
   }
 
 
   @override
   Future<void> saveUserInfo() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('name', user.User().name);
-    await prefs.setInt('avatar', user.User().avatar.index);
-    await prefs.setInt('difficulty', user.User().difficulty.index);
+    await prefs.setString('name', user
+        .User()
+        .name);
+    await prefs.setInt('avatar', user
+        .User()
+        .avatar
+        .index);
+    await prefs.setInt('difficulty', user
+        .User()
+        .difficulty
+        .index);
   }
 
-  Future<void> synchronizeDB() async {
-
+  Future<void> updateUserInfo() async {
+    await FirebaseDatabase(databaseURL: databaseLink).reference().child("users")
+        .child(FirebaseAuth.instance.currentUser!.uid).once()
+        .then((DataSnapshot snapshot) {
+      user.User().setName(snapshot.value["name"]);
+      user.User().setAvatar(Avatar.values[snapshot.value["avatar"]]);
+      user.User().setDifficulty(
+          Difficulty.values[snapshot.value["difficulty"]]);
+    });
   }
 
 
@@ -103,34 +116,46 @@ class DatabaseRepository extends Repository {
   }
 
   Future<void> uploadUserInfo() async {
-    await FirebaseDatabase(databaseURL: databaseLink).reference().child("users").child(FirebaseAuth.instance.currentUser!.uid).update({
-      "id" : FirebaseAuth.instance.currentUser!.uid,
-      "name": user.User().name,
-      "avatar": user.User().avatar.index,
-      "difficulty": user.User().difficulty.index,
+    await FirebaseDatabase(databaseURL: databaseLink).reference()
+        .child("users")
+        .child(FirebaseAuth.instance.currentUser!.uid)
+        .update({
+      "id": FirebaseAuth.instance.currentUser!.uid,
+      "name": user
+          .User()
+          .name,
+      "avatar": user
+          .User()
+          .avatar
+          .index,
+      "difficulty": user
+          .User()
+          .difficulty
+          .index,
     });
   }
 
   Future<void> fetchAndUploadZone(Zones zone) async {
-
     List<Map> _zone = await database!.query('zone',
       where: 'id = ?',
       whereArgs: [zone.id],
     );
-    
+
     await uploadZone(_zone[0]);
   }
-  
+
   Future<void> uploadZone(Map zone) async {
-    await FirebaseDatabase(databaseURL: databaseLink).reference().child("users").child(FirebaseAuth.instance.currentUser!.uid).child("zones").child(zone["name"]).set({
-      "id" : zone['id'],
+    await FirebaseDatabase(databaseURL: databaseLink).reference().child("users")
+        .child(FirebaseAuth.instance.currentUser!.uid).child("zones").child(
+        zone["name"])
+        .set({
+      "id": zone['id'],
       "name": zone['name'],
       "stars": zone['stars'],
       "levelsNb": zone['levelsNb'],
       "levelReached": zone['levelReached'],
       "isFinished": zone['isFinished'],
     });
-
   }
 
   Future<void> fetchAndUploadLevel(Zones zone, int level) async {
@@ -140,17 +165,18 @@ class DatabaseRepository extends Repository {
     );
     await uploadLevel(_level[0]);
   }
-  
+
   Future<void> uploadLevel(Map level) async {
     await FirebaseDatabase(databaseURL: databaseLink).reference()
         .child("users")
         .child(FirebaseAuth.instance.currentUser!.uid)
         .child("zones")
-        .child(Zones.values[level["zone_id"]-1].toString().split(".")[1])
+        .child(Zones.values[level["zone_id"] - 1].toString().split(".")[1])
         .child("levels")
-        .child(level["level"].toString())
+        .child("level${level["level"].toString()}")
         .update({
-      "id" : level['id'],
+      "id": level['id'],
+      "isLocked": level['isLocked'],
       "level": level['level'],
       "stars": level['stars'],
       "isQuiz": level['isQuiz'],
@@ -167,26 +193,32 @@ class DatabaseRepository extends Repository {
   }
 
   Future<void> uploadTrophy(Map trophy) async {
-    await FirebaseDatabase(databaseURL: databaseLink).reference().child("users").child(FirebaseAuth.instance.currentUser!.uid).child("trophies").child(trophy["id"].toString()).update({
-      "id" : trophy['id'],
+    await FirebaseDatabase(databaseURL: databaseLink).reference()
+        .child("users")
+        .child(FirebaseAuth.instance.currentUser!.uid)
+        .child("trophies")
+        .child("trophy${trophy["id"].toString()}").update({
+      "id": trophy['id'],
       "isCollected": trophy['isCollected'],
     });
   }
 
-  
-  
-  Future<void> download() async {
 
+  Future<void> download() async {
     await updateUserInfo();
 
 
     print("it's downloading 1");
 
 
-
-    await FirebaseDatabase(databaseURL: databaseLink).reference().child("users").child(FirebaseAuth.instance.currentUser!.uid).child("zones").get().then((snapshot) {
+    await FirebaseDatabase(databaseURL: databaseLink).reference().child("users")
+        .child(FirebaseAuth.instance.currentUser!.uid).child("zones").get()
+        .then((snapshot) {
       (snapshot.value as Map).forEach((key, value) {
         updateZone(value);
+        (value["levels"] as Map).forEach((key, value) {
+          updateLevel(value);
+        });
       });
     });
 
@@ -194,79 +226,107 @@ class DatabaseRepository extends Repository {
     print("it's downloading 2");
 
 
-
-    await FirebaseDatabase(databaseURL: databaseLink).reference().child("users").child(FirebaseAuth.instance.currentUser!.uid).child("levels").onValue.listen((event) async {
-
-      for (var level in event.snapshot.value ) {
-          updateLevel(level);
-
-      }
-
-    });
-
-
-    print("it's downloading 3");
-
-
-
-
-    await FirebaseDatabase(databaseURL: databaseLink).reference().child("users").child(FirebaseAuth.instance.currentUser!.uid).child("trophies").onValue.listen((event) {
-      for (Map trophy in event.snapshot.value ) {
-        updateTrophy(trophy);
-      }
-    });
-
-
-    print("it's downloading 4");
-    
-  }
-  
-  Future<void> updateUserInfo() async {
-    await FirebaseDatabase(databaseURL: databaseLink).reference().child("users").child(FirebaseAuth.instance.currentUser!.uid).once().then((DataSnapshot snapshot) {
-      user.User().setName(snapshot.value["name"]);
-      user.User().setAvatar(Avatar.values[snapshot.value["avatar"]]);
-      user.User().setDifficulty(Difficulty.values[snapshot.value["difficulty"]]);
-    });
-  }
-  
-  Future<void> downloadAndUpdateZone(Zones zone) async {
-    await FirebaseDatabase(databaseURL: databaseLink).reference().child("users").child(FirebaseAuth.instance.currentUser!.uid).child("zones").child(zone.toString().split(".")[1]).once().then((DataSnapshot snapshot) {
-      updateZone(snapshot.value);
-    });
-  }
-  
-
-  
-
-  Future<void> downloadAndUpdateLevel(Zones zone, int level) async {
     await FirebaseDatabase(databaseURL: databaseLink).reference()
         .child("users")
         .child(FirebaseAuth.instance.currentUser!.uid)
-        .child("zones")
-        .child(zone.toString().split(".")[1])
-        .child("levels")
-        .child(level.toString()).get().then((snapshot) {
-          updateLevel(snapshot.value);
+        .child("trophies")
+        .get().then((snapshot) {
+      (snapshot.value as Map).forEach((key, value) {
+        updateTrophy(value);
+      });
     });
+
+    print("it's downloading 3");
   }
 
 
-
-  Future<void> fetchAndDownloadTrophy(Trophies trophy) async {
-    await FirebaseDatabase(databaseURL: databaseLink).reference().child("users").child(FirebaseAuth.instance.currentUser!.uid).child("trophies").child(trophy.id.toString()).once().then((DataSnapshot snapshot) {
-      updateTrophy(snapshot.value);
-    });
-  }
-
-
-
-  
+    Future<void> downloadAndUpdateZone(Zones zone) async {
+      await FirebaseDatabase(databaseURL: databaseLink).reference().child(
+          "users").child(FirebaseAuth.instance.currentUser!.uid).child("zones")
+          .child(zone.toString().split(".")[1]).once()
+          .then((DataSnapshot snapshot) {
+        updateZone(snapshot.value);
+      });
+    }
 
 
+    Future<void> downloadAndUpdateLevel(Zones zone, int level) async {
+      await FirebaseDatabase(databaseURL: databaseLink).reference()
+          .child("users")
+          .child(FirebaseAuth.instance.currentUser!.uid)
+          .child("zones")
+          .child(zone.toString().split(".")[1])
+          .child("levels")
+          .child(level.toString()).get().then((snapshot) {
+        updateLevel(snapshot.value);
+      });
+    }
+
+
+    Future<void> fetchAndDownloadTrophy(Trophies trophy) async {
+      await FirebaseDatabase(databaseURL: databaseLink).reference().child(
+          "users").child(FirebaseAuth.instance.currentUser!.uid).child(
+          "trophies").child(trophy.id.toString()).once().then((
+          DataSnapshot snapshot) {
+        updateTrophy(snapshot.value);
+      });
+    }
+
+
+    Map<String, dynamic> compareLevels(Map<Object?, Object?> lvl1, Map lvl2) {
+      if (lvl1["isLocked"] == 1 && lvl2["isLocked"] == 0) {
+        return lvl2 as Map<String, dynamic>;
+      } else if (lvl1["isLocked"] == 0 && lvl2["isLocked"] == 1) {
+        return lvl1 as Map<String, dynamic>;
+      } else if (lvl1["isLocked"] == 1 && lvl2["isLocked"] == 1) {
+        return lvl1 as Map<String, dynamic>;
+      } else {
+        return ((lvl1["stars"] as int)> lvl2["stars"] ? lvl1 : lvl2)  as Map<String, dynamic>;
+      }
+    }
+
+
+    Future<void> syncZone(Zones zone) async {
+
+      List<Map> _levels = (await DatabaseRepository().database!.rawQuery("SELECT * FROM level WHERE zone_id = ? ORDER BY level ASC", [3])).toList();
+      late Map<dynamic, dynamic> level;
+      FirebaseDatabase(databaseURL: databaseLink)
+          .reference()
+          .child("users")
+          .child(FirebaseAuth.instance.currentUser!.uid)
+          .child("zones")
+          .child(zone.toString().split(".")[1])
+          .child("levels").get().then((snapshot) {
+            (snapshot.value as Map).forEach((key, value) {
+
+              Map map = Map<String, dynamic>.from(value) as Map<String, dynamic>;
+
+              level = compareLevels(map , _levels[map["level"]]);
+              updateLevel(level);
+              uploadLevel(level);
+              _levels[map["level"]] = level;
+            });
+          });
 
 
 
+      int allStars = (await DatabaseRepository().database!.rawQuery("SELECT SUM(stars) as Total FROM level GROUP BY zone_id")).toList()[zone.index]["Total"] as int;
+      int isFinished = 0;
+      if (allStars > 0 && _levels.last["stars"] > 0) {
+        isFinished = 1;
+        if (allStars == 3 * _levels.length) {
 
+        }
+      }
+      await database!.update(
+        "zone",
+        {
+          "stars": allStars,
+        },
+        where: "id = ?",
+        whereArgs: [zone.id],
+      );
+    }
 
 
 }

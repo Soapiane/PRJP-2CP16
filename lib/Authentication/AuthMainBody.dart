@@ -2,9 +2,9 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:projet2cp/Body.dart';
+import 'package:projet2cp/Navigation/Body.dart';
 import 'package:projet2cp/ButtonGenerator.dart';
-import 'package:projet2cp/Guest.dart';
+import 'package:projet2cp/Info/Guest.dart';
 import 'package:projet2cp/ImageGenerator.dart';
 import 'package:projet2cp/Repository/GuestRepository.dart';
 import 'package:projet2cp/TextGenerator.dart';

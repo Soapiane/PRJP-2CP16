@@ -9,8 +9,8 @@ import 'package:projet2cp/Color.dart' as color;
 import 'package:projet2cp/Margin.dart';
 import 'package:projet2cp/Repository/DatabaseRepository.dart';
 import 'package:projet2cp/TextGenerator.dart';
-import 'package:projet2cp/Body.dart';
-import 'package:projet2cp/User.dart' as user;
+import 'package:projet2cp/Navigation/Body.dart';
+import 'package:projet2cp/Info/User.dart' as user;
 
 class LogInBody extends Body {
 

@@ -1,5 +1,5 @@
 import 'package:projet2cp/Collectables/Trophy.dart';
-import 'package:projet2cp/Zones.dart';
+import 'package:projet2cp/Navigation/Zones.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -44,6 +44,7 @@ abstract class Repository {
     await db.execute('''
       CREATE TABLE IF NOT EXISTS level (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
+        isLocked INTEGER,
         level INTEGER,
         stars INTEGER,
         isQuiz INTEGER,
@@ -89,6 +90,7 @@ abstract class Repository {
       for (int j = 0; j < 8; j++) {
         await db.insert('level', {
           'level': j,
+          'isLocked': j == 0 ? 0 : 1,
           'stars': 0,
           'zone_id': zone_id,
           'isQuiz': 0
@@ -154,6 +156,7 @@ abstract class Repository {
 
   Future<void> updateLevel(Map level) async {
     database!.update('level', {
+      'isLocked': level["isLocked"],
       'stars': level["stars"],
       'isQuiz': level["isQuiz"],
     },

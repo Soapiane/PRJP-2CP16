@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:flame/game.dart';
-import 'package:projet2cp/Difficulty.dart';
+import 'package:projet2cp/Info/Difficulty.dart';
 import 'package:projet2cp/MiniGames/MiniGameHUD.dart';
-import 'package:projet2cp/User.dart';
+import 'package:projet2cp/Info/User.dart';
 
 abstract class MiniGame extends FlameGame {
 

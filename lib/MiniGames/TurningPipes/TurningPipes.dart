@@ -6,7 +6,7 @@ import 'dart:ui';
 import 'package:flame/game.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flutter/material.dart';
-import 'package:projet2cp/Difficulty.dart';
+import 'package:projet2cp/Info/Difficulty.dart';
 import 'package:projet2cp/MiniGames/MiniGame.dart';
 import 'SolutionPipe.dart';
 import 'Pipe.dart';

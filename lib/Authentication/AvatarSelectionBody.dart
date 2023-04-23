@@ -1,14 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:projet2cp/Avatar.dart';
-import 'package:projet2cp/Body.dart';
+import 'package:projet2cp/Info/Avatar.dart';
+import 'package:projet2cp/Navigation/Body.dart';
 import 'package:projet2cp/ButtonGenerator.dart';
 import 'package:projet2cp/Color.dart' as color;
 import 'package:projet2cp/Generator.dart';
 import 'package:projet2cp/Margin.dart';
 import 'package:projet2cp/Repository/DatabaseRepository.dart';
 import 'package:projet2cp/TextGenerator.dart';
-import 'package:projet2cp/User.dart';
+import 'package:projet2cp/Info/User.dart';
 
 class AvatarSelectionBody extends Body {
 

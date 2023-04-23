@@ -9,7 +9,7 @@ import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:projet2cp/ButtonGenerator.dart';
 import 'package:projet2cp/ImageGenerator.dart';
 import 'package:projet2cp/StandardWidgets.dart';
-import 'package:projet2cp/Zones.dart';
+import 'package:projet2cp/Navigation/Zones.dart';
 
 class MiniGameHUD extends StatefulWidget{
 

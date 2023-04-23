@@ -6,7 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:projet2cp/Authentication/AuthMainBody.dart';
 import 'package:projet2cp/Authentication/AvatarSelectionBody.dart';
-import 'package:projet2cp/Body.dart';
+import 'package:projet2cp/Navigation/Body.dart';
 import 'package:projet2cp/Authentication/DifficultySelectionBody.dart';
 import 'package:projet2cp/Authentication/LogInBody.dart';
 import 'package:projet2cp/Authentication/RegisterBody.dart';
@@ -14,7 +14,7 @@ import 'package:projet2cp/Navigation/Zone/ZoneBody.dart';
 import 'package:projet2cp/Navigation/ZoneSelectionBody.dart';
 import 'package:projet2cp/ButtonGenerator.dart';
 import 'package:projet2cp/ImageGenerator.dart';
-import 'package:projet2cp/Language.dart';
+import 'package:projet2cp/Info/Language.dart';
 import 'package:projet2cp/Repository/DatabaseRepository.dart';
 import 'package:projet2cp/Repository/GuestRepository.dart';
 import 'package:projet2cp/StandardWidgets.dart';
@@ -23,7 +23,7 @@ import 'package:projet2cp/TextStyles.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart' as svg_provider;
 import 'package:projet2cp/Color.dart' as color;
-import 'package:projet2cp/Zones.dart';
+import 'package:projet2cp/Navigation/Zones.dart';
 
 class MainScreen extends StatefulWidget {
 
@@ -58,18 +58,7 @@ class _MainState extends State<MainScreen> {
   late AvatarSelectionBody avatarSelectionBody;
 
 
-  // void goToZoneSelection(){
-  //   setState(() {
-  //     blur = ImageFilter.blur(
-  //       sigmaX: 10,
-  //       sigmaY: 10,
-  //     );
-  //
-  //     zoneSelectionBody.lastScreen = body;
-  //     body = zoneSelectionBody;
-  //
-  //   });
-  // }
+
 
 
 

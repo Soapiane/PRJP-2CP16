@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:projet2cp/Body.dart';
+import 'package:projet2cp/Navigation/Body.dart';
 import 'package:projet2cp/ButtonGenerator.dart';
 import 'package:projet2cp/Couple.dart';
 import 'package:projet2cp/ImageGenerator.dart';
@@ -13,7 +13,7 @@ import 'package:projet2cp/Margin.dart';
 import 'package:projet2cp/Repository/DatabaseRepository.dart';
 import 'package:projet2cp/TextGenerator.dart';
 import 'package:projet2cp/Color.dart' as color;
-import 'package:projet2cp/User.dart' as user;
+import 'package:projet2cp/Info/User.dart' as user;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterBody extends Body {
