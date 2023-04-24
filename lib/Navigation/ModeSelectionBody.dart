@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:projet2cp/ButtonGenerator.dart';
+import 'package:projet2cp/MiniGames/Hud/ScoreScreen.dart';
 import 'package:projet2cp/Navigation/Body.dart';
 import 'package:projet2cp/Navigation/Mode.dart';
 import 'package:projet2cp/Color.dart' as color;
@@ -13,11 +14,35 @@ class ModeSelectionBody extends Body {
 
   ModeSelectionBody({Key? key, this.onModeSelected, super.lastScreen}) : super(key: key);
 
+  Future<void> testMenu(BuildContext context) async {
+
+    Widget menu = ScoreScreen(stars: 1,).build(context);
+
+    await Future.delayed(const Duration(milliseconds: 2000),(){
+
+
+      showDialog(
+        barrierDismissible: true,
+        context: context,
+        builder: (BuildContext context) {
+          return ScoreScreen(stars: 1,);
+        },
+      );
+
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
 
     ButtonGenerator buttonGenerator = ButtonGenerator(context: context);
     TextGenerator textGenerator = TextGenerator(context: context);
+
+    testMenu(context);
+
+
+
 
 
 
