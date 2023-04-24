@@ -32,17 +32,6 @@ class _SplashState extends State<SplashScreen>{
 
     await DatabaseRepository().openDB();
 
-    await DatabaseRepository().database!.update("level", {
-      "stars": 2,
-      },
-      where: "id = ?",
-      whereArgs: [17],
-
-    );
-
-    await DatabaseRepository().printDB();
-
-
     if (FirebaseAuth.instance.currentUser != null) {
       await DatabaseRepository().syncZone(Zones.foret);
     }

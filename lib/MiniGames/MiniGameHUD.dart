@@ -10,6 +10,7 @@ import 'package:projet2cp/ButtonGenerator.dart';
 import 'package:projet2cp/ImageGenerator.dart';
 import 'package:projet2cp/StandardWidgets.dart';
 import 'package:projet2cp/Navigation/Zones.dart';
+import 'package:projet2cp/Color.dart' as color;
 
 class MiniGameHUD extends StatefulWidget{
 
@@ -85,7 +86,7 @@ class _MiniGameHUDState extends State<MiniGameHUD>{
   int points = 0, stars = 0;
   late bool hasTimer, hasPoints;
   late Widget view, pointsView = const SizedBox.shrink(), timerView = const SizedBox.shrink(), starsView = const SizedBox.shrink();
-  static const double DIM = 30;
+  late double DIM1 = 30, DIM2;
 
 
 
@@ -123,18 +124,24 @@ class _MiniGameHUDState extends State<MiniGameHUD>{
     ImageGenerator imageGenerator = ImageGenerator(context: context);
     ButtonGenerator buttonGenerator = ButtonGenerator(context: context);
 
+    DIM1 = imageGenerator.calculateY(30);
+    DIM2 = imageGenerator.calculateY(24);
+
     timerView = widget.countdown != null ?
     Row(
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       children: [
 
-        imageGenerator.generateImage(height: DIM, width: DIM, imagePath: "assets/hud/time.svg"),
-        Text(
-          '$minutes:$seconds',
-          style: const TextStyle(
-            color: Colors.red,
-            fontSize: 25,
+        imageGenerator.generateImage(height: DIM2, width: DIM2, imagePath: "assets/hud/time.svg"),
+        Padding(
+          padding: const EdgeInsets.only(left: 5),
+          child: Text(
+            '$minutes:$seconds',
+            style: const TextStyle(
+              color: Colors.red,
+              fontSize: 25,
+            ),
           ),
         ),
       ],
@@ -145,7 +152,7 @@ class _MiniGameHUDState extends State<MiniGameHUD>{
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       children: [
-        imageGenerator.generateImage(height: DIM, width: DIM, imagePath: "assets/hud/star.svg"),
+        imageGenerator.generateImage(height: DIM2, width: DIM2, imagePath: "assets/hud/star.svg"),
         Text(
           ' $stars/3',
           style: const TextStyle(
@@ -162,7 +169,7 @@ class _MiniGameHUDState extends State<MiniGameHUD>{
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        imageGenerator.generateImage(height: DIM, width: DIM, imagePath: widget.pointsAsset),
+        imageGenerator.generateImage(height: DIM2, width: DIM2, imagePath: widget.pointsAsset),
         Text(
           '$points / ${widget.maxPoints}',
           style: const TextStyle(
@@ -173,24 +180,28 @@ class _MiniGameHUDState extends State<MiniGameHUD>{
       ],
     ) : const SizedBox.shrink();
 
-    view = Padding(
-      padding: const EdgeInsets.all(10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          timerView,
-          starsView,
-          pointsView,
-          buttonGenerator.generateImageButtom(
-            height: DIM,
-            width: DIM,
-            borderRadius: BorderRadius.circular(23.5),
-            imagePath: "assets/settings.svg",
-            onTap: (){
-              onPaused();
-            },
-          ),
-        ],
+    view = Material(
+      elevation: 10,
+      color: color.Color.yellowGreen.color,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(40, 5, 40, 5),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            timerView,
+            starsView,
+            pointsView,
+            buttonGenerator.generateImageButtom(
+              height: DIM1,
+              width: DIM1,
+              borderRadius: BorderRadius.circular(10),
+              imagePath: "assets/nav_buttons/pause.svg",
+              onTap: (){
+                onPaused();
+              },
+            ),
+          ],
+        ),
       ),
     );
 

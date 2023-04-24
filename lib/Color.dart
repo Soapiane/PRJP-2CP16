@@ -2,6 +2,9 @@ import 'dart:ui';
 import 'package:flutter/painting.dart' as p;
 
 enum Color {
+
+  denimBlue(color: p.Color(0xff81B0FE)),
+  yellowGreen(color: p.Color(0xff8CC63F )),
   bangladeshGreen(color: p.Color(0xff04724D )),
   blackOlive(color: p.Color(0xff404040)),
   black(color: p.Color(0xff000000)),

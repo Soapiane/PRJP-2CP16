@@ -10,6 +10,8 @@ import 'package:projet2cp/Navigation/Body.dart';
 import 'package:projet2cp/Authentication/DifficultySelectionBody.dart';
 import 'package:projet2cp/Authentication/LogInBody.dart';
 import 'package:projet2cp/Authentication/RegisterBody.dart';
+import 'package:projet2cp/Navigation/Mode.dart';
+import 'package:projet2cp/Navigation/ModeSelectionBody.dart';
 import 'package:projet2cp/Navigation/Zone/ZoneBody.dart';
 import 'package:projet2cp/Navigation/ZoneSelectionBody.dart';
 import 'package:projet2cp/ButtonGenerator.dart';
@@ -53,9 +55,11 @@ class _MainState extends State<MainScreen> {
   late LogInBody logInBody;
   late RegisterBody registerBody;
   late DifficultySelectionBody difficultySelectionBody;
+  late ModeSelectionBody modeSelectionBody;
   late ZoneSelectionBody zoneSelectionBody;
   late ZoneBody zoneBody;
   late AvatarSelectionBody avatarSelectionBody;
+  late Widget challengesButton, trophiesWidget;
 
 
 
@@ -67,7 +71,6 @@ class _MainState extends State<MainScreen> {
     setState(() {
 
       zoneBody = ZoneBody(zone: zone);
-
       changeBodyWithBlur(newBody: zoneBody);
 
     });
@@ -119,9 +122,17 @@ class _MainState extends State<MainScreen> {
       onCardTap: goToZoneBody,
     );
 
+    modeSelectionBody = ModeSelectionBody(
+      onModeSelected: (mode){
+        if (mode == Mode.adventure) {
+          changeBodyWithBlur(newBody: zoneSelectionBody);
+        }
+      },
+    );
+
     avatarSelectionBody = AvatarSelectionBody(
       onFinally: (){
-        changeBodyWithBlur(newBody: zoneSelectionBody, lastBody: authMainBody);
+        changeBodyWithBlur(newBody: modeSelectionBody, lastBody: authMainBody);
       },
     );
 
@@ -141,7 +152,7 @@ class _MainState extends State<MainScreen> {
 
     logInBody = LogInBody(
       onConnexion: (){
-        changeBodyWithBlur(newBody: zoneSelectionBody);
+        changeBodyWithBlur(newBody: modeSelectionBody);
       },
       onRegister: (){
         changeBodyWithNoBlur(newBody: registerBody);
@@ -154,7 +165,7 @@ class _MainState extends State<MainScreen> {
         changeBodyWithNoBlur(newBody: logInBody);
       },
       onPlay: (){
-        changeBodyWithBlur(newBody: zoneSelectionBody);
+        changeBodyWithBlur(newBody: modeSelectionBody);
       },
     );
 
@@ -162,7 +173,11 @@ class _MainState extends State<MainScreen> {
 
 
 
-    body = widget.signedIn ? zoneSelectionBody : authMainBody;
+    body = widget.signedIn ? modeSelectionBody : authMainBody;
+
+
+
+
 
   }
 
@@ -172,14 +187,23 @@ class _MainState extends State<MainScreen> {
 
 
     standardWidgets = StandardWidgets(context: context);
-    Function? onBackButtonTapped;
+    Function? onBackButtonTapped, onChallengeButtonTapped, onTrophiesButtonTapped;
+
 
     switch (body.toString()){
       case "AuthMainBody":{
         onBackButtonTapped = null;
       }
       break;
-      case "ZoneSelectionBody":{
+      case "DifficultySelectionBody":{
+        onBackButtonTapped = null;
+      }
+      break;
+      case "AvatarSelectionBody":{
+        onBackButtonTapped = null;
+      }
+      break;
+      case "ModeSelectionBody":{
         onBackButtonTapped = () {
           setState(() {
             body.lastScreen = authMainBody;
@@ -196,6 +220,14 @@ class _MainState extends State<MainScreen> {
       }
       break;
       default:{
+        if (body.toString().compareTo("ZoneSelectionBody") == 0 || body.toString().compareTo("ZoneBody") == 0 ) {
+          onChallengeButtonTapped = () {
+            print("challenges tapped");
+          };
+          onTrophiesButtonTapped = () {
+            print("trophies tapped");
+          };
+        }
         onBackButtonTapped = () {
           setState(() {
             blur = ImageFilter.blur(
@@ -222,7 +254,11 @@ class _MainState extends State<MainScreen> {
     // };
 
 
-    Widget foreground = createForeground(onBackButtonTapped: onBackButtonTapped);
+    Widget foreground = createForeground(
+      onBackButtonTapped: onBackButtonTapped,
+      onChallengeButtonTapped: onChallengeButtonTapped,
+      onTrophiesButtonTapped: onTrophiesButtonTapped,
+    );
 
     Widget background = Container(
       decoration: const BoxDecoration(
@@ -265,17 +301,32 @@ class _MainState extends State<MainScreen> {
 
 
   Widget createForeground({
-    Function? onBackButtonTapped
+    Function? onBackButtonTapped,
+    Function? onChallengeButtonTapped,
+    Function? onTrophiesButtonTapped,
   }){
-    return Stack(
-      children: [
-        standardWidgets.settingsButton(),
+    ButtonGenerator buttonGenerator = ButtonGenerator(context: context);
+    double topPadding = buttonGenerator.calculateY(10);
+    double verticalPadding = buttonGenerator.calculateX(21);
+    return Padding(
+      padding: EdgeInsets.only(top: topPadding, left: verticalPadding, right: verticalPadding),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
 
-        standardWidgets.languageButton(Language.french),
+          onBackButtonTapped!=null ? standardWidgets.backButton(onBackButtonTapped: onBackButtonTapped) : SizedBox.shrink(),
+          onChallengeButtonTapped!=null ? standardWidgets.challengesButton(onChallengesButtonTapped: onChallengeButtonTapped) : SizedBox.shrink(),
+          onTrophiesButtonTapped!=null ? standardWidgets.trophiesButton(onTrophiesButtonTapped: onTrophiesButtonTapped) : SizedBox.shrink(),
+          standardWidgets.settingsButton(),
 
-        if (onBackButtonTapped!=null)standardWidgets.backButton(onBackButtonTapped: onBackButtonTapped),
-      ],
+        ],
+      ),
     );
   }
+
+
+
+
 
 }
