@@ -14,23 +14,7 @@ class ModeSelectionBody extends Body {
 
   ModeSelectionBody({Key? key, this.onModeSelected, super.lastScreen}) : super(key: key);
 
-  Future<void> testMenu(BuildContext context) async {
 
-    Widget menu = ScoreScreen(stars: 1,).build(context);
-
-    await Future.delayed(const Duration(milliseconds: 2000),(){
-
-
-      showDialog(
-        barrierDismissible: true,
-        context: context,
-        builder: (BuildContext context) {
-          return ScoreScreen(stars: 1,);
-        },
-      );
-
-    });
-  }
 
 
   @override
@@ -39,7 +23,6 @@ class ModeSelectionBody extends Body {
     ButtonGenerator buttonGenerator = ButtonGenerator(context: context);
     TextGenerator textGenerator = TextGenerator(context: context);
 
-    testMenu(context);
 
 
 

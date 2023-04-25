@@ -10,13 +10,13 @@ import 'package:projet2cp/TextGenerator.dart';
 class ScoreScreen extends StatelessWidget {
 
   void Function()? onRestart, onQuit;
-  final String title;
-  final String scoreText;
+  final String? title;
+  final String scoreText, scoreAsset ;
   final int stars;
   late String? score;
   late Duration? time;
 
-  ScoreScreen({Key? key, this.onRestart, this.onQuit, this.title = "Bravo !", required this.stars, this.time, this.score, this.scoreText = "Score"}) : super(key: key);
+  ScoreScreen({Key? key, this.onRestart, this.onQuit, this.title = "Bravo !", required this.stars, this.time, this.score, this.scoreText = "Score", this.scoreAsset = "assets/hud/points.svg"}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -48,9 +48,6 @@ class ScoreScreen extends StatelessWidget {
     double ydim5 = generator.calculateY(39);
 
 
-    //for tests
-    score = "5/10";
-    time = Duration(seconds: 30);
 
 
 
@@ -112,9 +109,9 @@ class ScoreScreen extends StatelessWidget {
                               padding: const EdgeInsets.only(left: 22, right: 22, top: 10),
                               child: Column(
                                 children: [
-                                  textGenerator.generateTextView(texts: [title], fontSize: 16).first,
+                                  textGenerator.generateTextView(texts: [title!], fontSize: 16).first,
                                   time != null ? infoRow(context,"Temps:", "${strDigits(time!.inMinutes.remainder(60))}:${strDigits(time!.inSeconds.remainder(60))}", "assets/hud/time.svg") : const Visibility(visible: false, child: SizedBox.shrink()),
-                                  score != null ? infoRow(context,"Score:", score!, "assets/hud/points.svg") : const Visibility(visible: false, child: SizedBox.shrink()),
+                                  score != null ? infoRow(context,"Score:", score!, scoreAsset) : const Visibility(visible: false, child: SizedBox.shrink()),
                                 ],
                               ),
                             ),

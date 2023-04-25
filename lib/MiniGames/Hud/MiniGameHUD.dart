@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:projet2cp/ButtonGenerator.dart';
 import 'package:projet2cp/ImageGenerator.dart';
+import 'package:projet2cp/MiniGames/Hud/ScoreScreen.dart';
 import 'package:projet2cp/StandardWidgets.dart';
 import 'package:projet2cp/Navigation/Zones.dart';
 import 'package:projet2cp/Color.dart' as color;
@@ -18,7 +19,7 @@ class MiniGameHUD extends StatefulWidget{
   int? countdown;
   int? maxPoints;
   int initialPoints, initialStars;
-  String pointsAsset;
+  String pointsAsset, pointsText;
   late _MiniGameHUDState state;
   Function? onGameTimeOut, onGamePaused, resumeGame, restartGame, onMaxPointsReached;
   Function(int)?  onStarsModified;
@@ -28,7 +29,7 @@ class MiniGameHUD extends StatefulWidget{
 
 
 
-  MiniGameHUD({super.key, required this.zone, this.countdown, this.maxPoints, this.pointsAsset = "assets/hud/points.svg", this.initialPoints = 0, this.initialStars = 0}){
+  MiniGameHUD({super.key, required this.zone, this.countdown, this.maxPoints, this.pointsAsset = "assets/hud/points.svg", this.pointsText = "Score", this.initialPoints = 0, this.initialStars = 0}){
 
     state = _MiniGameHUDState();
   }
@@ -220,10 +221,6 @@ class _MiniGameHUDState extends State<MiniGameHUD>{
             this.points = widget.maxPoints!;
           }
 
-          if (this.points == widget.maxPoints){
-            onMaxPointsReached();
-          }
-
           widget.onPointsModified?.call(this.points, points);
 
         });
@@ -242,14 +239,14 @@ class _MiniGameHUDState extends State<MiniGameHUD>{
 
   void setStars(int stars){
     setState(() {
+
+
       if (stars < 0){
         stars = 0;
       } else if (stars > 3) {
         stars = 3;
       }
-
       this.stars = stars;
-
       widget.onStarsModified?.call(this.stars);
 
     });
@@ -277,13 +274,15 @@ class _MiniGameHUDState extends State<MiniGameHUD>{
     final reduceSecondsBy = 1;
     setState(() {
       final seconds = timerDuration.inSeconds - reduceSecondsBy;
+
+      widget.onTimeUpdate?.call(Duration(seconds: seconds));
+
       if (seconds < 0) {
         onTimeOute();
       } else {
         timerDuration = Duration(seconds: seconds);
       }
 
-      widget.onTimeUpdate?.call(timerDuration);
 
     });
   }
@@ -304,33 +303,33 @@ class _MiniGameHUDState extends State<MiniGameHUD>{
     startTimer();
   }
 
-  AlertDialog createMenu(String title){
-    return AlertDialog(
-      content: Text(title),
-      actions: <Widget>[
-        ElevatedButton(
-          child: const Text("Quit"),
-          onPressed: () {
+  Widget createMenu({String? title}){
+    print(stars.toString());
+    return ScoreScreen(
+      title: title,
+      stars: stars,
+      score: widget.maxPoints != null ? "${points}/${widget.maxPoints}" : null,
+      scoreText: widget.pointsText,
+      scoreAsset: widget.pointsAsset,
+      time: widget.countdown != null ? timerDuration : null,
+      onQuit: (){
+        Navigator.of(context).pop();
+        Navigator.pop(context);
 
-            Navigator.of(context).pop();
-            Navigator.pop(context);
-          },
-        ),
-        ElevatedButton(
-          child: const Text("Restart"),
-          onPressed: () {
-            Navigator.of(context).pop();
-            onRestart();
-          },
-        ),
-      ],
+      },
+      onRestart: (){
+        Navigator.of(context).pop();
+        onRestart();
+      },
+
     );
   }
 
 
   void onTimeOute(){
 
-    Widget menu = createMenu("Your time is out!!!");
+
+    Widget menu = createMenu(title: "Temps écoulé!");
 
     setState(() {
       countdownTimer?.cancel();
@@ -348,7 +347,7 @@ class _MiniGameHUDState extends State<MiniGameHUD>{
   void onFinished(){
 
 
-    Widget menu = createMenu("You finished the game!!!");
+    Widget menu = createMenu(title: "Bravo!");
 
     setState(() {
       countdownTimer?.cancel();
@@ -364,8 +363,9 @@ class _MiniGameHUDState extends State<MiniGameHUD>{
 
   void onLose(){
     setState(() {
+      stars = 0;
       countdownTimer?.cancel();
-      showDialog(barrierDismissible: false, context: context, builder: (BuildContext context) => createMenu("You lost!!!"));
+      showDialog(barrierDismissible: false, context: context, builder: (BuildContext context) => createMenu(title: "You lost!!!"));
     });
   }
 

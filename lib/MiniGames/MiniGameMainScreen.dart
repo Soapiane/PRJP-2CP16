@@ -4,7 +4,7 @@ import 'package:flame/game.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:projet2cp/MiniGames/MiniGame.dart';
-import 'package:projet2cp/MiniGames/MiniGameHUD.dart';
+import 'package:projet2cp/MiniGames/Hud/MiniGameHUD.dart';
 import 'package:projet2cp/MiniGames/TurningPipes/TurningPipes.dart';
 import 'package:projet2cp/Navigation/Zones.dart';
 

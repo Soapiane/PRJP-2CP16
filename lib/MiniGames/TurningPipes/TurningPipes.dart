@@ -34,7 +34,7 @@ class TurningPipes extends MiniGame with HasTappables{
         time = 15;
         break;
     }
-    addTimer(seconds: time);
+    addTimer(seconds: 3);
     setInitStars(initStars: 3);
 
   }
