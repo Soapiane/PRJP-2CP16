@@ -153,7 +153,7 @@ class _AvatarButton extends StatelessWidget {
     return buttonGenerator.generateImageButtom(
       height: 55,
       width: 55,
-      imagePath: "assets/avatars/avatar0.png",
+      imagePath: Avatar.values[index].getImagePath(),
       backgroundColor: selected ? color.Color.bangladeshGreen : color.Color.white,
       borderRadius: BorderRadius.circular(13),
       onTap: (){

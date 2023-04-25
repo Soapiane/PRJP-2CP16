@@ -13,7 +13,7 @@ enum Avatar {
 
 
   String getImagePath() {
-    return 'assets/avatars/avatar0.svg';
+    return 'assets/avatars/avatar$index.svg';
   }
 
 }
