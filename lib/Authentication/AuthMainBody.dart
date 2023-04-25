@@ -33,7 +33,7 @@ class AuthMainBody extends Body {
           width: 173,
           xPos: 317,
           yPos: 133,
-          imagePath: "assets/tree_planting.svg",
+          imagePath: "assets/terra/earth_planting.svg",
         ),
 
         buttonsGenerator.generateTextButton(

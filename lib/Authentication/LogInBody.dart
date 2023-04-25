@@ -65,7 +65,7 @@ class LogInBody extends Body {
               width: 133,
               xPos: 569,
               yPos: 209,
-              imagePath: "assets/earth_sleeping.svg",
+              imagePath: "assets/terra/earth_sleeping.svg",
             ),
 
             Center(

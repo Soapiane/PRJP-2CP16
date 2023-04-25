@@ -77,7 +77,7 @@ class RegisterBody extends Body {
             width: 134,
             xPos: 98,
             yPos: 153,
-            imagePath: "assets/earth_hi.svg",
+            imagePath: "assets/terra/earth_hi.svg",
           ),
 
           Center(

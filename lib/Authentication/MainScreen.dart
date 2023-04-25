@@ -12,6 +12,7 @@ import 'package:projet2cp/Authentication/LogInBody.dart';
 import 'package:projet2cp/Authentication/RegisterBody.dart';
 import 'package:projet2cp/Navigation/Mode.dart';
 import 'package:projet2cp/Navigation/ModeSelectionBody.dart';
+import 'package:projet2cp/Navigation/Warning.dart';
 import 'package:projet2cp/Navigation/Zone/ZoneBody.dart';
 import 'package:projet2cp/Navigation/ZoneSelectionBody.dart';
 import 'package:projet2cp/ButtonGenerator.dart';
@@ -26,6 +27,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart' as svg_provider;
 import 'package:projet2cp/Color.dart' as color;
 import 'package:projet2cp/Navigation/Zones.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 class MainScreen extends StatefulWidget {
 
@@ -132,6 +134,8 @@ class _MainState extends State<MainScreen> {
 
     avatarSelectionBody = AvatarSelectionBody(
       onFinally: (){
+
+
         changeBodyWithBlur(newBody: modeSelectionBody, lastBody: authMainBody);
       },
     );
@@ -162,7 +166,7 @@ class _MainState extends State<MainScreen> {
 
     authMainBody = AuthMainBody(
       onConnexionPressed: (){
-        changeBodyWithNoBlur(newBody: logInBody);
+        goToLogIn();
       },
       onPlay: (){
         changeBodyWithBlur(newBody: modeSelectionBody);
@@ -323,6 +327,23 @@ class _MainState extends State<MainScreen> {
         ],
       ),
     );
+  }
+
+  void goToLogIn() async {
+
+    bool result = await InternetConnectionChecker().hasConnection;
+    if(result == true) {
+      changeBodyWithNoBlur(newBody: logInBody);
+    } else {
+      setState(() {
+        showDialog(
+          barrierDismissible: false,
+          context: context,
+          builder: (BuildContext context) => Warning(onOk: (){Navigator.of(context).pop();}, text: "Pas de connexion internet!",),
+        );
+      });
+    }
+
   }
 
 
