@@ -1,5 +1,7 @@
 
 
+import 'dart:ui';
+
 import 'package:flame/game.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,10 +17,11 @@ class MiniGameMainScreen extends StatelessWidget {
   late MiniGameHUD hud;
   final Zones zone;
   late String backgroundImageUrl;
+  bool blur = false;
 
 
   MiniGameMainScreen({super.key,required this.miniGameOrder,  required this.zone}){
-    getBackgroundImageUrl();
+    backgroundImageUrl = zone.backgroundImagePath;
     getHUD();
     getMiniGame();
   }
@@ -37,6 +40,7 @@ class MiniGameMainScreen extends StatelessWidget {
       case Zones.ville:
         switch (miniGameOrder) {
           case 1:
+            blur = true;
             game = TurningPipes(hud: hud);
             break;
           default:
@@ -51,23 +55,12 @@ class MiniGameMainScreen extends StatelessWidget {
     game =  TurningPipes(hud: hud);
   }
 
-  void getBackgroundImageUrl(){
-    //the background image is based on the zone
-    switch (zone) {
-      case Zones.ville:
-        backgroundImageUrl = "assets/ville.png";
-        break;
-      default:
-        backgroundImageUrl = "assets/ville.png";
-        break;
-    }
-  }
-
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
+
         Container(
           decoration: BoxDecoration(
             image: DecorationImage(
@@ -76,7 +69,11 @@ class MiniGameMainScreen extends StatelessWidget {
             ),
           ),
         ),
-        GameWidget(game: game),
+        BackdropFilter(
+          filter: blur ?  ImageFilter.blur(sigmaX: 2, sigmaY: 2) : ImageFilter.blur(sigmaX: 0, sigmaY: 0),
+          child: GameWidget(game: game),
+        )
+        ,
         hud,
       ],
     );

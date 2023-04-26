@@ -98,6 +98,7 @@ flutter:
     - assets/tiles/
     - assets/zones/
     - assets/zones/cards/
+    - assets/zones/backgrounds/
     - assets/hud/
     - assets/hud/score_screen/
     - assets/hud/score_screen/stars/
@@ -107,6 +108,7 @@ flutter:
     - assets/nav_buttons/
     - assets/collectables/stars/
     - assets/collectables/trophies/
+    -
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
