@@ -45,14 +45,15 @@ class GuestRepository extends Repository {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     Guest().setAvatar(Avatar.values[prefs.getInt("avatarGuest") ?? 0]);
     Guest().setDifficulty(Difficulty.values[prefs.getInt("difficultyGuest") ?? 0]);
+    Guest().setSound(prefs.getBool("soundGuest") ?? true);
   }
 
   @override
   Future<void> saveUserInfo() async {
     //saves guest info to the local storage
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setInt("avatarGuest", Guest().avatar.index);
-    prefs.setInt("difficultyGuest", Guest().difficulty.index);
+    await prefs.setInt("avatarGuest", Guest().avatar.index);
+    await prefs.setInt("soundGuest", Guest().difficulty.index);
   }
 
 

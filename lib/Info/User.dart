@@ -42,6 +42,12 @@ class User extends Info {
     DatabaseRepository().saveUserInfo();
   }
 
+  @override
+  void setSound(bool value) {
+    super.setSound(value);
+    DatabaseRepository().saveUserInfo();
+  }
+
 
 
 

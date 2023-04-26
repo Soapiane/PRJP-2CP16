@@ -101,6 +101,7 @@ flutter:
     - assets/hud/
     - assets/hud/score_screen/
     - assets/hud/score_screen/stars/
+    - assets/hud/pause_screen/
     - assets/avatars/
     - assets/modes/
     - assets/nav_buttons/

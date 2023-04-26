@@ -59,6 +59,7 @@ class DatabaseRepository extends Repository {
     user.User().setAvatar(Avatar.values[prefs.getInt("avatar") ?? 0]);
     user.User().setDifficulty(
         Difficulty.values[prefs.getInt("difficulty") ?? 0]);
+    user.User().setSound(prefs.getBool("sound") ?? true);
   }
 
 
@@ -76,6 +77,14 @@ class DatabaseRepository extends Repository {
         .User()
         .difficulty
         .index);
+    await prefs.setInt('difficulty', user
+        .User()
+        .difficulty
+        .index);
+    await prefs.setBool('sound', user
+        .User()
+        .sound);
+
   }
 
   Future<void> updateUserInfo() async {
@@ -84,8 +93,6 @@ class DatabaseRepository extends Repository {
         .then((DataSnapshot snapshot) {
       user.User().setName(snapshot.value["name"]);
       user.User().setAvatar(Avatar.values[snapshot.value["avatar"]]);
-      user.User().setDifficulty(
-          Difficulty.values[snapshot.value["difficulty"]]);
     });
   }
 
@@ -127,10 +134,6 @@ class DatabaseRepository extends Repository {
       "avatar": user
           .User()
           .avatar
-          .index,
-      "difficulty": user
-          .User()
-          .difficulty
           .index,
     });
   }

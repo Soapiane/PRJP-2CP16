@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class Info {
 
+  late bool _sound = true;
   late Difficulty _difficulty = Difficulty.EASY;
   late Avatar _avatar = Avatar.avatar0;
 
@@ -24,6 +25,12 @@ abstract class Info {
 
   void setAvatar(Avatar value) {
     _avatar = value;
+  }
+
+  bool get sound => _sound;
+
+  void setSound(bool value) {
+    _sound = value;
   }
 }
 

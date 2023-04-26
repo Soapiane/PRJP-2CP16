@@ -3,14 +3,18 @@
 
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:projet2cp/ButtonGenerator.dart';
 import 'package:projet2cp/ImageGenerator.dart';
+import 'package:projet2cp/MiniGames/Hud/PauseScreen.dart';
 import 'package:projet2cp/MiniGames/Hud/ScoreScreen.dart';
 import 'package:projet2cp/StandardWidgets.dart';
 import 'package:projet2cp/Navigation/Zones.dart';
 import 'package:projet2cp/Color.dart' as color;
+import 'package:projet2cp/Info/User.dart' as user;
+import 'package:projet2cp/Info/Guest.dart' as guest;
 
 class MiniGameHUD extends StatefulWidget{
 
@@ -24,11 +28,15 @@ class MiniGameHUD extends StatefulWidget{
   Function(int)?  onStarsModified;
   Function(int, int)? onPointsModified;
   Function(Duration)? onTimeUpdate;
+  Color? textColor;
+  bool visible, hideBackground;
 
 
 
 
-  MiniGameHUD({super.key, required this.zone, this.countdown, this.maxPoints, this.pointsAsset = "assets/hud/points.svg", this.pointsText = "Score", this.initialPoints = 0, this.initialStars = 0}){
+  MiniGameHUD({super.key, required this.zone, this.countdown, this.maxPoints, this.pointsAsset = "assets/hud/points.svg", this.pointsText = "Score", this.initialPoints = 0, this.initialStars = 0,
+    this.textColor, this.visible = true, this.hideBackground = false}){
+    textColor = Colors.white;
 
     state = _MiniGameHUDState();
   }
@@ -113,6 +121,8 @@ class _MiniGameHUDState extends State<MiniGameHUD>{
   @override
   Widget build(BuildContext context) {
 
+    double fontSize = 20;
+
     String strDigits(int n) => n.toString().padLeft(2, '0');
 
     if (widget.countdown!=null){
@@ -125,85 +135,127 @@ class _MiniGameHUDState extends State<MiniGameHUD>{
     ButtonGenerator buttonGenerator = ButtonGenerator(context: context);
 
     DIM1 = imageGenerator.calculateY(30);
-    DIM2 = imageGenerator.calculateY(24);
+    DIM2 = imageGenerator.calculateX(18);
 
-    timerView = widget.countdown != null ?
-    Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      mainAxisSize: MainAxisSize.min,
-      children: [
+    widget.hideBackground = true;
 
-        imageGenerator.generateImage(height: DIM2, width: DIM2, imagePath: "assets/hud/time.svg"),
-        Padding(
-          padding: const EdgeInsets.only(left: 5),
-          child: Text(
-            '$minutes:$seconds',
-            style: const TextStyle(
-              color: Colors.red,
-              fontSize: 25,
-            ),
-          ),
-        ),
-      ],
-    ) : const SizedBox.shrink();
-
-
-    starsView = Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        imageGenerator.generateImage(height: DIM2, width: DIM2, imagePath: "assets/hud/star.svg"),
-        Text(
-          ' $stars/3',
-          style: const TextStyle(
-            color: Colors.red,
-            fontSize: 25,
-          ),
-        ),
-      ],
-    );
-
-
-    pointsView = widget.maxPoints != null ?
-    Row(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        imageGenerator.generateImage(height: DIM2, width: DIM2, imagePath: widget.pointsAsset),
-        Text(
-          '$points / ${widget.maxPoints}',
-          style: const TextStyle(
-            color: Colors.red,
-            fontSize: 25,
-          ),
-        ),
-      ],
-    ) : const SizedBox.shrink();
-
-    view = Material(
-      elevation: 10,
-      color: color.Color.yellowGreen.color,
+    timerView = widget.countdown != null && widget.visible ?
+    Container(
+      decoration: BoxDecoration(
+        color: color.Color.yellowGreenLigh.color,
+        borderRadius: BorderRadius.circular(10),
+      ),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(40, 5, 40, 5),
+        padding: const EdgeInsets.all(8.0),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: [
-            timerView,
-            starsView,
-            pointsView,
-            buttonGenerator.generateImageButtom(
-              height: DIM1,
-              width: DIM1,
-              borderRadius: BorderRadius.circular(10),
-              imagePath: "assets/nav_buttons/pause.svg",
-              onTap: (){
-                onPaused();
-              },
+
+            imageGenerator.generateImage(height: DIM2, width: DIM2, imagePath: "assets/hud/time.svg"),
+            Padding(
+              padding: const EdgeInsets.only(left: 5),
+              child: DefaultTextStyle(
+                style: TextStyle(
+                  color: widget.textColor,
+                  fontSize: fontSize,
+                ),
+                child: Text(
+                  '$minutes:$seconds',
+                ),
+              ),
             ),
           ],
         ),
       ),
+    ) : const SizedBox.shrink();
+
+
+    starsView = widget.visible ? Container(
+      decoration: BoxDecoration(
+        color: color.Color.yellowGreenLigh.color,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            imageGenerator.generateImage(height: DIM2, width: DIM2, imagePath: "assets/hud/star.svg"),
+            DefaultTextStyle(
+              style: TextStyle(
+                color: widget.textColor,
+                fontSize: fontSize,
+              ),
+              child: Text(
+                ' $stars/3',
+              ),
+            ),
+          ],
+        ),
+      ),
+    ) : const SizedBox.shrink();
+
+
+    pointsView = widget.maxPoints != null && widget.visible ?
+    Container(
+      decoration: BoxDecoration(
+        color: color.Color.yellowGreenLigh.color,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            imageGenerator.generateImage(height: DIM2, width: DIM2, imagePath: widget.pointsAsset),
+            DefaultTextStyle(
+              style: TextStyle(
+                color: widget.textColor,
+                fontSize: fontSize,
+              ),
+              child: Text(
+                '$points / ${widget.maxPoints}',
+              ),
+            ),
+          ],
+        ),
+      ),
+    ) : const SizedBox.shrink();
+
+    Padding frontEnd = Padding(
+      padding: const EdgeInsets.fromLTRB(40, 5, 40, 5),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          timerView,
+          starsView,
+          pointsView,
+          buttonGenerator.generateImageButtom(
+            height: DIM1,
+            width: DIM1,
+            borderRadius: BorderRadius.circular(10),
+            imagePath: "assets/nav_buttons/pause.svg",
+            onTap: (){
+              onPaused();
+            },
+          ),
+        ],
+      ),
     );
+
+    if (!widget.hideBackground && widget.visible){
+      view = Material(
+        elevation: 10,
+        color: color.Color.yellowGreen.color,
+        child: frontEnd,
+      );
+    } else {
+      view = frontEnd;
+    }
+
 
     return view;
   }
@@ -371,34 +423,54 @@ class _MiniGameHUDState extends State<MiniGameHUD>{
 
   void onPaused(){
 
-    Widget menu = AlertDialog(
-      content: Text("PAUSED!!!"),
-      actions: <Widget>[
-        ElevatedButton(
-          child: const Text("RESUME"),
-          onPressed: () {
-            startTimer();
-            widget.resumeGame?.call();
-            Navigator.of(context).pop();
-          },
-        ),
-        ElevatedButton(
-          child: const Text("RESTART"),
-          onPressed: () {
-            Navigator.of(context).pop();
-            onRestart();
-          },
-        ),
-        ElevatedButton(
-          child: const Text("QUIT"),
-          onPressed: (){
-            Navigator.of(context).pop();
-            Navigator.pop(context);
-          },
-        ),
-      ],
-    );
+    late Widget menu;
+    // menu = AlertDialog(
+    //   content: Text("PAUSED!!!"),
+    //   actions: <Widget>[
+    //     ElevatedButton(
+    //       child: const Text("RESUME"),
+    //       onPressed: () {
+    //         startTimer();
+    //         widget.resumeGame?.call();
+    //         Navigator.of(context).pop();
+    //       },
+    //     ),
+    //     ElevatedButton(
+    //       child: const Text("RESTART"),
+    //       onPressed: () {
+    //         Navigator.of(context).pop();
+    //         onRestart();
+    //       },
+    //     ),
+    //     ElevatedButton(
+    //       child: const Text("QUIT"),
+    //       onPressed: (){
+    //         Navigator.of(context).pop();
+    //         Navigator.pop(context);
+    //       },
+    //     ),
+    //   ],
+    // );
 
+
+    menu = PauseScreen(
+      onQuit: (){
+        Navigator.of(context).pop();
+        Navigator.pop(context);
+      },
+      onRestart: (){
+        Navigator.of(context).pop();
+        onRestart();
+      },
+      onResume: (){
+        startTimer();
+        widget.resumeGame?.call();
+        Navigator.of(context).pop();
+      },
+      sound: FirebaseAuth.instance.currentUser != null ? user.User().sound : guest.Guest().sound,
+      screenHeight: MediaQuery.of(context).size.height,
+      screenWidth: MediaQuery.of(context).size.width,
+    );
 
 
     setState(() {

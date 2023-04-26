@@ -32,6 +32,12 @@ class Guest extends Info {
     GuestRepository().saveUserInfo();
   }
 
+  @override
+  void setSound(bool value) {
+    super.setSound(value);
+    GuestRepository().saveUserInfo();
+  }
+
 
 
 

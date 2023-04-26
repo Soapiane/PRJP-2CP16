@@ -9,6 +9,7 @@ enum Color {
   denimBlue(color: p.Color(0xff81B0FE)),
   yellowGreenDark(color: p.Color(0xff6E9D2F )),
   yellowGreen(color: p.Color(0xff8CC63F )),
+  yellowGreenLigh(color: p.Color(0xff86B14E )),
   bangladeshGreen(color: p.Color(0xff04724D )),
   blackOlive(color: p.Color(0xff404040)),
   black(color: p.Color(0xff000000)),

@@ -69,15 +69,6 @@ abstract class Repository {
       )
     ''');
 
-    //information table
-    await db.execute('''
-      CREATE TABLE IF NOT EXISTS information (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        infoIndex INTEGER,
-        state INTEGER
-      )
-    ''');
-
     for (int i = 0; i < 4; i++) {
       int zone_id = await db.insert('zone', {
         'name': Zones.values[i].toString().split('.')[1],
@@ -104,7 +95,7 @@ abstract class Repository {
       });
     }
 
-    //TODO: add challenges and information to the database
+    //TODO: add challenges to the database
 
 
 
