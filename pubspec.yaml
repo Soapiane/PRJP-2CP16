@@ -57,6 +57,7 @@ dependencies:
   flutter_svg_provider: ^1.0.3
   dcdg: ^4.1.0
   internet_connection_checker: ^1.0.0+1
+  loading_animation_widget: ^1.2.0+4
 
 dependency_overrides:
   xml: ^6.1.0
@@ -108,7 +109,7 @@ flutter:
     - assets/nav_buttons/
     - assets/collectables/stars/
     - assets/collectables/trophies/
-    -
+    - assets/settings/
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

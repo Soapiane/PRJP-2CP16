@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:projet2cp/Info/Avatar.dart';
-import 'package:projet2cp/Info/Difficulty.dart';
 import 'package:projet2cp/Repository/Repository.dart';
 import 'package:projet2cp/Navigation/Zones.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -46,7 +45,6 @@ class DatabaseRepository extends Repository {
 
     user.User().setName("");
     user.User().setAvatar(Avatar.values[0]);
-    user.User().setDifficulty(Difficulty.values[0]);
 
     await FirebaseAuth.instance.signOut();
   }
@@ -57,9 +55,6 @@ class DatabaseRepository extends Repository {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     user.User().setName(prefs.getString("name") ?? "Player");
     user.User().setAvatar(Avatar.values[prefs.getInt("avatar") ?? 0]);
-    user.User().setDifficulty(
-        Difficulty.values[prefs.getInt("difficulty") ?? 0]);
-    user.User().setSound(prefs.getBool("sound") ?? true);
   }
 
 
@@ -73,17 +68,6 @@ class DatabaseRepository extends Repository {
         .User()
         .avatar
         .index);
-    await prefs.setInt('difficulty', user
-        .User()
-        .difficulty
-        .index);
-    await prefs.setInt('difficulty', user
-        .User()
-        .difficulty
-        .index);
-    await prefs.setBool('sound', user
-        .User()
-        .sound);
 
   }
 

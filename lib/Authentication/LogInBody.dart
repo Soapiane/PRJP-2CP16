@@ -3,10 +3,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:projet2cp/Authentication/MainScreen.dart';
 import 'package:projet2cp/ButtonGenerator.dart';
 import 'package:projet2cp/ImageGenerator.dart';
 import 'package:projet2cp/Color.dart' as color;
 import 'package:projet2cp/Margin.dart';
+import 'package:projet2cp/Navigation/Loading.dart';
 import 'package:projet2cp/Repository/DatabaseRepository.dart';
 import 'package:projet2cp/TextGenerator.dart';
 import 'package:projet2cp/Navigation/Body.dart';
@@ -15,7 +17,9 @@ import 'package:projet2cp/Info/User.dart' as user;
 class LogInBody extends Body {
 
   Function onRegister, onConnexion;
-  LogInBody({Key? key, required this.onConnexion, required this.onRegister, super.lastScreen}) : super(key: key);
+  Function(String) showErrorDialog;
+  late BuildContext? mainContext;
+  LogInBody({Key? key, this.mainContext, required this.onConnexion, required this.onRegister, required this.showErrorDialog, super.lastScreen}) : super(key: key);
 
 
   
@@ -47,10 +51,17 @@ class LogInBody extends Body {
       icon: Icons.password,
       margin: formMargin,
       hide: true,
-      rightButtonImagePath: "assets/closed_eye.svg",
-      rightButtonPaddingHorizontal: 5,
-      rightButtonPaddingVertical: 5,
     );
+
+    bool checkErrors(FirebaseAuthException error, List<String> codes) {
+
+      for (String element in codes) {
+        if (error.code.compareTo(element) == 0) {
+          return true;
+        }
+      }
+      return false;
+    }
 
 
     
@@ -82,13 +93,21 @@ class LogInBody extends Body {
                       text: "Connexion",
                       margin: formMargin,
                       onTap: (){
-                        print("EMAIL: ${email.second.controller?.text}");
-                        print("PASSWORD: ${password.second.controller?.text}");
-
+                        Loading.ShowLoading(context);
                         FirebaseAuth.instance.signInWithEmailAndPassword(
                             email: email.second.controller!.text,
                           password: password.second.controller!.text,
-                        ).then((value) => _onConnexion()).catchError((e) => print("Error: $e"));
+                        ).then((value) => _onConnexion()).catchError((e) {
+                          FirebaseAuthException error = e as FirebaseAuthException;
+                          if (checkErrors(error, ["wrong-password", "invalid-email", "user-disabled", "user-not-found"])
+                          || e.toString().contains("Given String is empty or null")) {
+                            showErrorDialog("Email ou mot de passe incorrect");
+                          } else if (e.toString().contains("A network error")){
+                            showErrorDialog(MainScreen.networkErrorString);
+                          } else {
+                            showErrorDialog("Une erreur s'est produite");
+                          }
+                        });
 
 
                     },

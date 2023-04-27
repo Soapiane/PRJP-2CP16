@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:projet2cp/ButtonGenerator.dart';
 import 'package:projet2cp/ImageGenerator.dart';
+import 'package:projet2cp/Info/Info.dart';
 import 'package:projet2cp/MiniGames/Hud/PauseScreen.dart';
 import 'package:projet2cp/MiniGames/Hud/ScoreScreen.dart';
 import 'package:projet2cp/StandardWidgets.dart';
@@ -467,7 +468,7 @@ class _MiniGameHUDState extends State<MiniGameHUD>{
         widget.resumeGame?.call();
         Navigator.of(context).pop();
       },
-      sound: FirebaseAuth.instance.currentUser != null ? user.User().sound : guest.Guest().sound,
+      sound: Info.sound,
       screenHeight: MediaQuery.of(context).size.height,
       screenWidth: MediaQuery.of(context).size.width,
     );

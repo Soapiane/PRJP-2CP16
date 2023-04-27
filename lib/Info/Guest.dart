@@ -19,11 +19,6 @@ class Guest extends Info {
 
   Guest._internal();
 
-  void setDifficulty(Difficulty value) {
-    super.setDifficulty(value);
-    GuestRepository().saveUserInfo();
-  }
-
 
 
   @override
@@ -32,11 +27,6 @@ class Guest extends Info {
     GuestRepository().saveUserInfo();
   }
 
-  @override
-  void setSound(bool value) {
-    super.setSound(value);
-    GuestRepository().saveUserInfo();
-  }
 
 
 

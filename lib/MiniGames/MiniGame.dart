@@ -2,13 +2,14 @@ import 'dart:async';
 
 import 'package:flame/game.dart';
 import 'package:projet2cp/Info/Difficulty.dart';
+import 'package:projet2cp/Info/Info.dart';
 import 'package:projet2cp/MiniGames/Hud/MiniGameHUD.dart';
 import 'package:projet2cp/Info/User.dart';
 
 abstract class MiniGame extends FlameGame {
 
   final MiniGameHUD hud;
-  final Difficulty difficulty = User().difficulty;
+  final Difficulty difficulty = Info.difficulty;
 
    MiniGame({required this.hud}){
      hud.onMaxPointsReached = onMaxPointsReached;

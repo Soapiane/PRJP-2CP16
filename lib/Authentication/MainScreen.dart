@@ -4,14 +4,17 @@ import 'dart:ui';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:projet2cp/Authentication/AuthMainBody.dart';
 import 'package:projet2cp/Authentication/AvatarSelectionBody.dart';
 import 'package:projet2cp/Navigation/Body.dart';
 import 'package:projet2cp/Authentication/DifficultySelectionBody.dart';
 import 'package:projet2cp/Authentication/LogInBody.dart';
 import 'package:projet2cp/Authentication/RegisterBody.dart';
+import 'package:projet2cp/Navigation/Loading.dart';
 import 'package:projet2cp/Navigation/Mode.dart';
 import 'package:projet2cp/Navigation/ModeSelectionBody.dart';
+import 'package:projet2cp/Navigation/Settings.dart';
 import 'package:projet2cp/Navigation/Warning.dart';
 import 'package:projet2cp/Navigation/Zone/ZoneBody.dart';
 import 'package:projet2cp/Navigation/ZoneSelectionBody.dart';
@@ -29,7 +32,12 @@ import 'package:projet2cp/Color.dart' as color;
 import 'package:projet2cp/Navigation/Zones.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 
+
+
 class MainScreen extends StatefulWidget {
+
+  static const String networkErrorString = "Pas de connexion internet!";
+  static const String inputErrorString = "Les données entrées sont invalides!";
 
   bool signedIn;
 
@@ -49,6 +57,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainState extends State<MainScreen> {
 
+  late Function onExitPressed;
   static const double blurRadius = 2;
   late StandardWidgets standardWidgets;
   late Body body;
@@ -62,6 +71,7 @@ class _MainState extends State<MainScreen> {
   late ZoneBody zoneBody;
   late AvatarSelectionBody avatarSelectionBody;
   late Widget challengesButton, trophiesWidget;
+
 
 
 
@@ -113,6 +123,8 @@ class _MainState extends State<MainScreen> {
   void initState() {
     super.initState();
 
+
+
     blur = ImageFilter.blur(
       sigmaX: 0,
       sigmaY: 0,
@@ -149,18 +161,23 @@ class _MainState extends State<MainScreen> {
 
     registerBody = RegisterBody(
       onRegister: (){
-        changeBodyWithNoBlur(newBody: difficultySelectionBody);
-      }
+
+        register();
+      },
+      showErrorDialog: showError,
     );
 
 
     logInBody = LogInBody(
       onConnexion: (){
-        changeBodyWithBlur(newBody: modeSelectionBody);
+
+        logIn();
       },
       onRegister: (){
-        changeBodyWithNoBlur(newBody: registerBody);
+        goToRegister();
       },
+      showErrorDialog: showError,
+      mainContext: context,
     );
 
 
@@ -189,6 +206,11 @@ class _MainState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
 
+    onExitPressed = onExit;
+
+    logInBody.mainContext = context;
+    registerBody.mainContext = context;
+
 
     standardWidgets = StandardWidgets(context: context);
     Function? onBackButtonTapped, onChallengeButtonTapped, onTrophiesButtonTapped;
@@ -197,6 +219,7 @@ class _MainState extends State<MainScreen> {
     switch (body.toString()){
       case "AuthMainBody":{
         onBackButtonTapped = null;
+        onExitPressed = SystemNavigator.pop;
       }
       break;
       case "DifficultySelectionBody":{
@@ -208,18 +231,7 @@ class _MainState extends State<MainScreen> {
       }
       break;
       case "ModeSelectionBody":{
-        onBackButtonTapped = () {
-          setState(() {
-            body.lastScreen = authMainBody;
-            blur = ImageFilter.blur(
-              sigmaX: body.lastScreen!.isBlured ? blurRadius : 0,
-              sigmaY: body.lastScreen!.isBlured ? blurRadius : 0,
-            );
-            body = body.lastScreen ?? body;
-            signOut();
-
-          });
-        };
+        onBackButtonTapped = null;
 
       }
       break;
@@ -278,6 +290,9 @@ class _MainState extends State<MainScreen> {
     );
 
 
+    Loading.HideLoading(context);
+
+
 
     return Scaffold(
       body: Stack(
@@ -291,6 +306,8 @@ class _MainState extends State<MainScreen> {
         ],
       ),
     );
+
+
   }
 
   Future<void> signOut() async {
@@ -299,6 +316,20 @@ class _MainState extends State<MainScreen> {
     } else {
       await GuestRepository().closeDB();
     }
+  }
+
+  void onExit(){
+    setState(() {
+      Navigator.of(context).pop();
+      body.lastScreen = authMainBody;
+      blur = ImageFilter.blur(
+        sigmaX: body.lastScreen!.isBlured ? blurRadius : 0,
+        sigmaY: body.lastScreen!.isBlured ? blurRadius : 0,
+      );
+      body = body.lastScreen ?? body;
+      signOut();
+
+    });
   }
 
 
@@ -322,7 +353,14 @@ class _MainState extends State<MainScreen> {
           onBackButtonTapped!=null ? standardWidgets.backButton(onBackButtonTapped: onBackButtonTapped) : SizedBox.shrink(),
           onChallengeButtonTapped!=null ? standardWidgets.challengesButton(onChallengesButtonTapped: onChallengeButtonTapped) : SizedBox.shrink(),
           onTrophiesButtonTapped!=null ? standardWidgets.trophiesButton(onTrophiesButtonTapped: onTrophiesButtonTapped) : SizedBox.shrink(),
-          standardWidgets.settingsButton(),
+          standardWidgets.settingsButton((){
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return Settings(onDeconnexion: onExitPressed, onBackButtonTapped: Navigator.of(context).pop);
+                },
+            );
+          }),
 
         ],
       ),
@@ -335,16 +373,59 @@ class _MainState extends State<MainScreen> {
     if(result == true) {
       changeBodyWithNoBlur(newBody: logInBody);
     } else {
-      setState(() {
-        showDialog(
-          barrierDismissible: false,
-          context: context,
-          builder: (BuildContext context) => Warning(onOk: (){Navigator.of(context).pop();}, text: "Pas de connexion internet!",),
-        );
-      });
+      Loading.HideLoading(context);
+      showError("Pas de connexion internet!");
     }
 
   }
+
+
+  void logIn() async {
+
+    bool result = await InternetConnectionChecker().hasConnection;
+    if(result == true) {
+      changeBodyWithBlur(newBody: modeSelectionBody);
+    } else {
+      Loading.HideLoading(context);
+      showError(MainScreen.networkErrorString);
+    }
+  }
+
+  void goToRegister() async {
+
+    bool result = await InternetConnectionChecker().hasConnection;
+    if(result == true) {
+      changeBodyWithNoBlur(newBody: registerBody);
+    } else {
+      Loading.HideLoading(context);
+      showError(MainScreen.networkErrorString);
+    }
+  }
+
+  void register() async {
+
+      bool result = await InternetConnectionChecker().hasConnection;
+      if(result == true) {
+        changeBodyWithNoBlur(newBody: difficultySelectionBody);
+      } else {
+        Loading.HideLoading(context);
+        showError(MainScreen.networkErrorString);
+      }
+  }
+
+  void showError(String error){
+    Loading.HideLoading(context);
+    setState(() {
+      showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context) => Warning(onOk: (){Navigator.of(context).pop();}, text: error,),
+      );
+    });
+  }
+
+
+
 
 
 

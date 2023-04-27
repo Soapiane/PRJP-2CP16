@@ -2,23 +2,35 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:projet2cp/Info/Avatar.dart';
 import 'package:projet2cp/Info/Difficulty.dart';
+import 'package:projet2cp/Info/Language.dart';
 import 'package:projet2cp/Repository/DatabaseRepository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-abstract class Info {
+class Info {
 
-  late bool _sound = true;
-  late Difficulty _difficulty = Difficulty.EASY;
+
+  static bool sound = true;
+  static Difficulty difficulty = Difficulty.EASY;
+  static Language language = Language.french;
   late Avatar _avatar = Avatar.avatar0;
+  static late SharedPreferences _prefs;
 
 
-  Difficulty get difficulty => _difficulty;
-
-
-  void setDifficulty(Difficulty value) {
-    _difficulty = value;
+  static void iniState() async {
+    _prefs = await SharedPreferences.getInstance();
+    sound = _prefs.getBool("sound") ?? true;
+    difficulty = Difficulty.values[_prefs.getInt("difficulty") ?? 0];
+    language = Language.values[_prefs.getInt("language") ?? 0];
   }
 
+
+
+
+
+  static void setDifficulty(Difficulty value) {
+    difficulty = value;
+    _prefs.setInt("difficulty", Difficulty.values.indexOf(value));
+  }
 
 
   Avatar get avatar => _avatar;
@@ -27,10 +39,16 @@ abstract class Info {
     _avatar = value;
   }
 
-  bool get sound => _sound;
 
-  void setSound(bool value) {
-    _sound = value;
+  static void setSound(bool value) {
+    sound = value;
+    _prefs.setBool("sound", value);
   }
+
+  static void setLanguage(Language value) {
+    language = value;
+    _prefs.setInt("language", Language.values.indexOf(value));
+  }
+
 }
 

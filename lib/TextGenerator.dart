@@ -137,20 +137,6 @@ class TextGenerator extends Generator {
     Vector2 dims = calculateXY(width, height);
     double rightButtonDim = 0;
 
-    Widget showPasswordBtn = const SizedBox.shrink();
-    if (rightButtonImagePath != null) {
-      rightButtonDim = dims.y / 2;
-      showPasswordBtn = buttonGenerator.generateImageButtom(
-        height: rightButtonDim,
-        width: rightButtonDim,
-        imagePath: rightButtonImagePath,
-        paddingHorizontal: rightButtonPaddingHorizontal,
-        paddingVertical: rightButtonPaddingVertical,
-        borderRadius: BorderRadius.circular(cornerRadius),
-        backgroundColor: color.Color.whiteFront,
-        elevation: 0,
-      );
-    }
 
     icon ??= Icons.person;
     margin??=Margin(context: super.context);
@@ -195,6 +181,22 @@ class TextGenerator extends Generator {
         border: InputBorder.none,
       ),
     );
+
+
+    Widget showPasswordBtn = const SizedBox.shrink();
+    if (rightButtonImagePath != null) {
+      rightButtonDim = dims.y / 2;
+      showPasswordBtn = buttonGenerator.generateImageButtom(
+          height: rightButtonDim,
+          width: rightButtonDim,
+          imagePath: rightButtonImagePath,
+          paddingHorizontal: rightButtonPaddingHorizontal,
+          paddingVertical: rightButtonPaddingVertical,
+          borderRadius: BorderRadius.circular(cornerRadius),
+          backgroundColor: color.Color.whiteFront,
+          elevation: 0,
+      );
+    }
 
     return
       Couple(Container(

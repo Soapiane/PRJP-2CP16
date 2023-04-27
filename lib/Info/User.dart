@@ -21,11 +21,6 @@ class User extends Info {
 
 
 
-  @override
-  void setDifficulty(Difficulty value) {
-    super.setDifficulty(value);
-    DatabaseRepository().saveUserInfo();
-  }
 
 
   String get name => _name;
@@ -39,12 +34,6 @@ class User extends Info {
   @override
   void setAvatar(Avatar value) {
     super.setAvatar(value);
-    DatabaseRepository().saveUserInfo();
-  }
-
-  @override
-  void setSound(bool value) {
-    super.setSound(value);
     DatabaseRepository().saveUserInfo();
   }
 

@@ -2,7 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:projet2cp/Authentication/MainScreen.dart';
+import 'package:projet2cp/Info/Info.dart';
 import 'package:projet2cp/MiniGames/MiniGameMainScreen.dart';
+import 'package:projet2cp/Navigation/Loading.dart';
+import 'package:projet2cp/Navigation/Settings.dart';
 import 'package:projet2cp/Navigation/Warning.dart';
 import 'package:projet2cp/Navigation/Zones.dart';
 import 'package:projet2cp/SplashScreen/SplashScreen.dart';
@@ -43,6 +46,8 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  Info.iniState();
+
   setLandscapeMode();
 
   runApp(const MyApp());
@@ -59,7 +64,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MiniGameMainScreen(miniGameOrder: 1, zone: Zones.ville),
+      home: SplashScreen(),
     );
   }
 }

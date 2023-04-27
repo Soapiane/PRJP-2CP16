@@ -14,12 +14,13 @@ class StandardWidgets {
     buttonGenerator = ButtonGenerator(context: context);
   }
 
-  Widget settingsButton(){
+  Widget settingsButton(Function onSettingsButtonTapped){
     return buttonGenerator.generateImageButtom(
       height: dim,
       width: dim,
       borderRadius: BorderRadius.circular(23.5),
       imagePath: "assets/nav_buttons/settings.svg",
+      onTap: onSettingsButtonTapped,
     );
   }
 
@@ -31,7 +32,6 @@ class StandardWidgets {
       textColor: color.Color.brown,
       backgroundColor: color.Color.white,
       cornerRadius: 23,
-
     ).first;
   }
 

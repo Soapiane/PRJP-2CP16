@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:projet2cp/Info/Info.dart';
 import 'package:projet2cp/Navigation/Body.dart';
 import 'package:projet2cp/ButtonGenerator.dart';
 import 'package:projet2cp/Color.dart';
@@ -104,7 +105,7 @@ class _DifficultySelectionBodyState extends State<_DifficultySelectionBody> {
           child: Column(
             children: [
               textGenerator.generateTextView(
-                texts: ["Entrez l’age de l’enfant"],
+                texts: ["Choisissez votre difficulté de jeu"],
                 color: color.Color.blackOlive,
                 fontSize: 16,
               ).first,
@@ -135,7 +136,7 @@ class _DifficultySelectionBodyState extends State<_DifficultySelectionBody> {
 
   Future<void> _onContinue() async {
 
-    User().setDifficulty(Difficulty.values[selected]);
+    Info.setDifficulty(Difficulty.values[selected]);
     DatabaseRepository().uploadUserInfo();
     widget.onContinue?.call();
   }

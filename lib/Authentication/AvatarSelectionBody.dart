@@ -60,7 +60,6 @@ class _AvatarSelectionBodyState extends State<_AvatarSelectionBody> {
           index: index,
           onTap: (index){
             setState(() {
-              print("CLICKED $index");
               _selectedIndex = index;
             });
           },
