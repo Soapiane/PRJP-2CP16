@@ -4,6 +4,7 @@
 import 'package:flutter/material.dart';
 import 'package:projet2cp/Navigation/Body.dart';
 import 'package:projet2cp/Navigation/Zones.dart';
+import 'package:projet2cp/Repository/DatabaseRepository.dart';
 import 'Map/Zone.dart' as zoneModel;
 
 
@@ -18,6 +19,9 @@ class ZoneBody extends Body {
 
 
   ZoneBody({super.key, required this.zone}){
+
+
+
     _getBackgroundImageUrl();
 
     _getXYValues();

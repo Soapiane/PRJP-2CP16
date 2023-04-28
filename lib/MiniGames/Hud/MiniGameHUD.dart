@@ -11,6 +11,7 @@ import 'package:projet2cp/ImageGenerator.dart';
 import 'package:projet2cp/Info/Info.dart';
 import 'package:projet2cp/MiniGames/Hud/PauseScreen.dart';
 import 'package:projet2cp/MiniGames/Hud/ScoreScreen.dart';
+import 'package:projet2cp/Repository/DatabaseRepository.dart';
 import 'package:projet2cp/StandardWidgets.dart';
 import 'package:projet2cp/Navigation/Zones.dart';
 import 'package:projet2cp/Color.dart' as color;
@@ -93,7 +94,7 @@ class _MiniGameHUDState extends State<MiniGameHUD>{
   late Duration timerDuration;
   late String seconds = "0", minutes = "0";
   int points = 0, stars = 0;
-  late bool hasTimer, hasPoints;
+  late bool hasTimer, hasPoints, ended = false;
   late Widget view, pointsView = const SizedBox.shrink(), timerView = const SizedBox.shrink(), starsView = const SizedBox.shrink();
   late double DIM1 = 30, DIM2;
 
@@ -309,6 +310,7 @@ class _MiniGameHUDState extends State<MiniGameHUD>{
 
   void startTimer() {
 
+    ended = false;
     countdownTimer =
         Timer.periodic(Duration(seconds: 1), (_) => updateTimerView());
   }
@@ -318,6 +320,7 @@ class _MiniGameHUDState extends State<MiniGameHUD>{
   }
 
   void resetTimer() {
+    ended = false;
     stopTimer();
     setState(() => timerDuration = Duration(seconds: widget.countdown!));
   }
@@ -380,6 +383,8 @@ class _MiniGameHUDState extends State<MiniGameHUD>{
 
   void onTimeOute(){
 
+    ended = true;
+
 
     Widget menu = createMenu(title: "Temps écoulé!");
 
@@ -396,21 +401,21 @@ class _MiniGameHUDState extends State<MiniGameHUD>{
     });
   }
 
-  void onFinished(){
+  void onFinished() async{
+    if (!ended) {
+      Widget menu = createMenu(title: "Bravo!");
 
-
-    Widget menu = createMenu(title: "Bravo!");
-
-    setState(() {
-      countdownTimer?.cancel();
-      showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (BuildContext context) {
-          return menu;
-        },
-      );
-    });
+      setState(() {
+        countdownTimer?.cancel();
+        showDialog(
+          barrierDismissible: false,
+          context: context,
+          builder: (BuildContext context) {
+            return menu;
+          },
+        );
+      });
+    }
   }
 
   void onLose(){
@@ -456,6 +461,8 @@ class _MiniGameHUDState extends State<MiniGameHUD>{
 
     menu = PauseScreen(
       onQuit: (){
+
+
         Navigator.of(context).pop();
         Navigator.pop(context);
       },

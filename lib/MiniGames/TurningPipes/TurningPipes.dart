@@ -8,6 +8,7 @@ import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flutter/material.dart';
 import 'package:projet2cp/Info/Difficulty.dart';
 import 'package:projet2cp/MiniGames/MiniGame.dart';
+import 'package:projet2cp/Navigation/Zones.dart';
 import 'SolutionPipe.dart';
 import 'Pipe.dart';
 
@@ -25,6 +26,8 @@ class TurningPipes extends MiniGame with HasTappables{
 
 
   TurningPipes({required super.hud}){
+    zone = Zones.ville;
+    level = 0;
     switch (difficulty){
       case Difficulty.EASY:
         time = 60;

@@ -29,11 +29,13 @@ class _SplashState extends State<SplashScreen>{
 
   navigateToHome()async{
 
+    const String databaseLink = "https://projet2cp-1c628-default-rtdb.europe-west1.firebasedatabase.app/";
 
+    // await FirebaseAuth.instance.signOut();
     await DatabaseRepository().openDB();
 
     if (FirebaseAuth.instance.currentUser != null) {
-      await DatabaseRepository().syncZone(Zones.foret);
+      await DatabaseRepository().syncZone(Zones.ville);
     }
 
 
