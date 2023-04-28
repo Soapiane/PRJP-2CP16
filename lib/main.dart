@@ -8,6 +8,7 @@ import 'package:projet2cp/Navigation/Loading.dart';
 import 'package:projet2cp/Navigation/Settings.dart';
 import 'package:projet2cp/Navigation/Warning.dart';
 import 'package:projet2cp/Navigation/Zones.dart';
+import 'package:projet2cp/Navigation/Defis.dart';
 import 'package:projet2cp/SplashScreen/SplashScreen.dart';
 import 'package:projet2cp/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';

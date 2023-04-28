@@ -35,8 +35,9 @@ class _SplashState extends State<SplashScreen>{
     await DatabaseRepository().openDB();
 
     if (FirebaseAuth.instance.currentUser != null) {
-      await DatabaseRepository().syncZone(Zones.ville);
+      await DatabaseRepository().sync();
     }
+
 
 
     await Future.delayed(Duration(milliseconds: 2000),(){

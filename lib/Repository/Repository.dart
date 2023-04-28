@@ -37,7 +37,6 @@ abstract class Repository {
         stars INTEGER,
         levelsNb INTEGER,
         levelReached INTEGER,
-        isFinished INTEGER
       )
     ''');
     //levels table
@@ -56,7 +55,8 @@ abstract class Repository {
     await db.execute('''
       CREATE TABLE IF NOT EXISTS trophy (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        isCollected INTEGER
+        isCollected INTEGER,
+        title TEXT,
       )
     ''');
 
@@ -64,8 +64,8 @@ abstract class Repository {
     await db.execute('''
       CREATE TABLE IF NOT EXISTS challenge (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        challengeIndex INTEGER,
-        state INTEGER
+        state INTEGER,
+        title TEXT,
       )
     ''');
 
@@ -75,7 +75,6 @@ abstract class Repository {
         'stars': 0,
         'levelsNb': 8,
         'levelReached': 0,
-        'isFinished': 0
       });
 
       for (int j = 0; j < 8; j++) {
@@ -89,9 +88,20 @@ abstract class Repository {
       }
     }
 
+    List<String> trophiesTitles = ["Finir la zone "];
+
     for (var e in Trophies.values) {
       await db.insert('trophy', {
-        'isCollected': 0
+        'isCollected': 0,
+        'title': e.title,
+      });
+    }
+
+
+    for (int i = 0 ; i < 4; i++){
+      await db.insert('challenge', {
+        'state': 0,
+        'title': "Challenge ${i+1}",
       });
     }
 
@@ -138,7 +148,6 @@ abstract class Repository {
     database!.update('zone', {
       'stars': zone["stars"],
       'levelReached': zone["levelReached"],
-      'isFinished': zone["isFinished"],
     },
       where: 'id = ?',
       whereArgs: [zone["id"]],

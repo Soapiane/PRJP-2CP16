@@ -1,32 +1,22 @@
 enum Trophies {
   // Add your trophies here
   villeTrophy(
-    "Trophy de la vill",
-    "ce trophée est obtenu lorsque tous les niveaux de la ville sont terminés",
-    "assets//trophies/ville_trophy.svg",
+    "Finir la zone ville avec 3 etoiles dans tous les niveaux",
   ),
   zoneIndustrielleTrophy(
-    "Trophy de la zone industrielle",
-    "ce trophée est obtenu lorsque tous les niveaux de la zone industrielle sont terminés",
-    "assets//trophies/zone_industrielle_trophy.svg",
-  ),
-  mereTrophy(
-    "Trophy de la mer",
-    "ce trophée est obtenu lorsque tous les niveaux de la mer sont terminés",
-    "assets//trophies/mer_trophy.svg",
+    "Finir la zone industielle avec 3 etoiles dans tous les niveaux",
   ),
   foretTrophy(
-    "Trophy de la forêt",
-    "ce trophée est obtenu lorsque tous les niveaux de la forêt sont terminés",
-    "assets//trophies/foret_trophy.svg",
+    "Finir la zone foret avec 3 etoiles dans tous les niveaux",
+  ),
+  mereTrophy(
+    "Finir la zone mer avec 3 etoiles dans tous les niveaux",
   );
 
-  final String title, description, imagePath;
+  final String title;
 
   const Trophies(
     this.title,
-    this.description,
-    this.imagePath,
   );
 
 

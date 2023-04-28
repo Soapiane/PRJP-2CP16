@@ -6,8 +6,10 @@ import 'package:projet2cp/Info/Difficulty.dart';
 import 'package:projet2cp/Info/Info.dart';
 import 'package:projet2cp/MiniGames/Hud/MiniGameHUD.dart';
 import 'package:projet2cp/Info/User.dart';
+import 'package:projet2cp/Navigation/DefiState.dart';
 import 'package:projet2cp/Navigation/Zones.dart';
 import 'package:projet2cp/Repository/DatabaseRepository.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class MiniGame extends FlameGame {
 
@@ -15,6 +17,7 @@ abstract class MiniGame extends FlameGame {
   final Difficulty difficulty = Info.difficulty;
   late Zones zone;
   late int level;
+  int? challenge;
 
    MiniGame({required this.hud}){
      hud.onMaxPointsReached = onMaxPointsReached;
@@ -165,7 +168,6 @@ abstract class MiniGame extends FlameGame {
               {
                 "stars": zoneInfo["stars"] + differenceStars!,
                 "levelReached": (level == zoneInfo["levelReached"] && level != zoneInfo["levelsNb"]-1) ? level + 1 : zoneInfo["levelReached"],
-                "isFinished": (level == zoneInfo["levelsNb"]-1) && level-1 == zoneInfo["levelReached"] ? 1 : zoneInfo["isFinished"],
               },
               where: "id = ?",
               whereArgs: [zone.id],
@@ -186,12 +188,55 @@ abstract class MiniGame extends FlameGame {
         }
 
         ///give the zone finishing trophy
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        int allStars = (await DatabaseRepository().database!.rawQuery("SELECT SUM(stars) as Total FROM level GROUP BY zone_id")).toList()[Zones.ville.index]["Total"] as int;
+        int trophyAcquired = (await DatabaseRepository().database!.query(
+          "trophy",
+          where: "id = ?",
+          whereArgs: [zone.id],
+        )).toList()[0]["isCollected"] as int;
 
-        int allStars = (await DatabaseRepository().database!.rawQuery("SELECT SUM(stars) as Total FROM level GROUP BY zone_id")).toList()[zone.index]["Total"] as int;
-        int trophyAquirred = (await DatabaseRepository().database!.rawQuery("SELECT COUNT(*) as Total FROM trophy WHERE id = ?", [zone.id])).toList()[0]["Total"] as int;
+        if (allStars == zoneInfo["levelsNb"]*3 && trophyAcquired == 0) {
+          DatabaseRepository().database!.update(
+            "trophy",
+            {
+              "isCollected": 1,
+            },
+            where: "id = ?",
+            whereArgs: [zone.id],
+          );
+          prefs.setInt("newTrophy", zone.id);
+        }
 
 
-        //TODO: give a trophy or a challenge based on the progress
+        ///give the challenge
+
+        if (challenge != null) {
+          Map challengeInfo = (await DatabaseRepository().database!.query(
+            "challenge",
+            where: "id = ?",
+            whereArgs: [challenge!],
+          ))
+              .toList()[0];
+
+          if (challengeInfo["state"] == DefiState.nonCollected) {
+            DatabaseRepository().database!.update(
+                  "challenge",
+                  {
+                    "state": DefiState.collected.index,
+                  },
+                  where: "id = ?",
+                  whereArgs: [challenge!],
+                );
+            prefs.setInt("newChallenge", challenge!);
+          }
+        }
+
+        }
+
+
+
+
 
 
       }
@@ -200,4 +245,3 @@ abstract class MiniGame extends FlameGame {
 
 
 
-}

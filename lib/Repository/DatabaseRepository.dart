@@ -141,7 +141,6 @@ class DatabaseRepository extends Repository {
       "stars": zone['stars'],
       "levelsNb": zone['levelsNb'],
       "levelReached": zone['levelReached'],
-      "isFinished": zone['isFinished'],
     });
   }
 
@@ -276,6 +275,7 @@ class DatabaseRepository extends Repository {
     Future<void> syncZone(Zones zone) async {
 
 
+    ///syncing the levels
       List<Map> _levels = (await DatabaseRepository().database!.rawQuery("SELECT * FROM level WHERE zone_id = ? ORDER BY level ASC", [zone.id])).toList();
       late Map<dynamic, dynamic> level;
 
@@ -308,8 +308,11 @@ class DatabaseRepository extends Repository {
       }
 
 
+      ///syncing the zone
+
 
       int allStars = (await DatabaseRepository().database!.rawQuery("SELECT SUM(stars) as Total FROM level GROUP BY zone_id")).toList()[zone.index]["Total"] as int;
+
 
       await database!.update(
         "zone",
@@ -321,6 +324,72 @@ class DatabaseRepository extends Repository {
       );
 
       await fetchAndUploadZone(zone);
+
+
+      ///syncing the trophies
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+
+      Map zoneInfo = (await DatabaseRepository().database!.query(
+        "zone",
+        where: "id = ?",
+        whereArgs: [zone.id],
+      ))[0];
+
+
+      int trophyAcquired = (await DatabaseRepository().database!.query(
+        "trophy",
+        where: "id = ?",
+        whereArgs: [Zones.ville.id],
+      )).toList()[0]["isCollected"] as int;
+
+      if (allStars == zoneInfo["levelsNb"]*3 && trophyAcquired == 0) {
+        DatabaseRepository().database!.update(
+          "trophy",
+          {
+            "isCollected": 1,
+          },
+          where: "id = ?",
+          whereArgs: [Zones.ville.id],
+        );
+        prefs.setBool("newTrophy", true);
+      }
+
+      trophyAcquired = (await DatabaseRepository().database!.query(
+        "trophy",
+        where: "id = ?",
+        whereArgs: [Zones.ville.id],
+      )).toList()[0]["isCollected"] as int;
+
+      FirebaseDatabase(databaseURL: databaseLink)
+          .reference()
+          .child("users")
+          .child(FirebaseAuth.instance.currentUser!.uid)
+          .child("trophies")
+          .child("trophy${Zones.ville.id.toString()}")
+          .update({
+        "isCollected" : trophyAcquired,
+          }
+      );
+
+
+
+
+
+
+
+
+
+
+    }
+
+    Future<void> sync() async {
+      await updateUserInfo();
+
+      for (Zones zone in Zones.values) {
+        await syncZone(zone);
+      }
+
 
     }
 
