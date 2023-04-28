@@ -90,6 +90,15 @@ flutter:
     - family: PoppinsMedium
       fonts:
         - asset: assets/fonts/Poppins-Medium.ttf
+    - family: AndikaNewBasicBold
+      fonts:
+        - asset: assets/fonts/AndikaNewBasic-B.ttf
+    - family: AndikaNewBasic
+      fonts:
+        - asset: assets/fonts/AndikaNewBasic-R.ttf
+    - family: AndikaNewBasicItalic
+      fonts:
+        - asset: assets/fonts/AndikaNewBasic-I.ttf
 
   assets:
     - assets/
@@ -110,6 +119,7 @@ flutter:
     - assets/collectables/stars/
     - assets/collectables/trophies/
     - assets/settings/
+    - assets/profile/
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

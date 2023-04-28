@@ -14,6 +14,7 @@ import 'package:projet2cp/Authentication/RegisterBody.dart';
 import 'package:projet2cp/Navigation/Loading.dart';
 import 'package:projet2cp/Navigation/Mode.dart';
 import 'package:projet2cp/Navigation/ModeSelectionBody.dart';
+import 'package:projet2cp/Navigation/Profile.dart';
 import 'package:projet2cp/Navigation/Settings.dart';
 import 'package:projet2cp/Navigation/Warning.dart';
 import 'package:projet2cp/Navigation/Zone/ZoneBody.dart';
@@ -342,28 +343,55 @@ class _MainState extends State<MainScreen> {
   }){
     ButtonGenerator buttonGenerator = ButtonGenerator(context: context);
     double topPadding = buttonGenerator.calculateY(10);
-    double verticalPadding = buttonGenerator.calculateX(21);
-    return Padding(
-      padding: EdgeInsets.only(top: topPadding, left: verticalPadding, right: verticalPadding),
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
+    double horizontalPadding = buttonGenerator.calculateX(21);
+    return Stack(
+      children: [Align(
+        alignment: Alignment.topCenter,
+        child: Padding(
+          padding: EdgeInsets.only(top: topPadding, left: horizontalPadding, right: horizontalPadding),
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
 
-          onBackButtonTapped!=null ? standardWidgets.backButton(onBackButtonTapped: onBackButtonTapped) : SizedBox.shrink(),
-          onChallengeButtonTapped!=null ? standardWidgets.challengesButton(onChallengesButtonTapped: onChallengeButtonTapped) : SizedBox.shrink(),
-          onTrophiesButtonTapped!=null ? standardWidgets.trophiesButton(onTrophiesButtonTapped: onTrophiesButtonTapped) : SizedBox.shrink(),
-          standardWidgets.settingsButton((){
-            showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return Settings(onDeconnexion: onExitPressed, onBackButtonTapped: Navigator.of(context).pop);
-                },
-            );
-          }),
+              onBackButtonTapped!=null ? standardWidgets.backButton(onBackButtonTapped: onBackButtonTapped) : SizedBox.shrink(),
+              onChallengeButtonTapped!=null ? standardWidgets.challengesButton(onChallengesButtonTapped: onChallengeButtonTapped) : SizedBox.shrink(),
+              onTrophiesButtonTapped!=null ? standardWidgets.trophiesButton(onTrophiesButtonTapped: onTrophiesButtonTapped) : SizedBox.shrink(),
+              standardWidgets.settingsButton((){
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Settings(onDeconnexion: onExitPressed, onBackButtonTapped: Navigator.of(context).pop);
+                  },
+                );
+              }),
 
-        ],
+            ],
+          ),
+        ),
       ),
+        Padding(
+          padding:  EdgeInsets.only(bottom: topPadding, right: horizontalPadding),
+          child: Align(
+            alignment: Alignment.bottomRight,
+            child:
+            buttonGenerator.generateImageButtom(
+              height: standardWidgets.dim,
+              width: standardWidgets.dim,
+              borderRadius: BorderRadius.circular(23.5),
+              imagePath: "assets/nav_buttons/account.svg",
+              onTap: (){
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Profile();
+                  },
+                );
+              },
+            ),
+          ),
+        )
+      ],
     );
   }
 
