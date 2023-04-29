@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:projet2cp/Info/Avatar.dart';
 import 'package:projet2cp/Repository/Repository.dart';
 import 'package:projet2cp/Navigation/Zones.dart';
@@ -104,6 +105,22 @@ class DatabaseRepository extends Repository {
     }
 
     print("it's uploading 4");
+
+    uploadChallenges();
+
+    print("it's uploading 5");
+  }
+
+  void uploadChallenges() async {
+
+    bool result = await InternetConnectionChecker().hasConnection;
+    if (result) {
+      List<Map> _challenges = await database!.query('challenge');
+      for (int i = 0; i < _challenges.length; i++) {
+        print(_challenges[i].toString());
+        await uploadChallenge(_challenges[i]);
+      }
+    }
   }
 
   Future<void> uploadUserInfo() async {
@@ -189,6 +206,17 @@ class DatabaseRepository extends Repository {
     });
   }
 
+  Future<void> uploadChallenge(Map challenge) async {
+    await FirebaseDatabase(databaseURL: databaseLink).reference()
+        .child("users")
+        .child(FirebaseAuth.instance.currentUser!.uid)
+        .child("challenges")
+        .child("challenge${challenge["id"].toString()}").update({
+      "id": challenge['id'],
+      "state": challenge['state'],
+    });
+  }
+
 
   Future<void> download() async {
     await updateUserInfo();
@@ -223,6 +251,18 @@ class DatabaseRepository extends Repository {
     });
 
     print("it's downloading 3");
+
+    await FirebaseDatabase(databaseURL: databaseLink).reference()
+        .child("users")
+        .child(FirebaseAuth.instance.currentUser!.uid)
+        .child("challenges")
+        .get().then((snapshot) {
+      (snapshot.value as Map).forEach((key, value) {
+        updateChallenge(value);
+      });
+    });
+
+    print("it's downloading 4");
   }
 
 
@@ -301,7 +341,6 @@ class DatabaseRepository extends Repository {
 
 
         level = compareLevels(map , _levels[map["level"]]);
-        print(level.toString());
         updateLevel(level);
         uploadLevel(level);
         _levels[map["level"]] = level;
@@ -352,7 +391,7 @@ class DatabaseRepository extends Repository {
           where: "id = ?",
           whereArgs: [Zones.ville.id],
         );
-        prefs.setBool("newTrophy", true);
+        prefs.setInt("newTrophy", Zones.ville.index);
       }
 
       trophyAcquired = (await DatabaseRepository().database!.query(
@@ -374,24 +413,85 @@ class DatabaseRepository extends Repository {
 
 
 
+      ///challenges syncing
+      syncChallenges((){});
 
 
 
 
+    }
 
 
+    Future<void> syncChallenges(Function onDone) async {
+
+      bool result = await InternetConnectionChecker().hasConnection;
+    if (result) {
+      print("SYNCING CHALLENGES ");
+
+      DatabaseReference ref;
+
+        List<Map> challenges =  await DatabaseRepository().database!.query("challenge");
+
+
+        ref = FirebaseDatabase(databaseURL: databaseLink)
+            .reference()
+            .child("users")
+            .child(FirebaseAuth.instance.currentUser!.uid)
+            .child("challenges");
+
+        for (Map localChallenge in challenges) {
+          Map remoteChallenge = {};
+
+          await ref.child("challenge${localChallenge["id"] as int}").get().then((DataSnapshot snapshot) {
+            remoteChallenge = Map<String, dynamic>.from(snapshot.value);
+          });
+
+          if (localChallenge["state"] == 0 ) {
+            await DatabaseRepository().database!.update(
+              "challenge",
+              {
+                "state": remoteChallenge["state"],
+              },
+              where: "id = ?",
+              whereArgs: [localChallenge["id"]],
+            );
+          } else if (remoteChallenge["state"] == 0) {
+            await ref.child("challenge${localChallenge["id"] as int}")
+                .update({
+              "state" : localChallenge["state"],
+            });
+          }
+
+
+        }
+
+
+      //here we're downloading the challenges
+      print("DOWNLAODING CHALLENGES");
+      await ref.get().then((snapshot) {
+        (snapshot.value as Map).forEach((key, value) {
+          print(value.toString());
+          updateChallenge(value);
+        });
+      }).then((value) => onDone.call());
+    } else {
+      onDone.call();
+    }
 
     }
 
     Future<void> sync() async {
-      await updateUserInfo();
+      if (FirebaseAuth.instance.currentUser != null) {
+      bool result = await InternetConnectionChecker().hasConnection;
+      if (result == true) {
+        await updateUserInfo();
 
-      for (Zones zone in Zones.values) {
-        await syncZone(zone);
+        for (Zones zone in Zones.values) {
+          await syncZone(zone);
+        }
       }
-
-
     }
+  }
 
 
 }

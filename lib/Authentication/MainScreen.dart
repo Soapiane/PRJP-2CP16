@@ -11,6 +11,7 @@ import 'package:projet2cp/Navigation/Body.dart';
 import 'package:projet2cp/Authentication/DifficultySelectionBody.dart';
 import 'package:projet2cp/Authentication/LogInBody.dart';
 import 'package:projet2cp/Authentication/RegisterBody.dart';
+import 'package:projet2cp/Navigation/Defis.dart';
 import 'package:projet2cp/Navigation/Loading.dart';
 import 'package:projet2cp/Navigation/Mode.dart';
 import 'package:projet2cp/Navigation/ModeSelectionBody.dart';
@@ -204,6 +205,8 @@ class _MainState extends State<MainScreen> {
   }
 
 
+
+
   @override
   Widget build(BuildContext context) {
 
@@ -239,9 +242,22 @@ class _MainState extends State<MainScreen> {
       default:{
         if (body.toString().compareTo("ZoneSelectionBody") == 0 || body.toString().compareTo("ZoneBody") == 0 ) {
           onChallengeButtonTapped = () {
+
             print("challenges tapped");
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return Defis();
+            },
+            ).then((value) {
+
+              print("challenges dismissed");
+
+              FirebaseAuth.instance.currentUser != null ? DatabaseRepository().uploadChallenges() : null;
+            });
           };
           onTrophiesButtonTapped = () {
+
             print("trophies tapped");
           };
         }
