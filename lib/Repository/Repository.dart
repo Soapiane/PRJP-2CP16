@@ -88,11 +88,9 @@ abstract class Repository {
       }
     }
 
-    List<String> trophiesTitles = ["Finir la zone "];
-
-    for (var e in Trophies.values) {
+    for (Trophy e in Trophy.values) {
       await db.insert('trophy', {
-        'isCollected': 0,
+        'isCollected': e.index%2,
         'title': e.title,
       });
     }

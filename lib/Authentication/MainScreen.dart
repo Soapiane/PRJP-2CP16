@@ -17,6 +17,7 @@ import 'package:projet2cp/Navigation/Mode.dart';
 import 'package:projet2cp/Navigation/ModeSelectionBody.dart';
 import 'package:projet2cp/Navigation/Profile.dart';
 import 'package:projet2cp/Navigation/Settings.dart';
+import 'package:projet2cp/Navigation/Trophies.dart';
 import 'package:projet2cp/Navigation/Warning.dart';
 import 'package:projet2cp/Navigation/Zone/ZoneBody.dart';
 import 'package:projet2cp/Navigation/ZoneSelectionBody.dart';
@@ -73,6 +74,7 @@ class _MainState extends State<MainScreen> {
   late ZoneBody zoneBody;
   late AvatarSelectionBody avatarSelectionBody;
   late Widget challengesButton, trophiesWidget;
+  bool accountButtonVisible = true;
 
 
 
@@ -222,15 +224,18 @@ class _MainState extends State<MainScreen> {
 
     switch (body.toString()){
       case "AuthMainBody":{
+        accountButtonVisible = false;
         onBackButtonTapped = null;
         onExitPressed = SystemNavigator.pop;
       }
       break;
       case "DifficultySelectionBody":{
+        accountButtonVisible = false;
         onBackButtonTapped = null;
       }
       break;
       case "AvatarSelectionBody":{
+        accountButtonVisible = false;
         onBackButtonTapped = null;
       }
       break;
@@ -240,6 +245,8 @@ class _MainState extends State<MainScreen> {
       }
       break;
       default:{
+
+        accountButtonVisible = true;
         if (body.toString().compareTo("ZoneSelectionBody") == 0 || body.toString().compareTo("ZoneBody") == 0 ) {
           onChallengeButtonTapped = () {
 
@@ -257,8 +264,12 @@ class _MainState extends State<MainScreen> {
             });
           };
           onTrophiesButtonTapped = () {
-
-            print("trophies tapped");
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return Trophies();
+              },
+            );
           };
         }
         onBackButtonTapped = () {
@@ -386,7 +397,7 @@ class _MainState extends State<MainScreen> {
           ),
         ),
       ),
-        Padding(
+        FirebaseAuth.instance.currentUser != null && accountButtonVisible ? Padding(
           padding:  EdgeInsets.only(bottom: topPadding, right: horizontalPadding),
           child: Align(
             alignment: Alignment.bottomRight,
@@ -406,7 +417,7 @@ class _MainState extends State<MainScreen> {
               },
             ),
           ),
-        )
+        ) : const SizedBox.shrink(),
       ],
     );
   }

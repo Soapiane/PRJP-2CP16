@@ -1,4 +1,4 @@
-enum Trophies {
+enum Trophy {
   // Add your trophies here
   villeTrophy(
     "Finir la zone ville avec 3 etoiles dans tous les niveaux",
@@ -15,29 +15,11 @@ enum Trophies {
 
   final String title;
 
-  const Trophies(
+  const Trophy(
     this.title,
   );
 
 
   int get id => index+1;
-
-}
-
-class Trophy {
-
-  final bool isUnlocked;
-  late Trophies trophy;
-
-  Trophy({
-    required this.isUnlocked,
-    required this.trophy,
-  });
-
-
-  int get id => trophy.id;
-
-
-
 
 }

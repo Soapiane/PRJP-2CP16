@@ -119,16 +119,7 @@ class _DefisState extends State<Defis> {
     }
   }
   void onAjouterTache(String tache) async {
-    print(tache);
 
-
-    print("before: ");
-    List<Map> testList = await DatabaseRepository().database!.query(
-      "challenge",
-    );
-    for (Map test in testList) {
-      print(test);
-    }
     Loading.ShowLoading(context);
 
     if (FirebaseAuth.instance.currentUser != null) {
@@ -153,14 +144,6 @@ class _DefisState extends State<Defis> {
 
     Loading.HideLoading(context);
 
-    print("after: ");
-    testList = await DatabaseRepository().database!.query(
-      "challenge",
-    );
-    for (Map test in testList) {
-      print(test);
-    }
-    print("//////////////////");
 
     setState(() {
       widget.NonRea.add(tache);
@@ -168,17 +151,9 @@ class _DefisState extends State<Defis> {
     });
   }
   void onEnleverTache(String tache) async {
-    print(tache);
 
 
 
-    print("before: ");
-    List<Map> testList = await DatabaseRepository().database!.query(
-      "challenge",
-    );
-    for (Map test in testList) {
-      print(test);
-    }
     Loading.ShowLoading(context);
 
     if (FirebaseAuth.instance.currentUser != null) {
@@ -207,14 +182,6 @@ class _DefisState extends State<Defis> {
     Loading.HideLoading(context);
 
 
-    print("after: ");
-    testList = await DatabaseRepository().database!.query(
-      "challenge",
-    );
-    for (Map test in testList) {
-      print(test);
-    }
-    print("//////////////////");
 
 
     setState(() {
@@ -246,32 +213,48 @@ class _DefisState extends State<Defis> {
 
     if (FirebaseAuth.instance.currentUser != null) {
       await DatabaseRepository().syncChallenges(afterSyncingChallenges);
+    } else {
+      List<Map> challengesCollected = await (GuestRepository().database!.query(
+        "challenge",
+        where: "state = ?",
+        whereArgs: [DefiState.collected.index],
+      ));
+
+      List<Map> challengesDone = await GuestRepository().database!.query(
+    "challenge",
+    where: "state = ?",
+    whereArgs: [DefiState.done.index],
+    );
+
+      setState(() {
+        for (Map challenge in challengesCollected) {
+          widget.NonRea.add(challenge["title"]);
+        }
+
+
+        for (Map challenge in challengesDone) {
+          widget.Rea.add(challenge["title"]);
+        }
+      });
+
     }
   }
 
   void afterSyncingChallenges() async {
 
 
-    List<Map> challengesCollected = await (FirebaseAuth.instance.currentUser != null ?  DatabaseRepository().database!.query(
-      "challenge",
-      where: "state = ?",
-      whereArgs: [DefiState.collected.index],
-    ) :  GuestRepository().database!.query(
+    List<Map> challengesCollected = await (DatabaseRepository().database!.query(
       "challenge",
       where: "state = ?",
       whereArgs: [DefiState.collected.index],
     ));
 
 
-    List<Map> challengesDone = await (FirebaseAuth.instance.currentUser != null ?  DatabaseRepository().database!.query(
+    List<Map> challengesDone = await   DatabaseRepository().database!.query(
       "challenge",
       where: "state = ?",
       whereArgs: [DefiState.done.index],
-    ) :  GuestRepository().database!.query(
-      "challenge",
-      where: "state = ?",
-      whereArgs: [DefiState.done.index],
-    ));
+    );
 
 
     setState(() {

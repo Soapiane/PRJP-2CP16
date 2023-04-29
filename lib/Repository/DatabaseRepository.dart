@@ -187,7 +187,7 @@ class DatabaseRepository extends Repository {
     });
   }
 
-  Future<void> fetchAndUploadTrophy(Trophies trophy) async {
+  Future<void> fetchAndUploadTrophy(Trophy trophy) async {
     List<Map> _trophy = await database!.query('trophy',
       where: 'id = ?',
       whereArgs: [trophy.index],
@@ -289,7 +289,7 @@ class DatabaseRepository extends Repository {
     }
 
 
-    Future<void> fetchAndDownloadTrophy(Trophies trophy) async {
+    Future<void> fetchAndDownloadTrophy(Trophy trophy) async {
       await FirebaseDatabase(databaseURL: databaseLink).reference().child(
           "users").child(FirebaseAuth.instance.currentUser!.uid).child(
           "trophies").child(trophy.id.toString()).once().then((
@@ -413,8 +413,6 @@ class DatabaseRepository extends Repository {
 
 
 
-      ///challenges syncing
-      syncChallenges((){});
 
 
 
@@ -489,6 +487,10 @@ class DatabaseRepository extends Repository {
         for (Zones zone in Zones.values) {
           await syncZone(zone);
         }
+
+
+        ///challenges syncing
+        await syncChallenges((){});
       }
     }
   }

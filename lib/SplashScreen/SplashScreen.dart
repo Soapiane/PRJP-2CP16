@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:projet2cp/Authentication/MainScreen.dart';
 import 'package:projet2cp/Navigation/DefiState.dart';
 import 'package:projet2cp/Navigation/Defis.dart';
+import 'package:projet2cp/Navigation/Trophies.dart';
 import 'package:projet2cp/Repository/DatabaseRepository.dart';
 import 'package:projet2cp/Navigation/Zones.dart';
 import 'package:sqflite/sqflite.dart';
@@ -39,9 +40,8 @@ class _SplashState extends State<SplashScreen>{
     // await FirebaseAuth.instance.signOut();
     await DatabaseRepository().openDB();
 
-    if (FirebaseAuth.instance.currentUser != null) {
-      await DatabaseRepository().sync();
-    }
+    await DatabaseRepository().sync();
+
 
 
 
