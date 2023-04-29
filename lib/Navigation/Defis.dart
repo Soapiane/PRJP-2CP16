@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:projet2cp/Navigation/DefiState.dart';
+import 'package:projet2cp/Repository/DatabaseRepository.dart';
 //----------------------------------------------
 class TacheNonRealise extends StatelessWidget {
   String tache;
@@ -80,9 +82,10 @@ class TacheNonRealise extends StatelessWidget {
 }
 typedef  FonAjouterTache=void Function( String);
 class Defis extends StatefulWidget {
-  List<String> NonRea=[];
-  List<String> Rea=[];
-  Defis({Key? key,required this.NonRea,required this.Rea}) : super(key: key);
+  late List<String> NonRea=[];
+  late List<String> Rea=[];
+  Defis({Key? key}) : super(key: key);
+
 
   @override
   State<Defis> createState() => _DefisState();
@@ -109,13 +112,33 @@ class _DefisState extends State<Defis> {
       });
     }
   }
-  void onAjouterTache(String tache){
+  void onAjouterTache(String tache) async {
+
+    await DatabaseRepository().database!.update(
+      "challenge",
+      {
+        "state":DefiState.done.index
+      },
+      where: "title = ?",
+      whereArgs: [tache],
+    );
+
     setState(() {
       widget.NonRea.add(tache);
       widget.Rea.remove(tache);
     });
   }
-  void onEnleverTache(String tache){
+  void onEnleverTache(String tache) async {
+
+    await DatabaseRepository().database!.update(
+      "challenge",
+      {
+        "state":DefiState.done.index
+      },
+      where: "title = ?",
+      whereArgs: [tache],
+    );
+
     setState(() {
       widget.Rea.add(tache);
       widget.NonRea.remove(tache);
@@ -123,9 +146,12 @@ class _DefisState extends State<Defis> {
   }
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    etendu=false;
+
+
+
+    getChallenges();
+    etendu=true;
   }
   int HexColor(String color){
     String newColor="0xff"+color;
@@ -133,8 +159,46 @@ class _DefisState extends State<Defis> {
     int finalColor=int.parse(newColor);
     return finalColor;
   }
+
+  void getChallenges() async {
+
+    widget.Rea.clear();
+    widget.NonRea.clear();
+
+    List<Map> challengesCollected = await DatabaseRepository().database!.query(
+      "challenge",
+      where: "state = ?",
+      whereArgs: [DefiState.collected.index],
+    );
+
+
+    List<Map> challengesDone = await DatabaseRepository().database!.query(
+      "challenge",
+      where: "state = ?",
+      whereArgs: [DefiState.done.index],
+    );
+
+    setState(() {
+
+
+      for (Map challenge in challengesCollected) {
+        widget.NonRea.add(challenge["title"]);
+      }
+
+
+      for (Map challenge in challengesDone) {
+        widget.Rea.add(challenge["title"]);
+      }
+    });
+
+
+  }
+
   @override
   Widget build(BuildContext context) {
+
+
+
     final screenHeight = MediaQuery
         .of(context)
         .size
@@ -220,10 +284,10 @@ class _DefisState extends State<Defis> {
                           child: TacheNonRealise(tache: widget.NonRea[i],onRetirer:onEnleverTache)
                       ),
 
-                       Padding(
-                            padding: EdgeInsets.only(top: 14 * screenHeight / 360,bottom: 11 * screenHeight / 360),
-                                  child:DefisRealise(),
-                        ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 14 * screenHeight / 360,bottom: 11 * screenHeight / 360),
+                        child:DefisRealise(),
+                      ),
 
                     ],
                   ),
@@ -258,6 +322,8 @@ class Etendu extends StatelessWidget {
         .size
         .width;
     return Center(
+      child: GestureDetector(
+        onTap: onPressedTend,
         child: Container(
           width:  screenWidth*298/800,
           decoration: BoxDecoration(
@@ -277,105 +343,103 @@ class Etendu extends StatelessWidget {
               padding:  EdgeInsets.only(top: 9.0*screenHeight/360,bottom: 9.0*screenHeight/360),
               child: Column(
                 children: [
-                  Row(
-                      children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children:[ Padding(
-                            padding:  EdgeInsets.only(left: 39*screenWidth/800),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Text(
-                                  "Défis réalisés",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 12.5 * screenWidth / 800,
-                                    decoration: TextDecoration.none,
-                                    fontFamily: "AndikaNewBasic",
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(HexColor("#FFFFFF")),
-
-                                  ),
-
-                                ),
-                              ],
-                            ),
-                          ),
-                          ],
-                        ),
-                        Padding(
-                          padding:  EdgeInsets.only(left: 133*screenWidth/800),
-                          child: GestureDetector(
-                            onTap: onPressedTend,
-                            child: SvgPicture.asset(
-                              "assets/defis/Polygon_etendu.svg",
-                              height: 11*screenHeight/360,
-                              width: 12*screenWidth/800,
-                            ),
-                          ),
-                        )
-                      ]
-                  ),
-                  for(int i=0;i<Rea.length;i++)Center(
-                        child: Container(
-                          height: 50*screenHeight/360,
-                          child:Row(
-                            children: [
-                              Padding(
-                                padding:  EdgeInsets.only(left:10*screenWidth/800 ),
-                                child: GestureDetector(
-                                  onTap: (){
-                                    Retirer(Rea[i]);
-                                  },
-                                  child: SvgPicture.asset(
-                                    "assets/defis/Checked_circle.svg",
-                                    height: 20 * screenHeight / 360,
-                                    width: 20 * screenWidth / 800,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                width: 5*screenWidth/800,
-                              ),
-                              Expanded(
-                                child: Center(
-                                  child: Text(
-                                    Rea[i],
+                        Row(
+                        children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children:[ Padding(
+                              padding:  EdgeInsets.only(left: 39*screenWidth/800),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Text(
+                                    "Défis réalisés",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontSize: 12.5 * screenWidth / 800,
+                                      decoration: TextDecoration.none,
+                                      fontFamily: "AndikaNewBasic",
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(HexColor("#FFFFFF")),
+
+                                    ),
+
+                                  ),
+                                ],
+                              ),
+                            ),
+                            ],
+                          ),
+                          Padding(
+                            padding:  EdgeInsets.only(left: 133*screenWidth/800),
+                            child:  SvgPicture.asset(
+                                "assets/defis/Polygon_etendu.svg",
+                                height: 11*screenHeight/360,
+                                width: 12*screenWidth/800,
+                              ),
+                            ),
+                        ]
+                    ),
+                  for(int i=0;i<Rea.length;i++)Center(
+                      child: Container(
+                        height: 50*screenHeight/360,
+                        child:Row(
+                          children: [
+                            Padding(
+                              padding:  EdgeInsets.only(left:10*screenWidth/800 ),
+                              child: GestureDetector(
+                                onTap: (){
+                                  Retirer(Rea[i]);
+                                },
+                                child: SvgPicture.asset(
+                                  "assets/defis/Checked_circle.svg",
+                                  height: 20 * screenHeight / 360,
+                                  width: 20 * screenWidth / 800,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 5*screenWidth/800,
+                            ),
+                            Expanded(
+                              child: Center(
+                                child: Text(
+                                  Rea[i],
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 12.5 * screenWidth / 800,
                                       fontFamily: "AndikaNewBasic",
                                       decorationThickness: 1,
-                                        decorationStyle: TextDecorationStyle.solid,
+                                      decorationStyle: TextDecorationStyle.solid,
                                       decoration: TextDecoration.lineThrough,
-                                        fontWeight: FontWeight.bold,
+                                      fontWeight: FontWeight.bold,
                                       color: Color(HexColor("#FFFFFF")),
                                       decorationColor: Colors.white
-                                    ),
                                   ),
                                 ),
                               ),
-                              SizedBox(
-                                width: 10*screenWidth/800,
-                              ),
-                            ],
-                          ),
-                        )
-                    ),
+                            ),
+                            SizedBox(
+                              width: 10*screenWidth/800,
+                            ),
+                          ],
+                        ),
+                      )
+                  ),
                 ],
               ),
             ),
           ),
         ),
+      ),
     );
   }
 }
 //---------------------------------------
 class Tendu extends StatefulWidget {
   VoidCallback onPressedTend;
-   Tendu({Key? key,required this.onPressedTend}) : super(key: key);
+  Tendu({Key? key,required this.onPressedTend}) : super(key: key);
 
   @override
   State<Tendu> createState() => _TenduState();
@@ -399,66 +463,65 @@ class _TenduState extends State<Tendu> {
         .size
         .width;
     return Center(
-      child: Container(
-        height: screenHeight*24/360 ,
-        width:  screenWidth*298/800,
-        decoration: BoxDecoration(
-          color: Color(HexColor("19806D")),
-          borderRadius: BorderRadius.circular(15),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.5),
-              blurRadius: 2,
-              offset: Offset(0,2),
-            )
-          ],
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(15),
-          child: Row(
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children:[ Padding(
-                    padding:  EdgeInsets.only(left: 39*screenWidth/800),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Text(
-                          "Défis réalisés",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 12.5 * screenWidth / 800,
-                            decoration: TextDecoration.none,
-                            fontFamily: "AndikaNewBasic",
-                            fontWeight: FontWeight.bold,
-                            color: Color(HexColor("#FFFFFF")),
+      child: GestureDetector(
+        onTap: widget.onPressedTend,
+        child: Container(
+          height: screenHeight*24/360 ,
+          width:  screenWidth*298/800,
+          decoration: BoxDecoration(
+            color: Color(HexColor("19806D")),
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.5),
+                blurRadius: 2,
+                offset: Offset(0,2),
+              )
+            ],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: Row(
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children:[ Padding(
+                      padding:  EdgeInsets.only(left: 39*screenWidth/800),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text(
+                            "Défis réalisés",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 12.5 * screenWidth / 800,
+                              decoration: TextDecoration.none,
+                              fontFamily: "AndikaNewBasic",
+                              fontWeight: FontWeight.bold,
+                              color: Color(HexColor("#FFFFFF")),
+
+                            ),
 
                           ),
-
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
+                    ],
                   ),
-                  ],
-                ),
-                Padding(
-                  padding:  EdgeInsets.only(left: 133*screenWidth/800),
-                  child: GestureDetector(
-                    onTap: widget.onPressedTend,
-                    child: SvgPicture.asset(
-                      "assets/defis/Polygon_tendu.svg",
-                      height: 11*screenHeight/360,
-                      width: 12*screenWidth/800,
+                  Padding(
+                    padding:  EdgeInsets.only(left: 133*screenWidth/800),
+                      child: SvgPicture.asset(
+                        "assets/defis/Polygon_tendu.svg",
+                        height: 11*screenHeight/360,
+                        width: 12*screenWidth/800,
+                      ),
                     ),
-                  ),
-                )
-              ]
+                ]
+            ),
           ),
         ),
       ),
     );
   }
 }
-

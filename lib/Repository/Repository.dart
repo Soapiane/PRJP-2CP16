@@ -36,7 +36,7 @@ abstract class Repository {
         name TEXT,
         stars INTEGER,
         levelsNb INTEGER,
-        levelReached INTEGER,
+        levelReached INTEGER
       )
     ''');
     //levels table
@@ -56,7 +56,7 @@ abstract class Repository {
       CREATE TABLE IF NOT EXISTS trophy (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         isCollected INTEGER,
-        title TEXT,
+        title TEXT
       )
     ''');
 
@@ -65,7 +65,7 @@ abstract class Repository {
       CREATE TABLE IF NOT EXISTS challenge (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         state INTEGER,
-        title TEXT,
+        title TEXT
       )
     ''');
 
@@ -100,7 +100,7 @@ abstract class Repository {
 
     for (int i = 0 ; i < 4; i++){
       await db.insert('challenge', {
-        'state': 0,
+        'state': 1 + i%2,
         'title': "Challenge ${i+1}",
       });
     }
@@ -171,6 +171,15 @@ abstract class Repository {
     },
       where: 'id = ?',
       whereArgs: [trophy["id"]],
+    );
+  }
+
+  Future<void> updateChallenge(Map challenge) async {
+    database!.update('trophy', {
+      'state': challenge["state"],
+    },
+      where: 'id = ?',
+      whereArgs: [challenge["id"]],
     );
   }
 
