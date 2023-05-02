@@ -26,9 +26,9 @@ class User extends Info {
   String get name => _name;
 
 
-  void setName(String value) {
+  Future<void> setName(String value) async {
     _name = value;
-    DatabaseRepository().saveUserInfo();
+    await DatabaseRepository().saveUserInfo();
   }
 
   @override

@@ -7,15 +7,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:projet2cp/Authentication/AuthMainBody.dart';
 import 'package:projet2cp/Authentication/AvatarSelectionBody.dart';
+import 'package:projet2cp/MiniGames/MiniGameMainScreen.dart';
 import 'package:projet2cp/Navigation/Body.dart';
 import 'package:projet2cp/Authentication/DifficultySelectionBody.dart';
 import 'package:projet2cp/Authentication/LogInBody.dart';
 import 'package:projet2cp/Authentication/RegisterBody.dart';
 import 'package:projet2cp/Navigation/Defis.dart';
+import 'package:projet2cp/Navigation/LevelSelectionBody.dart';
 import 'package:projet2cp/Navigation/Loading.dart';
 import 'package:projet2cp/Navigation/Mode.dart';
 import 'package:projet2cp/Navigation/ModeSelectionBody.dart';
-import 'package:projet2cp/Navigation/Profile.dart';
+import 'package:projet2cp/Navigation/Notifications/ChallengeNotification.dart';
+import 'package:projet2cp/Navigation/Notifications/TrophyNotification.dart';
+import 'package:projet2cp/Navigation/Profile/Profile.dart';
+import 'package:projet2cp/Navigation/QuizSelectionBody.dart';
 import 'package:projet2cp/Navigation/Settings.dart';
 import 'package:projet2cp/Navigation/Trophies.dart';
 import 'package:projet2cp/Navigation/Warning.dart';
@@ -34,10 +39,14 @@ import 'package:flutter_svg_provider/flutter_svg_provider.dart' as svg_provider;
 import 'package:projet2cp/Color.dart' as color;
 import 'package:projet2cp/Navigation/Zones.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sqflite/sqflite.dart';
 
 
 
 class MainScreen extends StatefulWidget {
+
+
 
   static const String networkErrorString = "Pas de connexion internet!";
   static const String inputErrorString = "Les données entrées sont invalides!";
@@ -71,7 +80,7 @@ class _MainState extends State<MainScreen> {
   late DifficultySelectionBody difficultySelectionBody;
   late ModeSelectionBody modeSelectionBody;
   late ZoneSelectionBody zoneSelectionBody;
-  late ZoneBody zoneBody;
+  late LevelSelectionBody levelSelectionBody;
   late AvatarSelectionBody avatarSelectionBody;
   late Widget challengesButton, trophiesWidget;
   bool accountButtonVisible = true;
@@ -79,15 +88,195 @@ class _MainState extends State<MainScreen> {
 
 
 
+  void getNotification(SharedPreferences prefs) async {
+
+    String user = FirebaseAuth.instance.currentUser != null ? "" : "Guest";
+
+      String? trophy = prefs.getString("newTrophy$user");
+      if (trophy != null) {
+
+        prefs.remove("newTrophy$user");
+        await showDialog(context: context, builder: (context) => TrophyNotification(title: trophy));
+
+
+      }
+
+      String? challenge = prefs.getString("newChallenge$user");
+      if (challenge != null) {
+
+        prefs.remove("newChallenge$user");
+        await showDialog(context: context, builder: (context) => ChallengeNotification(title: challenge));
+
+      }
+
+  }
+
+
+  void _levelTaped(bool unlocked, Zones zone, int order) async {
+    if (unlocked){
+      await Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context)  => MiniGameMainScreen(miniGameOrder: order, zone: zone)
+          )
+      );
+
+      Loading.ShowLoading(text: "synchronisation...",context);
+      await DatabaseRepository().sync(); //this one is to sync the challenges
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      Loading.HideLoading(context);
+
+      getNotification(prefs);
+
+
+      //TODO: for the quizSelectionBody get the new stars from the local DB and use setState to show them
+
+    }
+  }
 
 
 
 
-  void goToZoneBody(Zones zone){
+
+
+
+  Future<List<List<int>>> getZonesInfo() async {
+
+    List<int> starsCollected = [], starsMax = [];
+
+    User? user = FirebaseAuth.instance.currentUser;
+    Database database;
+    if(user != null){
+      database = DatabaseRepository().database!;
+    }else{
+      database = GuestRepository().database!;
+    }
+
+    List<Map> zones = await database.rawQuery("SELECT * FROM zone ORDER BY id ASC");
+
+    for (Zones zone in Zones.values) {
+      starsCollected.add(zones[zone.index]["stars"]);
+      starsMax.add(zones[zone.index]["levelsNb"]*3);
+    }
+
+    return [starsCollected, starsMax];
+
+
+
+  }
+
+  void goToAdventureMode() async {
+
+    List<int> starsCollected = [], starsMax = [];
+    List<List<int>> zonesInfo = await getZonesInfo();
+    starsCollected = zonesInfo[0];
+    starsMax = zonesInfo[1];
+
+    print("stars collected:" + starsCollected.toString());
+    print("Max :" + starsMax.toString());
+
+
+    changeBodyWithBlur(
+      newBody: ZoneSelectionBody(
+        onCardTap: goToLevelSelectionBody, starsCollected: starsCollected, starsMax: starsMax,
+      ),
+      lastBody: modeSelectionBody,
+    );
+
+
+
+  }
+
+
+
+  Future<List<Map>> getQuizzesInfo() async {
+
+    List<Map> quizzes = [];
+
+    User? user = FirebaseAuth.instance.currentUser;
+    Database database;
+    if(user != null){
+      database = DatabaseRepository().database!;
+    }else{
+      database = GuestRepository().database!;
+    }
+
+    quizzes = await database.query(
+      "level",
+      where: "isQuiz = ?",
+      whereArgs: [1],
+      orderBy: "zone_id",
+    );
+
+
+    if (quizzes.isEmpty) {
+      List<Map> inCase = [];
+      for (Zones zone in Zones.values) {
+        Map<String, Object?> map = {
+          "stars": 0,
+          "isLocked": 1,
+        };
+        inCase.add(map);
+      }
+      return inCase;
+    }
+
+    return quizzes;
+
+
+
+  }
+
+
+
+  void goToQuizMode() async {
+
+    List<Map> quizzesInfo = await getQuizzesInfo();
+
+
+
+    changeBodyWithBlur(
+      newBody: QuizSelectionBody(
+        onCardTap: (zone){}, quizzesInfo: quizzesInfo,
+      ),
+      lastBody: modeSelectionBody,
+    );
+
+
+
+  }
+
+
+
+
+  void goToLevelSelectionBody(Zones zone) async {
+    Loading.ShowLoading(context);
+    List<Map> levelsinfo = [];
+
+    if (FirebaseAuth.instance.currentUser != null) {
+      levelsinfo = await DatabaseRepository().database!.query(
+        "level",
+        where: "zone_id = ?",
+        whereArgs: [zone.id],
+        orderBy: "id ASC",
+      );
+    } else {
+      levelsinfo = await GuestRepository().database!.query(
+        "level",
+        where: "zone_id = ?",
+        whereArgs: [zone.id],
+        orderBy: "level ASC",
+      );
+    }
+
+
+    Loading.HideLoading(context);
+
+
     setState(() {
 
-      zoneBody = ZoneBody(zone: zone);
-      changeBodyWithBlur(newBody: zoneBody);
+      levelSelectionBody = LevelSelectionBody(zone: zone, onLevelSelected: _levelTaped, levelsInfo: levelsinfo,);
+      changeBodyWithBlur(newBody: levelSelectionBody);
 
     });
   }
@@ -123,10 +312,10 @@ class _MainState extends State<MainScreen> {
   }
 
 
+
   @override
   void initState() {
     super.initState();
-
 
 
     blur = ImageFilter.blur(
@@ -136,14 +325,16 @@ class _MainState extends State<MainScreen> {
 
 
 
-    zoneSelectionBody = ZoneSelectionBody(
-      onCardTap: goToZoneBody,
-    );
+    // zoneSelectionBody = ZoneSelectionBody(
+    //   onCardTap: goToZoneBody,
+    // );
 
     modeSelectionBody = ModeSelectionBody(
       onModeSelected: (mode){
         if (mode == Mode.adventure) {
-          changeBodyWithBlur(newBody: zoneSelectionBody);
+          goToAdventureMode();
+        } else if (mode == Mode.quiz) {
+          goToQuizMode();
         }
       },
     );
@@ -209,8 +400,11 @@ class _MainState extends State<MainScreen> {
 
 
 
+
   @override
   Widget build(BuildContext context) {
+
+
 
     onExitPressed = onExit;
 
@@ -246,8 +440,10 @@ class _MainState extends State<MainScreen> {
       break;
       default:{
 
+
+
         accountButtonVisible = true;
-        if (body.toString().compareTo("ZoneSelectionBody") == 0 || body.toString().compareTo("ZoneBody") == 0 ) {
+        if (body.toString().compareTo("ZoneSelectionBody") == 0 || body.toString().compareTo("LevelSelectionBody") == 0 ) {
           onChallengeButtonTapped = () {
 
             print("challenges tapped");
@@ -281,9 +477,23 @@ class _MainState extends State<MainScreen> {
             body = body.lastScreen ?? body;
           });
         };
+
+
+        if (body.toString().compareTo("LevelSelectionBody") == 0 ) {
+          onBackButtonTapped = () {
+            goToAdventureMode();
+          };
+        }
+
       }
       break;
     }
+
+    if (FirebaseAuth.instance.currentUser == null) {
+      accountButtonVisible = false;
+    }
+
+
 
 
 

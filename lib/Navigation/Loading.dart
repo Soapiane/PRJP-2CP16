@@ -7,13 +7,14 @@ import 'package:projet2cp/TextGenerator.dart';
 class Loading extends StatelessWidget {
 
   static bool isLoading = false;
+  String? text;
 
-  static void ShowLoading(BuildContext context){
+  static void ShowLoading(BuildContext context, {String? text}){
     showDialog(
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
-        return Loading();
+        return Loading(text: text,);
       },
     );
     isLoading = true;
@@ -23,7 +24,7 @@ class Loading extends StatelessWidget {
     isLoading = false;
   }
 
-  const Loading({Key? key}) : super(key: key);
+  Loading({Key? key, this.text}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +47,7 @@ class Loading extends StatelessWidget {
                     padding: const EdgeInsets.only(right: 20),
                     child: LoadingAnimationWidget.hexagonDots(color: Colors.white, size: 30,),
                   ),
-                  textGenerator.generateTextView(texts: ["Chargement..."], fontSize: 16 ).first,
+                  textGenerator.generateTextView(texts: [text != null ? text! : "Chargement..."], fontSize: 16 ).first,
                 ],
               ),
             ],

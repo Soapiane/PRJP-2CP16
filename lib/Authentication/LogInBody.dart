@@ -66,6 +66,7 @@ class LogInBody extends Body {
 
     
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData().copyWith(
         colorScheme: ThemeData().colorScheme.copyWith(primary: Colors.green),
       ),
@@ -114,16 +115,16 @@ class LogInBody extends Body {
                     ).first,
                     textGenerator.generateTextView(
                       texts: ["pas de compte?", " s'inscrire! "],
-                      fontSize: 11,
+                      fontSize: 16,
                       textStyle: TextStyle(
                         color: color.Color.white.color,
-                        fontSize: 11,
-                        fontFamily: "PoppinsMedium"
+                        fontSize: 16,
+                        fontFamily: "AndikaNewBasic"
                       ),
                       linkStyle: TextStyle(
                         color: color.Color.white.color,
-                        fontSize: 11,
-                        fontFamily: "PoppinsBold",
+                        fontSize: 16,
+                        fontFamily: "AndikaNewBasicBold",
                         decoration: TextDecoration.underline,
                       ),
                       onSpansTap: [

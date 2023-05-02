@@ -21,9 +21,11 @@ class Level extends PointModel{
   late BuildContext context;
   late String imageUrl = "assets/map_horizontal_point.png";
   late Zones zone;
+  Function(bool unlocked, Zones zone, int order) onTap ;
 
   Level({required this.posX, required this.posY, required this.completed, required this.unlocked,
-        required this.stars, required this.number, required this.context, this.dim = 50.0, required this.zone}){
+        required this.stars, required this.number, required this.context, this.dim = 50.0, required this.zone,
+        required this.onTap}){
 
     super.width = 50.0;
     super.child = testWidget(number);
@@ -42,6 +44,7 @@ class Level extends PointModel{
   Widget testWidget(int order) {
     return InkWell(
       hoverColor: Colors.blue,
+      onTap: (){onTap.call(unlocked, zone, number);},
       child: Stack(
         alignment: Alignment.center,
         children: [
@@ -54,24 +57,20 @@ class Level extends PointModel{
               style: const TextStyle(color: Colors.black, fontSize: 16))
         ],
       ),
-      onTap: _levelTaped,
     );
 
   }
 
-  void _levelTaped(){
+  dynamic _levelTaped() async {
     if (unlocked){
-      Navigator.push(
+      return await Navigator.push(
           context,
           MaterialPageRoute(
-            builder: builder(number),
+            builder: (context)  => MiniGameMainScreen(miniGameOrder: number, zone: zone)
           )
       );
     }
   }
 
-  WidgetBuilder builder (int order){
-    return (context)  => MiniGameMainScreen(miniGameOrder: order, zone: zone);
-  }
 
 }

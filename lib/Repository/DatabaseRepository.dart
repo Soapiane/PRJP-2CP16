@@ -314,12 +314,16 @@ class DatabaseRepository extends Repository {
 
     Future<void> syncZone(Zones zone) async {
 
-
-    ///syncing the levels
-      List<Map> _levels = (await DatabaseRepository().database!.rawQuery("SELECT * FROM level WHERE zone_id = ? ORDER BY level ASC", [zone.id])).toList();
+      bool result = await InternetConnectionChecker().hasConnection;
+      if (result) {
+      ///syncing the levels
+      List<Map> _levels = (await DatabaseRepository().database!.rawQuery(
+              "SELECT * FROM level WHERE zone_id = ? ORDER BY level ASC",
+              [zone.id]))
+          .toList();
       late Map<dynamic, dynamic> level;
 
-      DatabaseReference ref =  FirebaseDatabase(databaseURL: databaseLink)
+      DatabaseReference ref = FirebaseDatabase(databaseURL: databaseLink)
           .reference()
           .child("users")
           .child(FirebaseAuth.instance.currentUser!.uid)
@@ -327,31 +331,27 @@ class DatabaseRepository extends Repository {
           .child(zone.toString().split(".")[1])
           .child("levels");
 
-
       for (int i = 0; i < _levels.length; i++) {
-
-
-
         Map map = {};
 
-
-        await ref.child("level${_levels[i]["level"] as int}").get().then((DataSnapshot snapshot) {
+        await ref
+            .child("level${_levels[i]["level"] as int}")
+            .get()
+            .then((DataSnapshot snapshot) {
           map = Map<String, dynamic>.from(snapshot.value);
         });
 
-
-        level = compareLevels(map , _levels[map["level"]]);
+        level = compareLevels(map, _levels[map["level"]]);
         updateLevel(level);
         uploadLevel(level);
         _levels[map["level"]] = level;
       }
 
-
       ///syncing the zone
 
-
-      int allStars = (await DatabaseRepository().database!.rawQuery("SELECT SUM(stars) as Total FROM level GROUP BY zone_id")).toList()[zone.index]["Total"] as int;
-
+      int allStars = (await DatabaseRepository().database!.rawQuery(
+              "SELECT SUM(stars) as Total FROM level GROUP BY zone_id"))
+          .toList()[zone.index]["Total"] as int;
 
       await database!.update(
         "zone",
@@ -364,7 +364,6 @@ class DatabaseRepository extends Repository {
 
       await fetchAndUploadZone(zone);
 
-
       ///syncing the trophies
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -375,22 +374,22 @@ class DatabaseRepository extends Repository {
         whereArgs: [zone.id],
       ))[0];
 
-
       int trophyAcquired = (await DatabaseRepository().database!.query(
         "trophy",
         where: "id = ?",
         whereArgs: [Zones.ville.id],
-      )).toList()[0]["isCollected"] as int;
+      ))
+          .toList()[0]["isCollected"] as int;
 
-      if (allStars == zoneInfo["levelsNb"]*3 && trophyAcquired == 0) {
+      if (allStars == zoneInfo["levelsNb"] * 3 && trophyAcquired == 0) {
         DatabaseRepository().database!.update(
-          "trophy",
-          {
-            "isCollected": 1,
-          },
-          where: "id = ?",
-          whereArgs: [Zones.ville.id],
-        );
+              "trophy",
+              {
+                "isCollected": 1,
+              },
+              where: "id = ?",
+              whereArgs: [Zones.ville.id],
+            );
         prefs.setInt("newTrophy", Zones.ville.index);
       }
 
@@ -398,7 +397,8 @@ class DatabaseRepository extends Repository {
         "trophy",
         where: "id = ?",
         whereArgs: [Zones.ville.id],
-      )).toList()[0]["isCollected"] as int;
+      ))
+          .toList()[0]["isCollected"] as int;
 
       FirebaseDatabase(databaseURL: databaseLink)
           .reference()
@@ -407,17 +407,10 @@ class DatabaseRepository extends Repository {
           .child("trophies")
           .child("trophy${Zones.ville.id.toString()}")
           .update({
-        "isCollected" : trophyAcquired,
-          }
-      );
-
-
-
-
-
-
-
+        "isCollected": trophyAcquired,
+      });
     }
+  }
 
 
     Future<void> syncChallenges(Function onDone) async {

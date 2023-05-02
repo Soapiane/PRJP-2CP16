@@ -28,6 +28,7 @@ class TurningPipes extends MiniGame with HasTappables{
   TurningPipes({required super.hud}){
     zone = Zones.ville;
     level = 0;
+    challenge = 1;
     switch (difficulty){
       case Difficulty.EASY:
         time = 60;

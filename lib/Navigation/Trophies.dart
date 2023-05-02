@@ -9,7 +9,9 @@ import 'package:sqflite/sqflite.dart';
 //----------------------------------------------
 class TropheNonObtenu extends StatelessWidget {
   String Trophe;
-  TropheNonObtenu({Key? key,required this.Trophe}) : super(key: key);
+  late Color? color;
+  late String? asset;
+  TropheNonObtenu({Key? key,required this.Trophe, this.color, this.asset}) : super(key: key);
   int HexColor(String color){
     String newColor="0xff"+color;
     newColor=newColor.replaceAll("#", "");
@@ -31,7 +33,7 @@ class TropheNonObtenu extends StatelessWidget {
         height: screenHeight*50/360 ,
         width:  screenWidth*298/800,
         decoration: BoxDecoration(
-          color: Color(HexColor("B29200")),
+          color: color ?? Color(HexColor("B29200")),
           borderRadius: BorderRadius.circular(15),
           boxShadow: [
             BoxShadow(
@@ -48,9 +50,9 @@ class TropheNonObtenu extends StatelessWidget {
               Padding(
                 padding:  EdgeInsets.only(left:14*screenWidth/800 ),
                  child:SvgPicture.asset(
-                    "assets/trophies/trophy.svg",
-                    height: 30*4/5 * screenHeight / 360,
-                    width: 36 *4/5* screenWidth / 800,
+                    asset??"assets/trophies/trophy.svg",
+                    height: (asset == null ? (30*4/5 ) : 7)* screenHeight / 360,
+                    width: (asset == null ? (36*4/5 ) : 7)* screenWidth / 800,
                 ),
               ),
               Expanded(
@@ -64,7 +66,6 @@ class TropheNonObtenu extends StatelessWidget {
                           fontFamily: "AndikaNewBasic",
                           fontWeight  : FontWeight.bold,
                           color: Color(HexColor("#FFFFFF")),
-
                         ),
                       ),
                 ),

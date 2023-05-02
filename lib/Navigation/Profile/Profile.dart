@@ -5,6 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:projet2cp/Info/User.dart';
 import 'package:projet2cp/Info/User.dart' as user;
+import 'package:projet2cp/Navigation/Profile/ChangeInfo.dart';
 
 class Profile extends StatefulWidget {
   late String Nom,Email;
@@ -24,14 +25,18 @@ class _ProfileState extends State<Profile> {
     int finalColor=int.parse(newColor);
     return finalColor;
   }
-  void onChangeName(){
-    print("changement de Nom");
+  Future<void> onChangeName() async {
+    await showDialog(context: context, builder: (context) => UserName() , barrierDismissible: true);
+    setState(() {
+      widget.Nom = user.User().name;
+      widget.Email = FirebaseAuth.instance.currentUser!.email!;
+    });
   }
   void onChangeEmail(){
-    print("changement de Mail");
+    showDialog(context: context, builder: (context) => Email() , barrierDismissible: true);
   }
   void onChangePassword(){
-    print("changement de MDP");
+    showDialog(context: context, builder: (context) => Password() , barrierDismissible: true);
   }
 
   @override
@@ -218,39 +223,44 @@ class EspaceNom extends StatelessWidget {
       children: [
         Padding(
           padding:  EdgeInsets.only(left: 20*screenWidth/800),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Color(couleurCon),
-              borderRadius: BorderRadius.circular(15),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.5),
-                  blurRadius: 2,
-                  offset: Offset(0,2),
-                )
-              ],
-            ),
-            height: 31*screenHeight/360,
-            width: 233*screenWidth/800,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(15),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    Nom,
-                    style: TextStyle(
-                      decoration: TextDecoration.none,
-                      fontSize:screenWidth*14/800,
-                      decorationColor:Color(couleur),
-                      fontFamily: "AndikaNewBasic",
-                      fontWeight: FontWeight.bold,
-                      color: Color(couleur),
-                    ),
-                  ),
+          child: GestureDetector(
+            onTap: () {
+              path == null ? function() : null;
+              },
+            child: Container(
+              decoration: BoxDecoration(
+                color: Color(couleurCon),
+                borderRadius: BorderRadius.circular(15),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.5),
+                    blurRadius: 2,
+                    offset: Offset(0,2),
+                  )
                 ],
+              ),
+              height: 31*screenHeight/360,
+              width: 233*screenWidth/800,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      Nom,
+                      style: TextStyle(
+                        decoration: TextDecoration.none,
+                        fontSize:screenWidth*14/800,
+                        decorationColor:Color(couleur),
+                        fontFamily: "AndikaNewBasic",
+                        fontWeight: FontWeight.bold,
+                        color: Color(couleur),
+                      ),
+                    ),
+                  ],
 
+                ),
               ),
             ),
           ),

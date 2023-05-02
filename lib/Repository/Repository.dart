@@ -83,7 +83,7 @@ abstract class Repository {
           'isLocked': j == 0 ? 0 : 1,
           'stars': 0,
           'zone_id': zone_id,
-          'isQuiz': 0
+          'isQuiz': j == 7 ? 1 : 0,
         });
       }
     }
@@ -98,7 +98,7 @@ abstract class Repository {
 
     for (int i = 0 ; i < 4; i++){
       await db.insert('challenge', {
-        'state': 1 + i%2,
+        'state': 0,
         'title': "Challenge ${i+1}",
       });
     }

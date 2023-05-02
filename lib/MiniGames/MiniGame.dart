@@ -5,10 +5,11 @@ import 'package:flame/game.dart';
 import 'package:projet2cp/Info/Difficulty.dart';
 import 'package:projet2cp/Info/Info.dart';
 import 'package:projet2cp/MiniGames/Hud/MiniGameHUD.dart';
-import 'package:projet2cp/Info/User.dart';
 import 'package:projet2cp/Navigation/DefiState.dart';
+import 'package:projet2cp/Navigation/Loading.dart';
 import 'package:projet2cp/Navigation/Zones.dart';
 import 'package:projet2cp/Repository/DatabaseRepository.dart';
+import 'package:projet2cp/Repository/GuestRepository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class MiniGame extends FlameGame {
@@ -72,11 +73,19 @@ abstract class MiniGame extends FlameGame {
 
    void onFinished() async{
 
-     await saveProgress();
-     await DatabaseRepository().printDB();
-     await DatabaseRepository().syncZone(zone);
-
      hud.onFinished();
+
+     await saveProgress();
+
+     if (FirebaseAuth.instance.currentUser != null){
+       await DatabaseRepository().printDB();
+       await DatabaseRepository().syncZone(zone);
+     } else {
+        await GuestRepository().printDB();
+     }
+
+     Loading.HideLoading(hud.getHudContext());
+
      pauseEngine();
    }
 
@@ -147,7 +156,7 @@ abstract class MiniGame extends FlameGame {
        if (differenceStars != 0) {
 
          ///Update the stars
-        DatabaseRepository().database!.update(
+        await DatabaseRepository().database!.update(
               "level",
               {
                 "stars": levelInfo["stars"] + differenceStars!,
@@ -163,10 +172,10 @@ abstract class MiniGame extends FlameGame {
           whereArgs: [zone.id],
         ))[0];
 
-        DatabaseRepository().database!.update(
+        await DatabaseRepository().database!.update(
               "zone",
               {
-                "stars": zoneInfo["stars"] + differenceStars!,
+                "stars": zoneInfo["stars"] + differenceStars,
                 "levelReached": (level == zoneInfo["levelReached"] && level != zoneInfo["levelsNb"]-1) ? level + 1 : zoneInfo["levelReached"],
               },
               where: "id = ?",
@@ -205,7 +214,11 @@ abstract class MiniGame extends FlameGame {
             where: "id = ?",
             whereArgs: [zone.id],
           );
-          prefs.setInt("newTrophy", zone.id);
+          prefs.setString("newTrophy", (await DatabaseRepository().database!.query(
+            "trophy",
+            where: "id = ?",
+            whereArgs: [zone.id],
+          )).toList()[0]["title"] as String);
         }
 
 
@@ -219,7 +232,7 @@ abstract class MiniGame extends FlameGame {
           ))
               .toList()[0];
 
-          if (challengeInfo["state"] == DefiState.nonCollected) {
+          if (challengeInfo["state"] == DefiState.nonCollected.index) {
             DatabaseRepository().database!.update(
                   "challenge",
                   {
@@ -228,7 +241,7 @@ abstract class MiniGame extends FlameGame {
                   where: "id = ?",
                   whereArgs: [challenge!],
                 );
-            prefs.setInt("newChallenge", challenge!);
+            prefs.setString("newChallenge", challengeInfo["title"] as String);
           }
         }
 
@@ -239,7 +252,114 @@ abstract class MiniGame extends FlameGame {
 
 
 
-      }
+      } else {
+
+       ///checking if any changes happened
+       Map levelInfo = (await GuestRepository().database!.query(
+         "level",
+         where: "zone_id = ? AND level = ?",
+         whereArgs: [zone.id, level],
+       ))[0];
+
+       if (levelInfo["stars"] < getStars()){
+         differenceStars = (getStars() - levelInfo["stars"]) as int?;
+       }
+       if (differenceStars != 0) {
+
+         ///Update the stars
+         await GuestRepository().database!.update(
+           "level",
+           {
+             "stars": levelInfo["stars"] + differenceStars!,
+           },
+           where: "zone_id = ? AND level = ?",
+           whereArgs: [zone.id, level],
+         );
+
+         ///update the zone info
+         Map zoneInfo = (await GuestRepository().database!.query(
+           "zone",
+           where: "id = ?",
+           whereArgs: [zone.id],
+         ))[0];
+
+         await GuestRepository().database!.update(
+           "zone",
+           {
+             "stars": zoneInfo["stars"] + differenceStars,
+             "levelReached": (level == zoneInfo["levelReached"] && level != zoneInfo["levelsNb"]-1) ? level + 1 : zoneInfo["levelReached"],
+           },
+           where: "id = ?",
+           whereArgs: [zone.id],
+         );
+
+         ///Unlock the next level if there's
+         if (level != zoneInfo["levelsNb"]-1) {
+
+           GuestRepository().database!.update(
+             "level",
+             {
+               "isLocked": 0,
+             },
+             where: "zone_id = ? AND level = ?",
+             whereArgs: [zone.id, level + 1],
+           );
+
+         }
+
+         ///give the zone finishing trophy
+         SharedPreferences prefs = await SharedPreferences.getInstance();
+         int allStars = (await GuestRepository().database!.rawQuery("SELECT SUM(stars) as Total FROM level GROUP BY zone_id")).toList()[Zones.ville.index]["Total"] as int;
+         int trophyAcquired = (await GuestRepository().database!.query(
+           "trophy",
+           where: "id = ?",
+           whereArgs: [zone.id],
+         )).toList()[0]["isCollected"] as int;
+
+         if (allStars == zoneInfo["levelsNb"]*3 && trophyAcquired == 0) {
+           GuestRepository().database!.update(
+             "trophy",
+             {
+               "isCollected": 1,
+             },
+             where: "id = ?",
+             whereArgs: [zone.id],
+           );
+           prefs.setString("newTrophyGuest", (await GuestRepository().database!.query(
+             "trophy",
+             where: "id = ?",
+             whereArgs: [zone.id],
+           )).toList()[0]["title"] as String);
+         }
+
+
+         ///give the challenge
+
+         if (challenge != null) {
+           Map challengeInfo = (await GuestRepository().database!.query(
+             "challenge",
+             where: "id = ?",
+             whereArgs: [challenge!],
+           ))
+               .toList()[0];
+
+           if (challengeInfo["state"] == DefiState.nonCollected.index) {
+             GuestRepository().database!.update(
+               "challenge",
+               {
+                 "state": DefiState.collected.index,
+               },
+               where: "id = ?",
+               whereArgs: [challenge!],
+             );
+             prefs.setString("newChallengeGuest", challengeInfo["title"] as String);
+           }
+         }
+
+       }
+
+       
+     }
     }
   }
 

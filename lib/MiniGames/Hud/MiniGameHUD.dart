@@ -11,6 +11,7 @@ import 'package:projet2cp/ImageGenerator.dart';
 import 'package:projet2cp/Info/Info.dart';
 import 'package:projet2cp/MiniGames/Hud/PauseScreen.dart';
 import 'package:projet2cp/MiniGames/Hud/ScoreScreen.dart';
+import 'package:projet2cp/Navigation/Loading.dart';
 import 'package:projet2cp/Repository/DatabaseRepository.dart';
 import 'package:projet2cp/StandardWidgets.dart';
 import 'package:projet2cp/Navigation/Zones.dart';
@@ -73,6 +74,11 @@ class MiniGameHUD extends StatefulWidget{
 
   void setStars({required int stars}){
     state.setStars(stars);
+  }
+
+
+  BuildContext getHudContext(){
+    return state.context;
   }
 
 
@@ -414,6 +420,9 @@ class _MiniGameHUDState extends State<MiniGameHUD>{
             return menu;
           },
         );
+
+        Loading.ShowLoading(context, text: "Sauveguarde des données...");
+
       });
     }
   }
@@ -461,7 +470,6 @@ class _MiniGameHUDState extends State<MiniGameHUD>{
 
     menu = PauseScreen(
       onQuit: (){
-
 
         Navigator.of(context).pop();
         Navigator.pop(context);

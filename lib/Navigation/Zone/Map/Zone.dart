@@ -11,9 +11,10 @@ class Zone extends StatefulWidget {
   List<double> xValues;
   List<double> yValues;
   Zones zone;
+  Function(bool unlocked, Zones zone, int order) onTap ;
 
 
-  Zone({super.key, required this.zone ,required this.levelsNumber, required this.levelReached, required this.xValues, required this.yValues}){
+  Zone({super.key, required this.onTap, required this.zone ,required this.levelsNumber, required this.levelReached, required this.xValues, required this.yValues}){
 
     maxStars = 3*levelsNumber;
 
@@ -64,6 +65,7 @@ class _ZoneState extends State<Zone>{
           stars: 0,
           number: i,
           context: context,
+          onTap: widget.onTap,
 
       );
 

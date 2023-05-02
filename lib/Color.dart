@@ -3,6 +3,10 @@ import 'package:flutter/painting.dart' as p;
 
 enum Color {
 
+  oceanBlueDark(color: p.Color(0xff19806D)),
+  oceanBlue(color: p.Color(0xff25BEA1)),
+  goldenYellowDark(color: p.Color(0xffB29200)),
+  goldenYellow(color: p.Color(0xffE5BC00)),
   terraCottaRedDark(color: p.Color(0xffDC5C3C)),
   terraCottaRed(color: p.Color(0xffE06E52)),
   orange(color: p.Color(0xffEB8914)),

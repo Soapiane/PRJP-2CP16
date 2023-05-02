@@ -16,16 +16,16 @@ class ZoneBody extends Body {
   late Widget? foreground;
   late String backgroundImageUrl;
   late List<double> yZone, xZone;
+  Function(bool unlocked, Zones zone, int order) onTap ;
 
 
-  ZoneBody({super.key, required this.zone}){
-
+  ZoneBody({super.key, required this.onTap, required this.zone}){
 
 
     _getBackgroundImageUrl();
 
     _getXYValues();
-    foreground = zoneModel.Zone(zone: zone,levelsNumber: 7, levelReached: 3, xValues: xZone, yValues: yZone);
+    foreground = zoneModel.Zone(onTap: onTap, zone: zone,levelsNumber: 7, levelReached: 3, xValues: xZone, yValues: yZone);
   }
 
 

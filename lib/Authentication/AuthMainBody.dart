@@ -2,10 +2,12 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:projet2cp/Navigation/Body.dart';
 import 'package:projet2cp/ButtonGenerator.dart';
 import 'package:projet2cp/Info/Guest.dart';
 import 'package:projet2cp/ImageGenerator.dart';
+import 'package:projet2cp/Navigation/Loading.dart';
 import 'package:projet2cp/Repository/GuestRepository.dart';
 import 'package:projet2cp/TextGenerator.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart' as svg_provider;
@@ -28,11 +30,22 @@ class AuthMainBody extends Body {
 
     return Stack(
       children: [
+        Align(
+          alignment: Alignment.topCenter,
+          child: Padding(
+            padding:  EdgeInsets.only(top: imageGenerator.calculateY(8)),
+            child: SvgPicture.asset(
+              "assets/logo.svg",
+              width: imageGenerator.calculateX(197),
+              height: imageGenerator.calculateY(147),
+            ),
+          ),
+        ),
         imageGenerator.generateImage(
-          height: 153,
-          width: 173,
-          xPos: 317,
-          yPos: 133,
+          height: 127,
+          width: 144,
+          xPos: 328,
+          yPos: 165,
           imagePath: "assets/terra/earth_planting.svg",
         ),
 
@@ -55,7 +68,7 @@ class AuthMainBody extends Body {
           text: "Jouer",
           backgroundColor: color.Color.yellow,
           onTap: (){
-            onPlayPressed();
+            onPlayPressed(context);
           },
         ).first,
 
@@ -63,8 +76,11 @@ class AuthMainBody extends Body {
     );
   }
 
-  Future<void> onPlayPressed() async {
-    GuestRepository().openDB();
+  Future<void> onPlayPressed(BuildContext context) async {
+    Loading.ShowLoading(context);
+    await GuestRepository().openDB();
+    await GuestRepository().printDB();
+    Loading.HideLoading(context);
     onPlay.call();
   }
 

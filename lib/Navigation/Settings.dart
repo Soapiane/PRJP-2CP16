@@ -252,13 +252,6 @@ class _SettingsState extends State<Settings> {
           ),
       ),
         ),
-        Align(
-          alignment: Alignment.topLeft,
-          child: Padding(
-            padding: EdgeInsets.only(top: screenHeight*0.05,left: screenWidth*0.05),
-            child: standardWidgets.backButton(onBackButtonTapped: widget.onBackButtonTapped),
-          ),
-        )
       ],
     );
   }
