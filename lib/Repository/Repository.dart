@@ -90,7 +90,7 @@ abstract class Repository {
 
     for (Trophy e in Trophy.values) {
       await db.insert('trophy', {
-        'isCollected': e.index%2,
+        'isCollected': 0,
         'title': e.title,
       });
     }

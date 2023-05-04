@@ -62,6 +62,10 @@ class _SplashState extends State<SplashScreen>{
               builder: (context)=> MainScreen(signedIn: FirebaseAuth.instance.currentUser != null)
           )
       );
+
+
+
+
     });
   }
 
@@ -83,11 +87,11 @@ class _SplashState extends State<SplashScreen>{
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SvgPicture.asset(
-              "assets/logo.svg",
-              width: logoWidth,
-              height: logoHeight,
-            ),
+            // SvgPicture.asset(
+            //   "assets/logo.svg",
+            //   width: logoWidth,
+            //   height: logoHeight,
+            // ),
             Padding(
               padding: const EdgeInsets.only(top: 50,),
               child: LoadingAnimationWidget.hexagonDots(

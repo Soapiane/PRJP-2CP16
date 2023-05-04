@@ -10,6 +10,7 @@ import 'package:projet2cp/ButtonGenerator.dart';
 import 'package:projet2cp/ImageGenerator.dart';
 import 'package:projet2cp/Info/Info.dart';
 import 'package:projet2cp/MiniGames/Hud/PauseScreen.dart';
+import 'package:projet2cp/MiniGames/Hud/ProgressBar.dart';
 import 'package:projet2cp/MiniGames/Hud/ScoreScreen.dart';
 import 'package:projet2cp/Navigation/Loading.dart';
 import 'package:projet2cp/Repository/DatabaseRepository.dart';
@@ -33,12 +34,13 @@ class MiniGameHUD extends StatefulWidget{
   Function(Duration)? onTimeUpdate;
   Color? textColor;
   bool visible, hideBackground;
+  bool useBar;
 
 
 
 
   MiniGameHUD({super.key, required this.zone, this.countdown, this.maxPoints, this.pointsAsset = "assets/hud/points.svg", this.pointsText = "Score", this.initialPoints = 0, this.initialStars = 0,
-    this.textColor, this.visible = true, this.hideBackground = false}){
+    this.textColor, this.visible = true, this.hideBackground = false, this.useBar = false}){
     textColor = Colors.white;
 
     state = _MiniGameHUDState();
@@ -129,6 +131,8 @@ class _MiniGameHUDState extends State<MiniGameHUD>{
   @override
   Widget build(BuildContext context) {
 
+    print(points);
+
     double fontSize = 20;
 
     String strDigits(int n) => n.toString().padLeft(2, '0');
@@ -179,7 +183,8 @@ class _MiniGameHUDState extends State<MiniGameHUD>{
     ) : const SizedBox.shrink();
 
 
-    starsView = widget.visible ? Container(
+    starsView = widget.visible ?
+    Container(
       decoration: BoxDecoration(
         color: color.Color.yellowGreenLigh.color,
         borderRadius: BorderRadius.circular(10),
@@ -191,7 +196,7 @@ class _MiniGameHUDState extends State<MiniGameHUD>{
           mainAxisSize: MainAxisSize.min,
           children: [
             imageGenerator.generateImage(height: DIM2, width: DIM2, imagePath: "assets/hud/star.svg"),
-            DefaultTextStyle(
+             DefaultTextStyle(
               style: TextStyle(
                 color: widget.textColor,
                 fontSize: fontSize,
@@ -203,7 +208,9 @@ class _MiniGameHUDState extends State<MiniGameHUD>{
           ],
         ),
       ),
-    ) : const SizedBox.shrink();
+    )
+
+        : const SizedBox.shrink();
 
 
     pointsView = widget.maxPoints != null && widget.visible ?
@@ -219,13 +226,20 @@ class _MiniGameHUDState extends State<MiniGameHUD>{
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             imageGenerator.generateImage(height: DIM2, width: DIM2, imagePath: widget.pointsAsset),
-            DefaultTextStyle(
+            !widget.useBar ? DefaultTextStyle(
               style: TextStyle(
                 color: widget.textColor,
                 fontSize: fontSize,
               ),
               child: Text(
                 '$points / ${widget.maxPoints}',
+              ),
+            )  : Padding(
+              padding: const EdgeInsets.only(left: 5),
+              child: ProgressBar(
+                total: widget.maxPoints!,
+                filled: points,
+                size: Size(imageGenerator.calculateX(imageGenerator.deviceWidth/12), imageGenerator.calculateX(imageGenerator.deviceWidth/5)/16),
               ),
             ),
           ],

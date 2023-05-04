@@ -226,6 +226,7 @@ class TurningPipes extends MiniGame with HasTappables{
   }
 
   void checkSolution(){
+    modifyPoints(points: 1);
     finished = true;
     for (var pipe in solutions) {
       if (!pipe.isSolved()){

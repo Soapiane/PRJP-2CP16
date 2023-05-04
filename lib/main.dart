@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:projet2cp/Authentication/MainScreen.dart';
 import 'package:projet2cp/Info/Info.dart';
 import 'package:projet2cp/Info/User.dart';
+import 'package:projet2cp/MiniGames/Hud/ProgressBar.dart';
 import 'package:projet2cp/MiniGames/MiniGameMainScreen.dart';
 import 'package:projet2cp/Navigation/DefiState.dart';
 import 'package:projet2cp/Navigation/LevelSelectionBody.dart';
