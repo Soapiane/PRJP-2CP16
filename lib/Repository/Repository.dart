@@ -6,6 +6,26 @@ import 'package:sqflite/sqflite.dart';
 abstract class Repository {
 
 
+  static const List<String> _challenges = [
+    "Prendre une bouteille réutilisable au lieu des bouteilles en plastique pendant 1 journée",
+    "Passer 30 minutes à nettoyer le parc ou la rue",
+    "Collecter 20 bouchons de bouteilles en plastique pour les recycler",
+    "Utiliser les escaliers au lieu de l’ascenseur, pendant une journée",
+    "Planter un arbre",
+    "Réparer un objet cassé au lieu de le jeter et en acheter un nouveau",
+    "Passer une journée entière sans sacs en plastique",
+    "Arroser les plantes de la maison, ou celles à l’extérieur",
+    "Ramasser 10 déchets dans le parc ou dans la rue",
+    "Fabriquer un objet à partir de matériaux recyclés ou récupérés",
+    "Passer une journée entière en n'utilisant que des lumières naturelles ou des bougies",
+    "Eteindre les lumières une heure plus tôt",
+    "Passer une journée entière sans produire de déchets plastiques",
+    "Ramasser 5 bouteilles en plastique",
+    "Ne rien jeter par terre pendant une journée",
+    "Manger exclusivement des légumes ou des fruits de saison dans le gouté"
+  ];
+
+
   Database? database;
 
   Future<void> printDB() async {
@@ -77,13 +97,13 @@ abstract class Repository {
         'levelReached': 0,
       });
 
-      for (int j = 0; j < 8; j++) {
+      for (int j = 0; j < 4; j++) {
         await db.insert('level', {
           'level': j,
           'isLocked': j == 0 ? 0 : 1,
           'stars': 0,
           'zone_id': zone_id,
-          'isQuiz': j == 7 ? 1 : 0,
+          'isQuiz': j == 3 ? 1 : 0,
         });
       }
     }
@@ -96,14 +116,14 @@ abstract class Repository {
     }
 
 
-    for (int i = 0 ; i < 4; i++){
+    for (String challenge in _challenges) {
       await db.insert('challenge', {
         'state': 0,
-        'title': "Challenge ${i+1}",
+        'title': challenge,
       });
+
     }
 
-    //TODO: add challenges to the database
 
 
 

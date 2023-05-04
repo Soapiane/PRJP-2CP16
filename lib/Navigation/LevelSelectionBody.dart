@@ -72,35 +72,35 @@ class LevelSelectionBody extends Body {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         createContainer(
-                            "assets/images/Quiz_level_selection.svg",
-                          2, // levelsInfo[0]["isLocked"] == 0 ? levelsInfo[0]["stars"] : -1,
-                            context,
-                          level: 1,),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        createContainer(
-                            "assets/images/Turtle_level_selection.svg",
-                          2, // levelsInfo[1]["isLocked"] == 0 ? levelsInfo[0]["stars"] : -1,
-                            context,
-                          level: 1,),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        createContainer(
-                            "assets/images/Puzzle_level_selection.svg",
-                          3, // levelsInfo[2]["isLocked"] == 0 ? levelsInfo[0]["stars"] : -1,
-                            context,
+                          "assets/images/Turtle_level_selection.svg",
+                          levelsInfo[0]["isLocked"] == 0 ? levelsInfo[0]["stars"] : -1,
+                          context,
                           level: 1,),
                         const SizedBox(
                           width: 10,
                         ),
                         createContainer(
                           "assets/images/Recycler_level_selection.svg",
-                          -1, // levelsInfo[3]["isLocked"] == 0 ? levelsInfo[0]["stars"] : -1, //                          1,
+                          levelsInfo[1]["isLocked"] == 0 ? levelsInfo[0]["stars"] : -1, //                          1,
                           context,
-                            level: 1,
+                          level: 1,
                         ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        createContainer(
+                            "assets/images/Puzzle_level_selection.svg",
+                             levelsInfo[2]["isLocked"] == 0 ? levelsInfo[0]["stars"] : -1,
+                            context,
+                          level: 1,),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        createContainer(
+                          "assets/images/Quiz_level_selection.svg",
+                          levelsInfo[3]["isLocked"] == 0 ? levelsInfo[0]["stars"] : -1,
+                          context,
+                          level: 1,),
                         const SizedBox(
                           width: 10,
                         ),
@@ -133,35 +133,35 @@ class LevelSelectionBody extends Body {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       createContainer(
-                          "assets/images/Quiz_level_selection.svg",
-                        2, // levelsInfo[0]["isLocked"] == 0 ? levelsInfo[0]["stars"] : -1, //3,
-                          context,
-                        level: 1,),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      createContainer(
-                          "assets/images/Runner_level_selection.svg",
-                        3, // levelsInfo[1]["isLocked"] == 0 ? levelsInfo[0]["stars"] : -1, //3,
-                          context,
-                        level: 1,),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      createContainer(
-                          "assets/images/Puzzle_level_selection.svg",
-                        1, // levelsInfo[2]["isLocked"] == 0 ? levelsInfo[0]["stars"] : -1, //2,
-                          context,
+                        "assets/images/Runner_level_selection.svg",
+                        levelsInfo[0]["isLocked"] == 0 ? levelsInfo[0]["stars"] : -1, //3,
+                        context,
                         level: 1,),
                       const SizedBox(
                         width: 10,
                       ),
                       createContainer(
                         "assets/images/Recycler_level_selection.svg",
-                        -1, // levelsInfo[3]["isLocked"] == 0 ? levelsInfo[0]["stars"] : -1, //2,
+                        levelsInfo[1]["isLocked"] == 0 ? levelsInfo[0]["stars"] : -1, //2,
                         context,
                         level: 1,
                       ),
+                      createContainer(
+                          "assets/images/Puzzle_level_selection.svg",
+                          levelsInfo[2]["isLocked"] == 0 ? levelsInfo[0]["stars"] : -1, //2,
+                          context,
+                        level: 1,),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      createContainer(
+                        "assets/images/Quiz_level_selection.svg",
+                        levelsInfo[3]["isLocked"] == 0 ? levelsInfo[0]["stars"] : -1, //3,
+                        context,
+                        level: 1,),
                       const SizedBox(
                         width: 10,
                       ),
@@ -195,35 +195,35 @@ class LevelSelectionBody extends Body {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         createContainer(
-                            "assets/images/Quiz_level_selection.svg",
-                          2, // levelsInfo[0]["isLocked"] == 0 ? levelsInfo[0]["stars"] : -1, //  3,
-                            context,
-                          level: 1,),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        createContainer(
-                            "assets/images/Runner_level_selection.svg",
-                          1, // levelsInfo[1]["isLocked"] == 0 ? levelsInfo[0]["stars"] : -1, //  3,
-                            context,
-                          level: 1,),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        createContainer(
-                            "assets/images/Bird_level_selection.svg",
-                          3, // levelsInfo[2]["isLocked"] == 0 ? levelsInfo[0]["stars"] : -1, //  0,
-                            context,
+                          "assets/images/Runner_level_selection.svg",
+                          levelsInfo[0]["isLocked"] == 0 ? levelsInfo[0]["stars"] : -1, //  3,
+                          context,
                           level: 1,),
                         const SizedBox(
                           width: 10,
                         ),
                         createContainer(
                           "assets/images/Recycler_level_selection.svg",
-                          -1, // levelsInfo[3]["isLocked"] == 0 ? levelsInfo[0]["stars"] : -1, //1,
+                          levelsInfo[1]["isLocked"] == 0 ? levelsInfo[0]["stars"] : -1, //1,
                           context,
-                            level: 1,
+                          level: 1,
                         ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        createContainer(
+                            "assets/images/Bird_level_selection.svg",
+                            levelsInfo[2]["isLocked"] == 0 ? levelsInfo[0]["stars"] : -1, //  0,
+                            context,
+                          level: 1,),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        createContainer(
+                          "assets/images/Quiz_level_selection.svg",
+                          levelsInfo[3]["isLocked"] == 0 ? levelsInfo[0]["stars"] : -1, //  3,
+                          context,
+                          level: 1,),
                         const SizedBox(
                           width: 10,
                         ),
@@ -256,36 +256,36 @@ class LevelSelectionBody extends Body {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       createContainer(
-                          "assets/images/Puzzle_level_selection.svg",
-                          3, // levelsInfo[0]["isLocked"] == 0 ? levelsInfo[0]["stars"] : -1, //3,
-                          context,
-                        level: 1,),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      createContainer(
-                          "assets/images/Runner_level_selection.svg",
-                          1, // levelsInfo[1]["isLocked"] == 0 ? levelsInfo[0]["stars"] : -1, //3,
-                          context,
-                        level: 1,),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      createContainer(
-                          "assets/images/Pipes_level_selection.svg",
-                          -1, // levelsInfo[2]["isLocked"] == 0 ? levelsInfo[0]["stars"] : -1, //2,
-                          context,
+                        "assets/images/Pipes_level_selection.svg",
+                        levelsInfo[0]["isLocked"] == 0 ? levelsInfo[0]["stars"] : -1, //2,
+                        context,
                         level: 1,
                       ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      createContainer(
+                        "assets/images/Runner_level_selection.svg",
+                        levelsInfo[1]["isLocked"] == 0 ? levelsInfo[0]["stars"] : -1, //3,
+                        context,
+                        level: 1,),
                       const SizedBox(
                         width: 10,
                       ),
                       createContainer(
                         "assets/images/Recycler_level_selection.svg",
-                        -1 ,// levelsInfo[3]["isLocked"] == 0 ? levelsInfo[0]["stars"] : -1,
+                        levelsInfo[2]["isLocked"] == 0 ? levelsInfo[0]["stars"] : -1,
                         context,
                         level: 1,
                       ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      createContainer(
+                        "assets/images/Quiz_level_selection.svg",
+                        levelsInfo[3]["isLocked"] == 0 ? levelsInfo[0]["stars"] : -1, //3,
+                        context,
+                        level: 1,),
                       const SizedBox(
                         width: 10,
                       ),

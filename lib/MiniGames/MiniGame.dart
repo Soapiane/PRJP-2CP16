@@ -20,7 +20,7 @@ abstract class MiniGame extends FlameGame {
   late int level;
   int? challenge;
 
-   MiniGame({required this.hud}){
+   MiniGame({required this.hud, this.zone = Zones.ville, this.level = 1, this.challenge}){
      hud.onMaxPointsReached = onMaxPointsReached;
      hud.onGameTimeOut = onTimeOut;
      hud.onGamePaused = onPaused;

@@ -7,6 +7,7 @@ import 'package:projet2cp/Info/Info.dart';
 import 'package:projet2cp/Info/User.dart';
 import 'package:projet2cp/MiniGames/Hud/ProgressBar.dart';
 import 'package:projet2cp/MiniGames/MiniGameMainScreen.dart';
+import 'package:projet2cp/MiniGames/Quizz/quizzGame.dart';
 import 'package:projet2cp/Navigation/DefiState.dart';
 import 'package:projet2cp/Navigation/LevelSelectionBody.dart';
 import 'package:projet2cp/Navigation/Livre.dart';
@@ -73,13 +74,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
 
 
+
+
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Livre(),
+      home: SplashScreen(),
     );
   }
 
