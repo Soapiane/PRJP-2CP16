@@ -9,6 +9,7 @@ import 'package:projet2cp/MiniGames/Hud/ProgressBar.dart';
 import 'package:projet2cp/MiniGames/MiniGameMainScreen.dart';
 import 'package:projet2cp/Navigation/DefiState.dart';
 import 'package:projet2cp/Navigation/LevelSelectionBody.dart';
+import 'package:projet2cp/Navigation/Livre.dart';
 import 'package:projet2cp/Navigation/Loading.dart';
 import 'package:projet2cp/Navigation/Notifications/ChallengeNotification.dart';
 import 'package:projet2cp/Navigation/Notifications/TrophyNotification.dart';
@@ -78,7 +79,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: SplashScreen(),
+      home: Livre(),
     );
   }
 

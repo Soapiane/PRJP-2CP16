@@ -58,6 +58,7 @@ dependencies:
   dcdg: ^4.1.0
   internet_connection_checker: ^1.0.0+1
   loading_animation_widget: ^1.2.0+4
+  audioplayers: ^4.0.1
 
 dependency_overrides:
   xml: ^6.1.0
@@ -124,6 +125,9 @@ flutter:
     - assets/trophies/
     - assets/icons/
     - assets/stars/
+    - assets/livre/book_svg/
+    - assets/livre/icons/
+    - assets/audio/
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
