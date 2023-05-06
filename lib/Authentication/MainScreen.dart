@@ -39,6 +39,7 @@ import 'package:projet2cp/ImageGenerator.dart';
 import 'package:projet2cp/Info/Language.dart';
 import 'package:projet2cp/Repository/DatabaseRepository.dart';
 import 'package:projet2cp/Repository/GuestRepository.dart';
+import 'package:projet2cp/Sound.dart';
 import 'package:projet2cp/StandardWidgets.dart';
 import 'package:projet2cp/TextGenerator.dart';
 import 'package:projet2cp/TextStyles.dart';
@@ -1103,10 +1104,13 @@ class MainState extends State<MainScreen> {
 
     Loading.HideLoading(context);
 
-    Navigator.push(
+    await Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const Livre()),
     );
+
+    Sound().playSound();
+
   }
 
   void showProfileSetting() async{

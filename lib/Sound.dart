@@ -41,7 +41,7 @@ class Sound {
 
   // rest of class as normal
   void playSound() {
-    if (!Info.sound) {
+    if (Info.sound) {
       audioPlayer.resume();
     }
   }
@@ -50,6 +50,10 @@ class Sound {
     if (!Info.sound) {
       audioPlayer.pause();
     }
+  }
+
+  void setVolume(double volume){
+    audioPlayer.setVolume(volume);
   }
 
   void changeSoundState(bool state){
