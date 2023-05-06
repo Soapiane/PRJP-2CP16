@@ -9,18 +9,45 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:projet2cp/MiniGames/MiniGame.dart';
 import 'package:projet2cp/MiniGames/Quizz/Quizz.dart';
+import 'package:projet2cp/MiniGames/Quizz/data/foret_questions.dart';
+import 'package:projet2cp/MiniGames/Quizz/data/mer_questions.dart';
+import 'package:projet2cp/MiniGames/Quizz/data/ville_questions.dart';
+import 'package:projet2cp/MiniGames/Quizz/data/zone_questions.dart';
+import 'package:projet2cp/MiniGames/Quizz/model/question_model.dart';
+import 'package:projet2cp/MiniGames/TutoScreen.dart';
 import 'package:projet2cp/Navigation/Zones.dart';
 
-import 'data/ville_questions.dart';
-import 'data/zone_questions.dart';
-import 'model/question_model.dart';
 import 'screens/pop_up.dart';
 import 'screens/result_screen.dart';
 
 class QuizzGame extends StatefulWidget {
   final Zones zone;
   final Quizz? gameRef;
-  const QuizzGame({super.key, required this.zone, this.gameRef});
+  late List<QuestionModel> questions;
+  QuizzGame({super.key, required this.zone, this.gameRef}){
+
+    switch (zone) {
+      case Zones.ville:
+        {
+          questions = questionsVille;
+        }
+        break;
+      case Zones.foret:
+        {
+          questions = questionsForet;
+        }
+        break;
+      case Zones.mer:
+        {
+          questions = questionsMer;
+        }
+        break;
+      case Zones.zoneIndustrielle:
+        {
+          questions = questionsZone;
+        }
+    }
+  }
 
   @override
   State<QuizzGame> createState() => _QuizzGameState();
@@ -41,10 +68,22 @@ class _QuizzGameState extends State<QuizzGame> {
   AudioPlayer audioPlayerExplanation = AudioPlayer();
   @override
   Widget build(BuildContext context) {
+
+    showTuto();
+
     return Scaffold(
       backgroundColor: Colors.transparent,
-      body: QuizzPage(widget.zone.backgroundImagePath, questionsZone),
+      body: QuizzPage(widget.zone.backgroundImagePath, widget.questions),
     );
+  }
+
+  void showTuto() async{
+    await Future.delayed(Duration(milliseconds: 300), (){
+
+
+      showDialog(context: context, builder: (context) => TutoScreen(path: "assets/tutorials/quiz.png",));
+
+    });
   }
 
   Stack QuizzPage(String backGroundPath, List<QuestionModel> questions) {

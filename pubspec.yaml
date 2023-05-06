@@ -37,7 +37,9 @@ dependencies:
 
   cupertino_icons: ^1.0.2
   flame: ^1.6.0
+  flame_svg: 1.7.1
   flame_tiled: ^1.9.1
+  flame_texturepacker: ^2.1.0
 
   sqflite: ^2.2.6
   shared_preferences: ^2.1.0
@@ -133,6 +135,36 @@ flutter:
     - assets/images/Quizz/earth/
     - assets/tutorials/turning_pipes/
     - assets/tutorials/
+    - assets/images/Recycler/backgrounds/
+    - assets/images/Recycler/poubelles/
+    - assets/images/Recycler/backgrounds/
+    - assets/images/Recycler/dechets/EWASTE/
+    - assets/images/Recycler/dechets/GLASS/
+    - assets/images/Recycler/dechets/METAL/
+    - assets/images/Recycler/dechets/ORGANIC/
+    - assets/images/Recycler/dechets/PAPER/
+    - assets/images/Recycler/dechets/PLASTIC/
+    - assets/images/Recycler/
+    - assets/images/Puzzle/images/
+    - assets/images/Puzzle/images/zone_industrielle/2x2/
+    - assets/images/Puzzle/images/zone_industrielle/3x3/
+    - assets/images/Puzzle/images/zone_industrielle/4x4/
+    - assets/images/Puzzle/images/zone_industrielle/images/
+    - assets/images/Puzzle/images/Mer/images/
+    - assets/images/Puzzle/images/Mer/2x2/
+    - assets/images/Puzzle/images/Mer/3x3/
+    - assets/images/Puzzle/images/Mer/4x4/
+    - assets/images/backgrounds/
+    - assets/images/AnimalGames/images/
+    - assets/images/AnimalGames/images/Bird/
+    - assets/images/AnimalGames/images/layersBird/
+    - assets/images/AnimalGames/images/layersTurtle/
+    - assets/images/AnimalGames/images/trashBird/
+    - assets/images/AnimalGames/images/trashTurtle/
+    - assets/images/AnimalGames/images/turtle/
+    - assets/images/Runner_Forest/
+    - assets/images/Runner_Zone/
+    - assets/images/Runner_Ville/
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

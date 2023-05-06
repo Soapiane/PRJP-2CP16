@@ -321,6 +321,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.6.0"
+  flame_svg:
+    dependency: "direct main"
+    description:
+      name: flame_svg
+      sha256: db11c6ea473723e4a58b03b74f2ee525853a33acba7992127c66832f1d1bcbac
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.7.1"
+  flame_texturepacker:
+    dependency: "direct main"
+    description:
+      name: flame_texturepacker
+      sha256: "9eccc25973aa2a5181e8a233b80f7a491f670c635d643cc86e27558662bfa3b3"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.0"
   flame_tiled:
     dependency: "direct main"
     description:

@@ -83,7 +83,7 @@ class LevelSelectionBody extends Body {
                           "assets/images/Recycler_level_selection.svg",
                           levelsInfo[1]["isLocked"] == 0 ? levelsInfo[1]["stars"] : -1, //                          1,
                           context,
-                          level: 1,
+                          level: 2,
                         ),
                         const SizedBox(
                           width: 10,
@@ -92,7 +92,7 @@ class LevelSelectionBody extends Body {
                             "assets/images/Puzzle_level_selection.svg",
                              levelsInfo[2]["isLocked"] == 0 ? levelsInfo[2]["stars"] : -1,
                             context,
-                          level: 1,),
+                          level: 3,),
                         const SizedBox(
                           width: 10,
                         ),
@@ -100,7 +100,7 @@ class LevelSelectionBody extends Body {
                           "assets/images/Quiz_level_selection.svg",
                           levelsInfo[3]["isLocked"] == 0 ? levelsInfo[3]["stars"] : -1,
                           context,
-                          level: 1,),
+                          level: 4,),
                         const SizedBox(
                           width: 10,
                         ),
@@ -144,16 +144,13 @@ class LevelSelectionBody extends Body {
                         "assets/images/Recycler_level_selection.svg",
                         levelsInfo[1]["isLocked"] == 0 ? levelsInfo[1]["stars"] : -1, //2,
                         context,
-                        level: 1,
+                        level: 2,
                       ),
                       createContainer(
                           "assets/images/Puzzle_level_selection.svg",
                           levelsInfo[2]["isLocked"] == 0 ? levelsInfo[2]["stars"] : -1, //2,
                           context,
-                        level: 1,),
-                      const SizedBox(
-                        width: 10,
-                      ),
+                        level: 3,),
                       const SizedBox(
                         width: 10,
                       ),
@@ -161,7 +158,7 @@ class LevelSelectionBody extends Body {
                         "assets/images/Quiz_level_selection.svg",
                         levelsInfo[3]["isLocked"] == 0 ? levelsInfo[3]["stars"] : -1, //3,
                         context,
-                        level: 1,),
+                        level: 4,),
                       const SizedBox(
                         width: 10,
                       ),
@@ -206,7 +203,7 @@ class LevelSelectionBody extends Body {
                           "assets/images/Recycler_level_selection.svg",
                           levelsInfo[1]["isLocked"] == 0 ? levelsInfo[1]["stars"] : -1, //1,
                           context,
-                          level: 1,
+                          level: 2,
                         ),
                         const SizedBox(
                           width: 10,
@@ -215,7 +212,7 @@ class LevelSelectionBody extends Body {
                             "assets/images/Bird_level_selection.svg",
                             levelsInfo[2]["isLocked"] == 0 ? levelsInfo[2]["stars"] : -1, //  0,
                             context,
-                          level: 1,),
+                          level: 3,),
                         const SizedBox(
                           width: 10,
                         ),
@@ -225,7 +222,7 @@ class LevelSelectionBody extends Body {
                           context,
                           level: 1,),
                         const SizedBox(
-                          width: 10,
+                          width: 4,
                         ),
                       ],
                     )),
@@ -268,7 +265,7 @@ class LevelSelectionBody extends Body {
                         "assets/images/Runner_level_selection.svg",
                         levelsInfo[1]["isLocked"] == 0 ? levelsInfo[1]["stars"] : -1, //3,
                         context,
-                        level: 1,),
+                        level: 2,),
                       const SizedBox(
                         width: 10,
                       ),
@@ -276,7 +273,7 @@ class LevelSelectionBody extends Body {
                         "assets/images/Recycler_level_selection.svg",
                         levelsInfo[2]["isLocked"] == 0 ? levelsInfo[2]["stars"] : -1,
                         context,
-                        level: 1,
+                        level: 3,
                       ),
                       const SizedBox(
                         width: 10,
@@ -285,7 +282,7 @@ class LevelSelectionBody extends Body {
                         "assets/images/Quiz_level_selection.svg",
                         levelsInfo[3]["isLocked"] == 0 ? levelsInfo[3]["stars"] : -1, //3,
                         context,
-                        level: 1,),
+                        level: 4,),
                       const SizedBox(
                         width: 10,
                       ),
