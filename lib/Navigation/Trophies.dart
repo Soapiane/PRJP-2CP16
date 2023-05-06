@@ -58,14 +58,16 @@ class TropheNonObtenu extends StatelessWidget {
               Expanded(
                 child: Padding(
                   padding:  EdgeInsets.only(left: 23.0*screenWidth/800),
-                      child: Text(
-                         Trophe,
-                        style: TextStyle(
-                          fontSize: 12.5 * screenWidth / 800,
-                          decoration: TextDecoration.none,
-                          fontFamily: "AndikaNewBasic",
-                          fontWeight  : FontWeight.bold,
-                          color: Color(HexColor("#FFFFFF")),
+                      child: SingleChildScrollView(
+                        child: Text(
+                           Trophe,
+                          style: TextStyle(
+                            fontSize: 12.5 * screenWidth / 800,
+                            decoration: TextDecoration.none,
+                            fontFamily: "AndikaNewBasic",
+                            fontWeight  : FontWeight.bold,
+                            color: Color(HexColor("#FFFFFF")),
+                          ),
                         ),
                       ),
                 ),
@@ -79,10 +81,10 @@ class TropheNonObtenu extends StatelessWidget {
   }
 }
 class Trophies extends StatefulWidget {
-  late List<String> Accomplis = [],NonAccomplis = [];
+  List<String> Accomplis = [],NonAccomplis = [];
 
 
-   Trophies({Key? key}) : super(key: key);
+   Trophies({Key? key, required this.Accomplis, required this.NonAccomplis}) : super(key: key);
 
   @override
   State<Trophies> createState() => _TrophiesState();
@@ -118,7 +120,7 @@ class _TrophiesState extends State<Trophies> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getTrophies();
+    // getTrophies();
     etendu=true;
 
 
@@ -430,37 +432,40 @@ class TrophesEtendu extends StatelessWidget {
                       ]
                   ),
                   for(int i=0;i<Accomplis.length;i++)Center(
-                      child: Container(
-                        height: 40*screenHeight/360,
-                        child:Row(
-                          children: [
-                            Padding(
-                              padding:  EdgeInsets.only(left:23*screenWidth/800 ),
-                                child: SvgPicture.asset(
-                                  "assets/trophies/point.svg",
-                                  height: 7 * screenHeight / 360,
-                                  width: 7 * screenWidth / 800,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(vertical: 10*screenHeight/360),
+                        child: Container(
+                          height: 40*screenHeight/360,
+                          child:Row(
+                            children: [
+                              Padding(
+                                padding:  EdgeInsets.only(left:23*screenWidth/800 ),
+                                  child: SvgPicture.asset(
+                                    "assets/trophies/point.svg",
+                                    height: 7 * screenHeight / 360,
+                                    width: 7 * screenWidth / 800,
+                                  ),
                                 ),
-                              ),
-                             Expanded(
-                               child: Padding(
-                                 padding:  EdgeInsets.only(left: 42.0*screenWidth/800),
-                                 child: Text(
-                                      Accomplis[i],
-                                      style: TextStyle(
-                                          fontSize: 12.5 * screenWidth / 800,
-                                          fontFamily: "AndikaNewBasic",
-                                          decorationThickness: 1,
-                                          decoration: TextDecoration.none,
-                                          fontWeight: FontWeight.bold,
-                                          color: Color(HexColor("#FFFFFF")),
-                                          decorationColor: Colors.white
+                               Expanded(
+                                 child: Padding(
+                                   padding:  EdgeInsets.only(left: 42.0*screenWidth/800),
+                                   child: Text(
+                                        Accomplis[i],
+                                        style: TextStyle(
+                                            fontSize: 12.5 * screenWidth / 800,
+                                            fontFamily: "AndikaNewBasic",
+                                            decorationThickness: 1,
+                                            decoration: TextDecoration.none,
+                                            fontWeight: FontWeight.bold,
+                                            color: Color(HexColor("#FFFFFF")),
+                                            decorationColor: Colors.white
+                                        ),
                                       ),
-                                    ),
+                                 ),
                                ),
-                             ),
-                            SizedBox(width: 10*screenWidth/800,)
-                          ],
+                              SizedBox(width: 10*screenWidth/800,)
+                            ],
+                          ),
                         ),
                       )
                   ),

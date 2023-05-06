@@ -61,16 +61,5 @@ class Level extends PointModel{
 
   }
 
-  dynamic _levelTaped() async {
-    if (unlocked){
-      return await Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context)  => MiniGameMainScreen(miniGameOrder: number, zone: zone)
-          )
-      );
-    }
-  }
-
 
 }

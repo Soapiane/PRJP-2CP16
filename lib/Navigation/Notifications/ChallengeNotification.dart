@@ -48,7 +48,7 @@ class ChallengeNotification extends StatelessWidget {
                           Padding(
                             padding: EdgeInsets.only(top: generator.calculateY(20)),
                             child: textGenerator.generateTextView(
-                              texts: ["Nouveau trophée débloqué !"],
+                              texts: ["Nouveau défi  débloqué !"],
                               fontSize: generator.calculateX(18),
                             ).first,
                           ),

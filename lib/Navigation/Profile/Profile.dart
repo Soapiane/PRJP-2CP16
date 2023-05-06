@@ -5,6 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:projet2cp/Info/User.dart';
 import 'package:projet2cp/Info/User.dart' as user;
+import 'package:projet2cp/Navigation/Profile/ChangeAvatar.dart';
 import 'package:projet2cp/Navigation/Profile/ChangeInfo.dart';
 
 class Profile extends StatefulWidget {
@@ -37,6 +38,9 @@ class _ProfileState extends State<Profile> {
   }
   void onChangePassword(){
     showDialog(context: context, builder: (context) => Password() , barrierDismissible: true);
+  }
+  void onChangeAvatar() {
+    showDialog(context: context, builder: (context) => ChangeAvatar() , barrierDismissible: true);
   }
 
   @override
@@ -111,10 +115,13 @@ class _ProfileState extends State<Profile> {
                             ),
                           ),
                         ),
-                        Padding(
-                          padding:  EdgeInsets.only(top: 6.0*screenHeight/360),
-                          child: Center(
-                            child:SvgPicture.asset(user.User().avatar.getImagePath(),height: 57*screenHeight/360,width: 55*screenWidth/800,),
+                        GestureDetector(
+                          onTap: onChangeAvatar,
+                          child: Padding(
+                            padding:  EdgeInsets.only(top: 6.0*screenHeight/360),
+                            child: Center(
+                              child:SvgPicture.asset(user.User().avatar.getImagePath(),height: 57*screenHeight/360,width: 55*screenWidth/800,),
+                            ),
                           ),
                         )
                       ],

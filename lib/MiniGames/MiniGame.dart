@@ -2,9 +2,12 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flame/game.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:projet2cp/Info/Difficulty.dart';
 import 'package:projet2cp/Info/Info.dart';
 import 'package:projet2cp/MiniGames/Hud/MiniGameHUD.dart';
+import 'package:projet2cp/MiniGames/TutoScreen.dart';
 import 'package:projet2cp/Navigation/DefiState.dart';
 import 'package:projet2cp/Navigation/Loading.dart';
 import 'package:projet2cp/Navigation/Zones.dart';
@@ -19,8 +22,9 @@ abstract class MiniGame extends FlameGame {
   late Zones zone;
   late int level;
   int? challenge;
+  BuildContext? context;
 
-   MiniGame({required this.hud, this.zone = Zones.ville, this.level = 1, this.challenge}){
+   MiniGame({required this.hud, this.zone = Zones.ville, this.level = 1, this.challenge, this.context}){
      hud.onMaxPointsReached = onMaxPointsReached;
      hud.onGameTimeOut = onTimeOut;
      hud.onGamePaused = onPaused;
@@ -30,6 +34,18 @@ abstract class MiniGame extends FlameGame {
      hud.restartGame = onRestart;
      hud.onTimeUpdate = onTimeUpdate;
    }
+  void showTutorial({String? path}) async {
+
+    if (context != null) {
+      await showDialog(
+        context: context!,
+        builder: (context){
+          return TutoScreen(path: path,);
+        },
+      );
+    }
+    onStart();
+  }
 
    void onTimeUpdate(Duration duration){
    }
@@ -140,6 +156,7 @@ abstract class MiniGame extends FlameGame {
   }
 
   Future<void> saveProgress() async {
+
 
     int? differenceStars = 0;
      if (FirebaseAuth.instance.currentUser != null){

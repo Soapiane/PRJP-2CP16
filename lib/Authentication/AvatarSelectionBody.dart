@@ -1,20 +1,23 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:projet2cp/Info/Avatar.dart';
 import 'package:projet2cp/Navigation/Body.dart';
 import 'package:projet2cp/ButtonGenerator.dart';
 import 'package:projet2cp/Color.dart' as color;
 import 'package:projet2cp/Generator.dart';
 import 'package:projet2cp/Margin.dart';
+import 'package:projet2cp/Navigation/Loading.dart';
 import 'package:projet2cp/Repository/DatabaseRepository.dart';
 import 'package:projet2cp/TextGenerator.dart';
-import 'package:projet2cp/Info/User.dart';
+import 'package:projet2cp/Info/User.dart' as user;
 
 class AvatarSelectionBody extends Body {
 
   final Function onFinally;
 
-  AvatarSelectionBody({Key? key, required this.onFinally});
+  AvatarSelectionBody({Key? key, required this.onFinally}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +41,12 @@ class _AvatarSelectionBodyState extends State<_AvatarSelectionBody> {
 
   int _selectedIndex = 0;
   late List<Padding> _rows;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = user.User().avatar.index;
+  }
 
 
 
@@ -80,6 +89,7 @@ class _AvatarSelectionBodyState extends State<_AvatarSelectionBody> {
 
     return
       MaterialApp(
+        debugShowCheckedModeBanner: false,
         theme: ThemeData().copyWith(
           colorScheme: ThemeData().colorScheme.copyWith(
               primary: Colors.green,
@@ -128,8 +138,11 @@ class _AvatarSelectionBodyState extends State<_AvatarSelectionBody> {
   }
 
   Future<void> _onFinally() async {
-    User().setAvatar(Avatar.values[_selectedIndex]);
-    DatabaseRepository().uploadUserInfo();
+    user.User().setAvatar(Avatar.values[_selectedIndex]);
+    Loading.ShowLoading(context);
+    bool result = await InternetConnectionChecker().hasConnection;
+    if (result) await DatabaseRepository().uploadUserInfo();
+    Loading.HideLoading(context);
     widget.onFinally.call();
   }
 

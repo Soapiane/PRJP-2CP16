@@ -94,7 +94,7 @@ class LogInBody extends Body {
                       text: "Connexion",
                       margin: formMargin,
                       onTap: (){
-                        Loading.ShowLoading(context);
+                        Loading.ShowLoading(mainContext!);
                         FirebaseAuth.instance.signInWithEmailAndPassword(
                             email: email.second.controller!.text,
                           password: password.second.controller!.text,

@@ -39,6 +39,7 @@ class MiniGameHUD extends StatefulWidget{
 
 
 
+
   MiniGameHUD({super.key, required this.zone, this.countdown, this.maxPoints, this.pointsAsset = "assets/hud/points.svg", this.pointsText = "Score", this.initialPoints = 0, this.initialStars = 0,
     this.textColor, this.visible = true, this.hideBackground = false, this.useBar = false}){
     textColor = Colors.white;
@@ -336,7 +337,7 @@ class _MiniGameHUDState extends State<MiniGameHUD>{
   }
 
   void stopTimer() {
-    setState(() => countdownTimer?.cancel());
+    if (widget.countdown != null) setState(() => countdownTimer?.cancel());
   }
 
   void resetTimer() {
@@ -374,8 +375,8 @@ class _MiniGameHUDState extends State<MiniGameHUD>{
   }
 
 
-  void onStart(){
-    startTimer();
+  void onStart() async{
+    if (widget.countdown != null) startTimer();
   }
 
   Widget createMenu({String? title}){
@@ -493,7 +494,7 @@ class _MiniGameHUDState extends State<MiniGameHUD>{
         onRestart();
       },
       onResume: (){
-        startTimer();
+        if (widget.countdown != null) startTimer();
         widget.resumeGame?.call();
         Navigator.of(context).pop();
       },

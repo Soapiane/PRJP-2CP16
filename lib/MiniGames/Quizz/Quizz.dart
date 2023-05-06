@@ -5,9 +5,17 @@ import 'package:projet2cp/Navigation/Zones.dart';
 import 'package:projet2cp/MiniGames/Quizz/quizzGame.dart';
 
 class Quizz extends MiniGame {
-  BuildContext? context;
+  BuildContext buildContext;
+  Function(bool unlocked, Zones zone, int order) restartQuizz;
 
-  Quizz({required super.hud, super.zone, super.level, super.challenge ,this.context});
+  Quizz({required super.hud, super.zone, super.level, super.challenge , required this.buildContext, required this.restartQuizz});
+
+  @override
+  void onMount() {
+    // TODO: implement onMount
+    super.onMount();
+
+  }
 
   @override
   void onPointsModified(int newPoints, int addedPoints) {
@@ -26,7 +34,9 @@ class Quizz extends MiniGame {
   void onRestart() {
     // TODO: implement onRestart
     super.onRestart();
-    Navigator.pushReplacement(context!,
-        MaterialPageRoute(builder: (context) => MiniGameMainScreen(zone: zone, miniGameOrder: 4)));
+    Navigator.pop(buildContext, true);
+    restartQuizz(true, zone, level);
   }
+
+
 }

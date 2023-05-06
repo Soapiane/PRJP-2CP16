@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:projet2cp/Authentication/MainScreen.dart';
 import 'package:projet2cp/Info/Info.dart';
 import 'package:projet2cp/Info/User.dart';
@@ -14,6 +16,7 @@ import 'package:projet2cp/Navigation/Livre.dart';
 import 'package:projet2cp/Navigation/Loading.dart';
 import 'package:projet2cp/Navigation/Notifications/ChallengeNotification.dart';
 import 'package:projet2cp/Navigation/Notifications/TrophyNotification.dart';
+import 'package:projet2cp/Navigation/Profile/ChangeAvatar.dart';
 import 'package:projet2cp/Navigation/Profile/ChangeInfo.dart';
 import 'package:projet2cp/Navigation/Settings.dart';
 import 'package:projet2cp/Navigation/Warning.dart';
@@ -72,7 +75,6 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-
 
 
 

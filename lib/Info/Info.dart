@@ -4,6 +4,7 @@ import 'package:projet2cp/Info/Avatar.dart';
 import 'package:projet2cp/Info/Difficulty.dart';
 import 'package:projet2cp/Info/Language.dart';
 import 'package:projet2cp/Repository/DatabaseRepository.dart';
+import 'package:projet2cp/Sound.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Info {
@@ -43,6 +44,7 @@ class Info {
   static void setSound(bool value) {
     sound = value;
     _prefs.setBool("sound", value);
+    Sound().changeSoundState(value);
   }
 
   static void setLanguage(Language value) {

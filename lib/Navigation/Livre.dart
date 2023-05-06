@@ -4,6 +4,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 
 class Livre extends StatefulWidget {
@@ -128,6 +129,8 @@ class _LivreState extends State<Livre> {
 
   @override
   Widget build(BuildContext context) {
+
+
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
     return Container(
@@ -484,10 +487,15 @@ class _LivreState extends State<Livre> {
             Positioned(
               top: 13*screenHeight/360,
               left: 17*screenWidth/800,
-              child:  SvgPicture.asset(
-                "assets/nav_buttons/back.svg",
-                height: 45*screenHeight/360,
-                width: 45*screenWidth/800,
+              child:  GestureDetector(
+                onTap: (){
+                  Navigator.pop(context);
+                },
+                child: SvgPicture.asset(
+                  "assets/nav_buttons/back.svg",
+                  height: 45*screenHeight/360,
+                  width: 45*screenWidth/800,
+                ),
               ),
             ),
             ///Bouton Son

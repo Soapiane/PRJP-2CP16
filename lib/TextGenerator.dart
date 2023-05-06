@@ -20,7 +20,7 @@ class TextGenerator extends Generator {
     required List<String> texts,
     List<Function>? onSpansTap,
     double fontSize = 20,
-    String fontFamily = 'PoppinsBold',
+    String fontFamily = 'AndikaNewBasicBold',
     color.Color color = color.Color.white,
     TextStyle? textStyle,
     TextStyle? linkStyle,
@@ -87,8 +87,10 @@ class TextGenerator extends Generator {
 
 
     Widget textWidget = DefaultTextStyle(
+      textAlign: TextAlign.center,
       style: textStyle,
       child: RichText(
+        textAlign: TextAlign.center,
         text: TextSpan(
           style: textStyle,
           children: textsSpan,

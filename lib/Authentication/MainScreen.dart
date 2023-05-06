@@ -1,5 +1,6 @@
 
 
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,8 +13,10 @@ import 'package:projet2cp/Navigation/Body.dart';
 import 'package:projet2cp/Authentication/DifficultySelectionBody.dart';
 import 'package:projet2cp/Authentication/LogInBody.dart';
 import 'package:projet2cp/Authentication/RegisterBody.dart';
+import 'package:projet2cp/Navigation/DefiState.dart';
 import 'package:projet2cp/Navigation/Defis.dart';
 import 'package:projet2cp/Navigation/LevelSelectionBody.dart';
+import 'package:projet2cp/Navigation/Livre.dart';
 import 'package:projet2cp/Navigation/Loading.dart';
 import 'package:projet2cp/Navigation/Mode.dart';
 import 'package:projet2cp/Navigation/ModeSelectionBody.dart';
@@ -41,6 +44,7 @@ import 'package:projet2cp/Navigation/Zones.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:projet2cp/Authentication/MainScreen.dart' as ref;
 
 
 
@@ -61,17 +65,18 @@ class MainScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
 
-    return _MainState();
+    return MainState();
   }
 
 }
 
 
-class _MainState extends State<MainScreen> {
+class MainState extends State<MainScreen> {
 
   late Function onExitPressed;
   static const double blurRadius = 2;
   late StandardWidgets standardWidgets;
+  late Widget bookButton;
   late Body body;
   late ImageFilter blur;
   late AuthMainBody authMainBody;
@@ -83,9 +88,30 @@ class _MainState extends State<MainScreen> {
   late LevelSelectionBody levelSelectionBody;
   late AvatarSelectionBody avatarSelectionBody;
   late Widget challengesButton, trophiesWidget;
-  bool accountButtonVisible = true;
+  bool accountButtonVisible = true, bookButtonVisible = true;
 
 
+
+  void goToAvatarSelectionBody() async {
+
+    Loading.ShowLoading(context);
+
+    for (int i=0; i<=9; i++) {
+
+      await precachePicture(
+        ExactAssetPicture(
+          SvgPicture.svgStringDecoderBuilder,
+          "assets/avatars/avatar$i.svg",
+        ),
+        context,
+      );
+
+    }
+
+    Loading.HideLoading(context);
+
+    changeBodyWithNoBlur(newBody: avatarSelectionBody);
+  }
 
 
   void getNotification(SharedPreferences prefs) async {
@@ -112,25 +138,59 @@ class _MainState extends State<MainScreen> {
   }
 
 
-  void _levelTaped(bool unlocked, Zones zone, int order) async {
+  void levelTaped(bool unlocked, Zones zone, int order) async {
     if (unlocked){
-      await Navigator.push(
+
+      Loading.ShowLoading(context);
+
+      for (int i=0; i<=3; i++) {
+
+        await precachePicture(
+          ExactAssetPicture(
+            SvgPicture.svgStringDecoderBuilder,
+            "assets/hud/score_screen/stars/${i}_stars_score.svg",
+          ),
+          context,
+        );
+
+      }
+
+      await precachePicture(
+        ExactAssetPicture(
+          SvgPicture.svgStringDecoderBuilder,
+          "assets/hud/score_screen/image.svg",
+        ),
+        context,
+      );
+
+
+
+
+      Loading.HideLoading(context);
+
+      bool? restarting = await Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context)  => MiniGameMainScreen(miniGameOrder: order, zone: zone)
+              builder: (context)  => MiniGameMainScreen(miniGameOrder: order, zone: zone, mainScreenRef: this as ref.MainState,)
           )
       );
 
-      Loading.ShowLoading(text: "synchronisation...",context);
-      await DatabaseRepository().sync(); //this one is to sync the challenges
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      Loading.HideLoading(context);
+      restarting ??= false;
 
-      getNotification(prefs);
+      if (!restarting) {
+        print("SYNCING");
+        Loading.ShowLoading(text: "synchronisation...", context);
+        await DatabaseRepository().sync(); //this one is to sync the challenges
+        SharedPreferences prefs = await SharedPreferences.getInstance();
 
+        if (body.toString().compareTo("QuizSelectionBody") == 0) {
+          await goToQuizMode();
+        }
 
-      //TODO: for the quizSelectionBody get the new stars from the local DB and use setState to show them
+        Loading.HideLoading(context);
 
+        getNotification(prefs);
+      }
     }
   }
 
@@ -167,14 +227,70 @@ class _MainState extends State<MainScreen> {
 
   void goToAdventureMode() async {
 
+    Loading.ShowLoading(context);
+
     List<int> starsCollected = [], starsMax = [];
     List<List<int>> zonesInfo = await getZonesInfo();
     starsCollected = zonesInfo[0];
     starsMax = zonesInfo[1];
 
-    print("stars collected:" + starsCollected.toString());
-    print("Max :" + starsMax.toString());
 
+    await precacheImage(
+      Image.asset("assets/zones/cards/foret.png").image,
+      context,
+    );
+
+    await precacheImage(
+      Image.asset("assets/zones/cards/mer.png").image,
+      context,
+    );
+
+    await precacheImage(
+      Image.asset("assets/zones/cards/ville.png").image,
+      context,
+    );
+
+    await precacheImage(
+      Image.asset("assets/zones/cards/zoneIndustrielle.png").image,
+      context,
+    );
+
+
+
+    await precachePicture(
+      ExactAssetPicture(
+        SvgPicture.svgStringDecoderBuilder,
+        "assets/zones/star.svg",
+      ),
+      context,
+    );
+
+
+    await precachePicture(
+      ExactAssetPicture(
+        SvgPicture.svgStringDecoderBuilder,
+        "assets/nav_buttons/challenges.svg",
+      ),
+      context,
+    );
+
+    await precachePicture(
+      ExactAssetPicture(
+        SvgPicture.svgStringDecoderBuilder,
+        "assets/nav_buttons/trophies.svg",
+      ),
+      context,
+    );
+
+    await precachePicture(
+      ExactAssetPicture(
+        SvgPicture.svgStringDecoderBuilder,
+        "assets/nav_buttons/back.svg",
+      ),
+      context,
+    );
+
+    Loading.HideLoading(context);
 
     changeBodyWithBlur(
       newBody: ZoneSelectionBody(
@@ -229,15 +345,56 @@ class _MainState extends State<MainScreen> {
 
 
 
-  void goToQuizMode() async {
+  FutureOr<void> goToQuizMode() async {
 
     List<Map> quizzesInfo = await getQuizzesInfo();
+
+
+    await precacheImage(
+      Image.asset("assets/zones/cards/foret.png").image,
+      context,
+    );
+
+    await precacheImage(
+      Image.asset("assets/zones/cards/mer.png").image,
+      context,
+    );
+
+    await precacheImage(
+      Image.asset("assets/zones/cards/ville.png").image,
+      context,
+    );
+
+    await precacheImage(
+      Image.asset("assets/zones/cards/zoneIndustrielle.png").image,
+      context,
+    );
+
+
+
+    await precachePicture(
+      ExactAssetPicture(
+        SvgPicture.svgStringDecoderBuilder,
+        "assets/zones/star.svg",
+      ),
+      context,
+    );
+
+
+    await precachePicture(
+      ExactAssetPicture(
+        SvgPicture.svgStringDecoderBuilder,
+        "assets/zones/cards/lock.svg",
+      ),
+      context,
+    );
+
 
 
 
     changeBodyWithBlur(
       newBody: QuizSelectionBody(
-        onCardTap: (zone){}, quizzesInfo: quizzesInfo,
+        onCardTap: levelTaped, quizzesInfo: quizzesInfo,
       ),
       lastBody: modeSelectionBody,
     );
@@ -251,6 +408,8 @@ class _MainState extends State<MainScreen> {
 
   void goToLevelSelectionBody(Zones zone) async {
     Loading.ShowLoading(context);
+
+
     List<Map> levelsinfo = [];
 
     if (FirebaseAuth.instance.currentUser != null) {
@@ -270,12 +429,130 @@ class _MainState extends State<MainScreen> {
     }
 
 
+
+
+    await precacheImage(
+      Image.asset(zone.backgroundImagePath).image,
+      context,
+    );
+
+
+
+    await precachePicture(
+      ExactAssetPicture(
+        SvgPicture.svgStringDecoderBuilder,
+        "assets/images/Bird_level_selection.svg",
+      ),
+      context,
+    );
+
+    await precachePicture(
+      ExactAssetPicture(
+        SvgPicture.svgStringDecoderBuilder,
+        "assets/images/Locked_level.svg",
+      ),
+      context,
+    );
+    await precachePicture(
+      ExactAssetPicture(
+        SvgPicture.svgStringDecoderBuilder,
+        "assets/images/Pipes_level_selection.svg",
+      ),
+      context,
+    );
+    await precachePicture(
+      ExactAssetPicture(
+        SvgPicture.svgStringDecoderBuilder,
+        "assets/images/Puzzle_level_selection.svg",
+      ),
+      context,
+    );
+    await precachePicture(
+      ExactAssetPicture(
+        SvgPicture.svgStringDecoderBuilder,
+        "assets/images/Quiz_level_selection.svg",
+      ),
+      context,
+    );
+    await precachePicture(
+      ExactAssetPicture(
+        SvgPicture.svgStringDecoderBuilder,
+        "assets/images/Recycler_level_selection.svg",
+      ),
+      context,
+    );
+    await precachePicture(
+      ExactAssetPicture(
+        SvgPicture.svgStringDecoderBuilder,
+        "assets/images/Runner_level_selection.svg",
+      ),
+      context,
+    );
+    await precachePicture(
+      ExactAssetPicture(
+        SvgPicture.svgStringDecoderBuilder,
+        "assets/images/Turtle_level_selection.svg",
+      ),
+      context,
+    );
+
+    await precachePicture(
+      ExactAssetPicture(
+        SvgPicture.svgStringDecoderBuilder,
+        "assets/stars/left_star_off.svg",
+      ),
+      context,
+    );
+
+    await precachePicture(
+      ExactAssetPicture(
+        SvgPicture.svgStringDecoderBuilder,
+        "assets/stars/left_star_on.svg",
+      ),
+      context,
+    );
+
+    await precachePicture(
+      ExactAssetPicture(
+        SvgPicture.svgStringDecoderBuilder,
+        "assets/stars/middle_star_off.svg",
+      ),
+      context,
+    );
+    await precachePicture(
+      ExactAssetPicture(
+        SvgPicture.svgStringDecoderBuilder,
+        "assets/stars/middle_star_on.svg",
+      ),
+      context,
+    );
+
+
+    await precachePicture(
+      ExactAssetPicture(
+        SvgPicture.svgStringDecoderBuilder,
+        "assets/stars/right_star_off.svg",
+      ),
+      context,
+    );
+
+
+    await precachePicture(
+      ExactAssetPicture(
+        SvgPicture.svgStringDecoderBuilder,
+        "assets/stars/right_star_on.svg",
+      ),
+      context,
+    );
+
+
+
     Loading.HideLoading(context);
 
 
     setState(() {
 
-      levelSelectionBody = LevelSelectionBody(zone: zone, onLevelSelected: _levelTaped, levelsInfo: levelsinfo,);
+      levelSelectionBody = LevelSelectionBody(zone: zone, onLevelSelected: levelTaped, levelsInfo: levelsinfo,);
       changeBodyWithBlur(newBody: levelSelectionBody);
 
     });
@@ -349,7 +626,7 @@ class _MainState extends State<MainScreen> {
 
     difficultySelectionBody = DifficultySelectionBody(
       onContinue: (){
-          changeBodyWithNoBlur(newBody: avatarSelectionBody);
+        goToAvatarSelectionBody();
       },
     );
 
@@ -413,7 +690,7 @@ class _MainState extends State<MainScreen> {
 
 
     standardWidgets = StandardWidgets(context: context);
-    Function? onBackButtonTapped, onChallengeButtonTapped, onTrophiesButtonTapped;
+    Function? onBackButtonTapped, onChallengeButtonTapped, onTrophiesButtonTapped, onBookButtonTapped;
 
 
     switch (body.toString()){
@@ -436,9 +713,21 @@ class _MainState extends State<MainScreen> {
       case "ModeSelectionBody":{
         onBackButtonTapped = null;
 
+          onBookButtonTapped = () {
+            openTheBook();
+          };
+
+
       }
       break;
       default:{
+
+        if (body.toString().compareTo("LogInBody") != 0 && body.toString().compareTo("RegisterBody") != 0 ) {
+          onBookButtonTapped = () {
+            openTheBook();
+          };
+
+        }
 
 
 
@@ -446,26 +735,10 @@ class _MainState extends State<MainScreen> {
         if (body.toString().compareTo("ZoneSelectionBody") == 0 || body.toString().compareTo("LevelSelectionBody") == 0 ) {
           onChallengeButtonTapped = () {
 
-            print("challenges tapped");
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return Defis();
-            },
-            ).then((value) {
-
-              print("challenges dismissed");
-
-              FirebaseAuth.instance.currentUser != null ? DatabaseRepository().uploadChallenges() : null;
-            });
+            showChallenges();
           };
           onTrophiesButtonTapped = () {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return Trophies();
-              },
-            );
+            showTrophies();
           };
         }
         onBackButtonTapped = () {
@@ -497,6 +770,7 @@ class _MainState extends State<MainScreen> {
 
 
 
+
     // onBackButtonTapped = body.toString().compareTo("AuthMainBody") == 0 ? null : (){
     //   setState(() {
     //     blur = ImageFilter.blur(
@@ -512,12 +786,13 @@ class _MainState extends State<MainScreen> {
       onBackButtonTapped: onBackButtonTapped,
       onChallengeButtonTapped: onChallengeButtonTapped,
       onTrophiesButtonTapped: onTrophiesButtonTapped,
+      onBookButtonTapped: onBookButtonTapped,
     );
 
     Widget background = Container(
-      decoration: const BoxDecoration(
+      decoration:  BoxDecoration(
         image: DecorationImage(
-            image: AssetImage("assets/main_background.png"),
+            image: Image.asset("assets/main_background.png").image,
             fit: BoxFit.cover
         ),
       ),
@@ -577,6 +852,7 @@ class _MainState extends State<MainScreen> {
     Function? onBackButtonTapped,
     Function? onChallengeButtonTapped,
     Function? onTrophiesButtonTapped,
+    Function? onBookButtonTapped,
   }){
     ButtonGenerator buttonGenerator = ButtonGenerator(context: context);
     double topPadding = buttonGenerator.calculateY(10);
@@ -618,13 +894,23 @@ class _MainState extends State<MainScreen> {
               borderRadius: BorderRadius.circular(23.5),
               imagePath: "assets/nav_buttons/account.svg",
               onTap: (){
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return Profile();
-                  },
-                );
+                showProfileSetting();
               },
+            ),
+          ),
+        ) : const SizedBox.shrink(),
+        onBookButtonTapped != null ?
+        Padding(
+          padding:  EdgeInsets.only(bottom: topPadding, left: horizontalPadding),
+          child: Align(
+            alignment: Alignment.bottomLeft,
+            child:
+            buttonGenerator.generateImageButtom(
+              height: standardWidgets.dim,
+              width: standardWidgets.dim,
+              borderRadius: BorderRadius.circular(23.5),
+              imagePath: "assets/nav_buttons/book.svg",
+              onTap: onBookButtonTapped,
             ),
           ),
         ) : const SizedBox.shrink(),
@@ -636,6 +922,25 @@ class _MainState extends State<MainScreen> {
 
     bool result = await InternetConnectionChecker().hasConnection;
     if(result == true) {
+
+      await precachePicture(
+        ExactAssetPicture(
+          SvgPicture.svgStringDecoderBuilder,
+          "assets/terra/earth_sleeping.svg",
+        ),
+        context,
+      );
+
+
+      await precachePicture(
+        ExactAssetPicture(
+          SvgPicture.svgStringDecoderBuilder,
+          "assets/nav_buttons/back.svg",
+        ),
+        context,
+      );
+
+
       changeBodyWithNoBlur(newBody: logInBody);
     } else {
       Loading.HideLoading(context);
@@ -658,8 +963,20 @@ class _MainState extends State<MainScreen> {
 
   void goToRegister() async {
 
+
+
     bool result = await InternetConnectionChecker().hasConnection;
     if(result == true) {
+
+      await precachePicture(
+        ExactAssetPicture(
+          SvgPicture.svgStringDecoderBuilder,
+          "assets/terra/earth_hi.svg",
+        ),
+        context,
+      );
+
+
       changeBodyWithNoBlur(newBody: registerBody);
     } else {
       Loading.HideLoading(context);
@@ -688,6 +1005,197 @@ class _MainState extends State<MainScreen> {
       );
     });
   }
+
+  void openTheBook() async {
+
+    Loading loading = Loading.ShowLoading(context, progressBar: true);
+
+
+
+    await Future.delayed(Duration(milliseconds: 500),(){});
+
+    for (var i = 1; i < 60; ++i) {
+
+      await precachePicture(
+        ExactAssetPicture(
+          SvgPicture.svgStringDecoderBuilder,
+          "assets/livre/book_svg/page$i.svg",
+        ),
+        context,
+      );
+
+      loading.updateProgress(i/59);
+
+    }
+
+
+
+    Loading.HideLoading(context);
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const Livre()),
+    );
+  }
+
+  void showProfileSetting() async{
+
+    Loading.ShowLoading(context);
+
+    for (int i=0; i<=9; i++) {
+
+      await precachePicture(
+        ExactAssetPicture(
+          SvgPicture.svgStringDecoderBuilder,
+          "assets/avatars/avatar$i.svg",
+        ),
+        context,
+      );
+
+    }
+
+    Loading.HideLoading(context);
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Profile();
+      },
+    );
+  }
+
+
+  void showChallenges() async {
+
+    Loading.ShowLoading(context);
+
+    List<List<String>> challenges = await getChallenges();
+
+    Loading.HideLoading(context);
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Defis(Rea : challenges[0], NonRea : challenges[1]);
+      },
+    ).then((value) {
+
+      FirebaseAuth.instance.currentUser != null ? DatabaseRepository().uploadChallenges() : null;
+    });
+
+  }
+
+  Future<List<List<String>>> getChallenges() async {
+
+    List<String> Rea = [], NonRea = [];
+
+    if (FirebaseAuth.instance.currentUser != null) {
+
+      void afterSyncingChallenges() async {
+
+
+        List<Map> challengesCollected = await (DatabaseRepository().database!.query(
+          "challenge",
+          where: "state = ?",
+          whereArgs: [DefiState.collected.index],
+        ));
+
+
+        List<Map> challengesDone = await   DatabaseRepository().database!.query(
+          "challenge",
+          where: "state = ?",
+          whereArgs: [DefiState.done.index],
+        );
+
+
+        for (Map challenge in challengesCollected) {
+          NonRea.add(challenge["title"]);
+        }
+
+
+        for (Map challenge in challengesDone) {
+          Rea.add(challenge["title"]);
+        }
+
+      }
+
+      await DatabaseRepository().syncChallenges(afterSyncingChallenges);
+    } else {
+      List<Map> challengesCollected = await (GuestRepository().database!.query(
+        "challenge",
+        where: "state = ?",
+        whereArgs: [DefiState.collected.index],
+      ));
+
+      List<Map> challengesDone = await GuestRepository().database!.query(
+        "challenge",
+        where: "state = ?",
+        whereArgs: [DefiState.done.index],
+      );
+      for (Map challenge in challengesCollected) {
+          NonRea.add(challenge["title"]);
+      }
+
+
+      for (Map challenge in challengesDone) {
+        Rea.add(challenge["title"]);
+      }
+
+
+    }
+
+    return [Rea, NonRea];
+  }
+
+
+  void showTrophies() async {
+
+
+
+    Loading.ShowLoading(context);
+      List<String> Accomplis = [];
+      List<String> NonAccomplis = [];
+
+      Database database = FirebaseAuth.instance.currentUser != null ? DatabaseRepository().database! : GuestRepository().database!;
+
+      List<Map> trophiesCollected = await database.query(
+        "trophy",
+        where: "isCollected = ?",
+        whereArgs: [1],
+      );
+
+      List<Map> trophiesNonCollected = await database.query(
+        "trophy",
+        where: "isCollected = ?",
+        whereArgs: [0],
+      );
+
+      setState(() {
+        for (Map trophy in trophiesCollected) {
+          Accomplis.add(trophy["title"]);
+        }
+
+        for (Map trophy in trophiesNonCollected) {
+          NonAccomplis.add(trophy["title"]);
+        }
+      });
+
+      Loading.HideLoading(context);
+
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Trophies(Accomplis: Accomplis, NonAccomplis: NonAccomplis,);
+        },
+      );
+
+
+
+
+
+
+  }
+
+
 
 
 

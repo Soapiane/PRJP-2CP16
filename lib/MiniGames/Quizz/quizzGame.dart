@@ -361,7 +361,7 @@ class _QuizzGameState extends State<QuizzGame> {
                                         }
                                       }
                                     : () {
-                                        _controller!.nextPage(
+                                        _controller.nextPage(
                                             duration:
                                                 Duration(microseconds: 500),
                                             curve: Curves.linear);

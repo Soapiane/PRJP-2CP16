@@ -6,12 +6,14 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:game_levels_scrolling_map/widgets/loading_progress.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:projet2cp/Authentication/MainScreen.dart';
+import 'package:projet2cp/Info/Info.dart';
 import 'package:projet2cp/Navigation/DefiState.dart';
 import 'package:projet2cp/Navigation/Defis.dart';
 import 'package:projet2cp/Navigation/Notifications/ChallengeNotification.dart';
 import 'package:projet2cp/Navigation/Trophies.dart';
 import 'package:projet2cp/Repository/DatabaseRepository.dart';
 import 'package:projet2cp/Navigation/Zones.dart';
+import 'package:projet2cp/Sound.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:projet2cp/Color.dart' as color;
 
@@ -32,11 +34,43 @@ class _SplashState extends State<SplashScreen>{
   void initState(){
     super.initState();
 
-
-    navigateToHome();
   }
 
-  navigateToHome()async{
+  Future<void> loadAssetsToCache(BuildContext context) async{
+
+    await precacheImage(
+      Image.asset("assets/main_background.png").image,
+      context,
+    );
+
+    await precachePicture(
+      ExactAssetPicture(
+        SvgPicture.svgStringDecoderBuilder,
+        "assets/nav_buttons/settings.svg",
+      ),
+      context,
+    );
+
+    if (FirebaseAuth.instance.currentUser == null) {
+      await precachePicture(
+        ExactAssetPicture(
+          SvgPicture.svgStringDecoderBuilder,
+          "assets/terra/earth_planting.svg",
+        ),
+        context,
+      );
+      await precachePicture(
+        ExactAssetPicture(
+          SvgPicture.svgStringDecoderBuilder,
+          "assets/logo.svg",
+        ),
+        context,
+      );
+    }
+
+  }
+
+  void navigateToHome(BuildContext context) async{
 
 
 
@@ -45,11 +79,9 @@ class _SplashState extends State<SplashScreen>{
     await DatabaseRepository().sync();
 
 
+    await loadAssetsToCache(context);
 
-
-
-
-
+    await Sound().iniState();
 
 
     await Future.delayed(Duration(milliseconds: 2000),(){
@@ -73,6 +105,10 @@ class _SplashState extends State<SplashScreen>{
   @override
   Widget build(BuildContext context) {
 
+
+
+    navigateToHome(context);
+
     double screenWidth = MediaQuery.of(context).size.width;
 
     double logoWidth = screenWidth/2.8 ;
@@ -87,11 +123,7 @@ class _SplashState extends State<SplashScreen>{
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SvgPicture.asset(
-              "assets/logo.svg",
-              width: logoWidth,
-              height: logoHeight,
-            ),
+            Image.asset("assets/logo.png", width: logoWidth, height: logoHeight,),
             Padding(
               padding: const EdgeInsets.only(top: 50,),
               child: LoadingAnimationWidget.hexagonDots(

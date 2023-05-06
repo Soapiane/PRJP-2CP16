@@ -24,7 +24,7 @@ import 'package:sqflite/sqflite.dart';
 class QuizSelectionBody extends Body {
 
 
-  Function(Zones zone) onCardTap;
+  Function(bool unlocked, Zones zone, int order) onCardTap;
   List<Map> quizzesInfo = [];
 
 
@@ -71,20 +71,22 @@ class ZoneCard extends StatelessWidget {
   int collectedStars;
   bool isLocked;
   Zones zone;
-  Function(Zones) onTap;
+  Function(bool unlocked, Zones zone, int order) onTap;
   ZoneCard({Key? key,required this.isLocked, required this.collectedStars, required this.zone, required this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
 
-    Generator generator = Generator(context: context);
 
-    double cardWidth = generator.calculateX(164);
-    double cardHeight = generator.calculateY(215);
+
+    TextGenerator textGenerator = TextGenerator(context: context);
+
+    double cardWidth = textGenerator.calculateX(164);
+    double cardHeight = textGenerator.calculateY(215);
 
     return GestureDetector(
       onTap: (){
-        isLocked ? null : onTap(zone);
+        onTap(!isLocked ,zone, 4);
       },
       child: Center(
         child: SizedBox(
@@ -187,10 +189,28 @@ class ZoneCard extends StatelessWidget {
                 ) : SizedBox.shrink(),
                 isLocked ? Align(
                   alignment: Alignment.center,
-                  child: SvgPicture.asset(
-                    "assets/zones/cards/lock.svg",
-                    width: generator.calculateX(50),
-                    height: generator.calculateY(50),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SvgPicture.asset(
+                        "assets/zones/cards/lock.svg",
+                        width: textGenerator.calculateX(50),
+                        height: textGenerator.calculateY(50),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: textGenerator.calculateY(30)),
+                        child: Text(
+                          "Débloquer en mode aventure",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: textGenerator.calculateX(14),
+                            fontFamily: "AndikaNewBasicBold",
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ) : SizedBox.shrink(),
               ],

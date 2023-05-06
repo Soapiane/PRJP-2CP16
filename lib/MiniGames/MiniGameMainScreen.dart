@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:flame/game.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:projet2cp/Authentication/MainScreen.dart';
 import 'package:projet2cp/MiniGames/MiniGame.dart';
 import 'package:projet2cp/MiniGames/Hud/MiniGameHUD.dart';
 import 'package:projet2cp/MiniGames/Quizz/Quizz.dart';
@@ -20,9 +21,10 @@ class MiniGameMainScreen extends StatelessWidget {
   late String backgroundImageUrl;
   late Widget mainScreen;
   bool blur = false;
+  MainState mainScreenRef;
 
 
-  MiniGameMainScreen({super.key,required this.miniGameOrder,  required this.zone}){
+  MiniGameMainScreen({super.key,required this.miniGameOrder,  required this.zone, required this.mainScreenRef}){
     backgroundImageUrl = zone.backgroundImagePath;
     getHUD();
   }
@@ -37,26 +39,108 @@ class MiniGameMainScreen extends StatelessWidget {
 
   void getMainScreen(BuildContext context){
     //chose the game based on the zone and the order
+    /**
     switch (zone) {
       case Zones.ville:
         switch (miniGameOrder) {
           case 1:
             {
               blur = true;
-              mainScreen = GameWidget(game: TurningPipes(hud: hud));
+              mainScreen = GameWidget(game: TurningPipes(hud: hud, context: context ));
             }
             break;
           case 4:
             {
               blur = true;
-              mainScreen = QuizzGame(zone: zone, gameRef: Quizz(hud: hud, zone: zone, level: miniGameOrder, context: context, ),);
+              mainScreen = QuizzGame(
+                zone: zone,
+                gameRef: Quizz(
+                  hud: hud,
+                  zone: zone,
+                  level: miniGameOrder,
+                  buildContext: context,
+                  restartQuizz: mainScreenRef.levelTaped,
+                ),
+              );
+            }
+            break;
+        }
+        break;
+      case Zones.zoneIndustrielle:
+        switch (miniGameOrder) {
+          case 4:
+            {
+              blur = true;
+              blur = true;
+              mainScreen = QuizzGame(
+                zone: zone,
+                gameRef: Quizz(
+                  hud: hud,
+                  zone: zone,
+                  level: miniGameOrder,
+                  buildContext: context,
+                  restartQuizz: mainScreenRef.levelTaped,
+                ),
+              );
+            }
+            break;
+        }
+        break;
+      case Zones.foret:
+        switch (miniGameOrder) {
+          case 4:
+            {
+              blur = true;
+              blur = true;
+              mainScreen = QuizzGame(
+                zone: zone,
+                gameRef: Quizz(
+                  hud: hud,
+                  zone: zone,
+                  level: miniGameOrder,
+                  buildContext: context,
+                  restartQuizz: mainScreenRef.levelTaped,
+                ),
+              );
+            }
+            break;
+        }
+        break;
+      case Zones.mer:
+        switch (miniGameOrder) {
+          case 4:
+            {
+              blur = true;
+              blur = true;
+              mainScreen = QuizzGame(
+                zone: zone,
+                gameRef: Quizz(
+                  hud: hud,
+                  zone: zone,
+                  level: miniGameOrder,
+                  buildContext: context,
+                  restartQuizz: mainScreenRef.levelTaped,
+                ),
+              );
             }
             break;
         }
         break;
     }
 
-    mainScreen = QuizzGame(zone: zone, gameRef: Quizz(hud: hud, zone: zone, level: miniGameOrder, context: context, ),);
+     **/
+
+    blur = true;
+    mainScreen = QuizzGame(
+      zone: zone,
+      gameRef: Quizz(
+        hud: hud,
+        zone: zone,
+        level: miniGameOrder,
+        buildContext: context,
+        restartQuizz: mainScreenRef.levelTaped,
+      ),
+    );
   }
 
 

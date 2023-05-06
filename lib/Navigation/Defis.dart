@@ -63,16 +63,18 @@ class TacheNonRealise extends StatelessWidget {
               ),
               Expanded(
                 child: Center(
-                  child: Text(
-                    tache,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 12.5 * screenWidth / 800,
-                      decoration: TextDecoration.none,
-                      fontFamily: "AndikaNewBasic",
-                      fontWeight  : FontWeight.bold,
-                      color: Color(HexColor("#FFFFFF")),
+                  child: SingleChildScrollView(
+                    child: Text(
+                      tache,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 12.5 * screenWidth / 800,
+                        decoration: TextDecoration.none,
+                        fontFamily: "AndikaNewBasic",
+                        fontWeight  : FontWeight.bold,
+                        color: Color(HexColor("#FFFFFF")),
 
+                      ),
                     ),
                   ),
                 ),
@@ -88,7 +90,7 @@ typedef  FonAjouterTache=void Function( String);
 class Defis extends StatefulWidget {
   late List<String> NonRea=[];
   late List<String> Rea=[];
-  Defis({Key? key}) : super(key: key);
+  Defis({Key? key,required this.Rea,required this.NonRea}) : super(key: key);
 
 
   @override
@@ -191,7 +193,7 @@ class _DefisState extends State<Defis> {
   }
   @override
   void initState() {
-    getChallenges();
+    // getChallenges();
     etendu=true;
     super.initState();
 
@@ -206,7 +208,6 @@ class _DefisState extends State<Defis> {
   }
 
   void getChallenges() async {
-
 
     widget.Rea.clear();
     widget.NonRea.clear();
@@ -481,18 +482,20 @@ class Etendu extends StatelessWidget {
                             ),
                             Expanded(
                               child: Center(
-                                child: Text(
-                                  Rea[i],
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 12.5 * screenWidth / 800,
-                                      fontFamily: "AndikaNewBasic",
-                                      decorationThickness: 1,
-                                      decorationStyle: TextDecorationStyle.solid,
-                                      decoration: TextDecoration.lineThrough,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color(HexColor("#FFFFFF")),
-                                      decorationColor: Colors.white
+                                child: SingleChildScrollView(
+                                  child: Text(
+                                    Rea[i],
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: 12.5 * screenWidth / 800,
+                                        fontFamily: "AndikaNewBasic",
+                                        decorationThickness: 1,
+                                        decorationStyle: TextDecorationStyle.solid,
+                                        decoration: TextDecoration.lineThrough,
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(HexColor("#FFFFFF")),
+                                        decorationColor: Colors.white
+                                    ),
                                   ),
                                 ),
                               ),

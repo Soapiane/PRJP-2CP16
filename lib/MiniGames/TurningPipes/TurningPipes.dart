@@ -8,6 +8,7 @@ import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flutter/material.dart';
 import 'package:projet2cp/Info/Difficulty.dart';
 import 'package:projet2cp/MiniGames/MiniGame.dart';
+import 'package:projet2cp/MiniGames/TutoScreen.dart';
 import 'package:projet2cp/Navigation/Zones.dart';
 import 'SolutionPipe.dart';
 import 'Pipe.dart';
@@ -25,7 +26,7 @@ class TurningPipes extends MiniGame with HasTappables{
   late Pipe firstPipe;
 
 
-  TurningPipes({required super.hud}){
+  TurningPipes({required super.hud, super.context}){
     zone = Zones.ville;
     level = 0;
     challenge = 1;
@@ -42,6 +43,8 @@ class TurningPipes extends MiniGame with HasTappables{
     }
     addTimer(seconds: time);
     setInitStars(initStars: 3);
+
+
 
   }
 
@@ -121,10 +124,20 @@ class TurningPipes extends MiniGame with HasTappables{
 
 
     shufflePipes();
-    onStart();
 
 
   }
+
+
+
+
+  @override
+  void onMount() {
+    // TODO: implement onMount
+    super.onMount();
+    showTutorial();
+  }
+
 
   void loadPipesOnScreen(){
     for (var pipe in normals){
