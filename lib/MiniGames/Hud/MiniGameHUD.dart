@@ -132,8 +132,6 @@ class _MiniGameHUDState extends State<MiniGameHUD>{
   @override
   Widget build(BuildContext context) {
 
-    print(points);
-
     double fontSize = 20;
 
     String strDigits(int n) => n.toString().padLeft(2, '0');
@@ -306,7 +304,6 @@ class _MiniGameHUDState extends State<MiniGameHUD>{
 
 
   void onMaxPointsReached(){
-    print("MAX REACHED");
     widget.onMaxPointsReached?.call();
     onFinished();
   }
@@ -380,7 +377,6 @@ class _MiniGameHUDState extends State<MiniGameHUD>{
   }
 
   Widget createMenu({String? title}){
-    print(stars.toString());
     return ScoreScreen(
       title: title,
       stars: stars,

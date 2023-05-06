@@ -34,7 +34,9 @@ abstract class MiniGame extends FlameGame {
      hud.restartGame = onRestart;
      hud.onTimeUpdate = onTimeUpdate;
    }
-  void showTutorial({String? path}) async {
+  FutureOr<void> showTutorial(String? path) async {
+
+
 
     if (context != null) {
       await showDialog(
@@ -44,7 +46,6 @@ abstract class MiniGame extends FlameGame {
         },
       );
     }
-    onStart();
   }
 
    void onTimeUpdate(Duration duration){
@@ -135,6 +136,10 @@ abstract class MiniGame extends FlameGame {
 
   void setPointsAsset({required String asset}){
     hud.pointsAsset = asset;
+  }
+
+  void setPointsString({required String name}) {
+     hud.pointsText = name;
   }
 
   void setStars({required int stars}){
@@ -283,6 +288,7 @@ abstract class MiniGame extends FlameGame {
        }
        if (differenceStars != 0) {
 
+         print("LEVEL : $level");
          ///Update the stars
          await GuestRepository().database!.update(
            "level",

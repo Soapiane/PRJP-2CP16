@@ -111,7 +111,7 @@ class ScoreScreen extends StatelessWidget {
                                 children: [
                                   textGenerator.generateTextView(texts: [title!], fontSize: 16).first,
                                   time != null ? infoRow(context,"Temps:", "${strDigits(time!.inMinutes.remainder(60))}:${strDigits(time!.inSeconds.remainder(60))}", "assets/hud/time.svg") : const Visibility(visible: false, child: SizedBox.shrink()),
-                                  score != null ? infoRow(context,"Score:", score!, scoreAsset) : const Visibility(visible: false, child: SizedBox.shrink()),
+                                  score != null ? infoRow(context,"$scoreText:", score!, scoreAsset) : const Visibility(visible: false, child: SizedBox.shrink()),
                                 ],
                               ),
                             ),

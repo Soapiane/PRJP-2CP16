@@ -4,11 +4,16 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flame/flame.dart';
+import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:projet2cp/Authentication/AuthMainBody.dart';
 import 'package:projet2cp/Authentication/AvatarSelectionBody.dart';
+import 'package:projet2cp/Info/Difficulty.dart';
+import 'package:projet2cp/Info/Info.dart';
 import 'package:projet2cp/MiniGames/MiniGameMainScreen.dart';
+import 'package:projet2cp/MiniGames/Puzzle/PuzzleGame.dart';
 import 'package:projet2cp/Navigation/Body.dart';
 import 'package:projet2cp/Authentication/DifficultySelectionBody.dart';
 import 'package:projet2cp/Authentication/LogInBody.dart';
@@ -137,11 +142,66 @@ class MainState extends State<MainScreen> {
 
   }
 
+  Future<void> LoadAnimal(Zones zone) async {
+    if(zone==Zones.mer){
+      await Flame.images.loadAll([
+        'AnimalGames/images/trashTurtle/trash2.png',
+        'AnimalGames/images/trashTurtle/trash1.png',
+        'AnimalGames/images/trashTurtle/trash3.png',
+        'AnimalGames/images/trashTurtle/trash4.png',
+        'AnimalGames/images/trashTurtle/trash5.png',
+      ]
+      );
+    }else{
+      if(zone==Zones.foret){
+        await Flame.images.loadAll([
+          'AnimalGames/images/trashBird/trash1.png',
+          'AnimalGames/images/trashBird/trash2.png',
+          'AnimalGames/images/trashBird/trash3.png',
+          'AnimalGames/images/trashBird/trash4.png',
+          'AnimalGames/images/trashBird/trash5.png',
+        ]
+        );
+      }
+    }
+  }
+
+  FutureOr<void> LoadPuzzle(Zones zone) async {
+    int LevelDiff;
+    if(Info.difficulty==Difficulty.EASY){
+      LevelDiff=2;
+    }else{
+      if(Info.difficulty==Difficulty.MEDIUM){
+        LevelDiff=3;
+      }else{
+        LevelDiff=4;
+      }
+    }
+    for (int j = 1; j <= 5; j++) {
+      if(zone==Zones.zoneIndustrielle){
+        await Flame.images.load("Puzzle/images/zone_industrielle/"+LevelDiff.toString()+"x"+LevelDiff.toString()+"/"+j.toString()+ ".png");
+        await Flame.images.load("Puzzle/images/zone_industrielle/images/$j.png");
+      }else{
+        if(zone==Zones.mer){
+          await Flame.images.load("Puzzle/images/Mer/"+LevelDiff.toString()+"x"+LevelDiff.toString()+"/"+j.toString()+ ".png");
+          await Flame.images.load("Puzzle/images/Mer/images/"+j.toString()+".png");
+        }
+      }
+    }
+    await Flame.images.load("Puzzle/images/Grid"+LevelDiff.toString()+".png");
+
+    await Flame.images.load("Puzzle/images/zone_industrielle/images/1.png");
+
+  }
 
   void levelTaped(bool unlocked, Zones zone, int order) async {
     if (unlocked){
 
       Loading.ShowLoading(context);
+
+
+      MiniGameMainScreen miniGameMainScreen = MiniGameMainScreen(miniGameOrder: order, zone: zone, mainScreenRef: this as ref.MainState,);
+
 
       for (int i=0; i<=3; i++) {
 
@@ -163,6 +223,15 @@ class MainState extends State<MainScreen> {
         context,
       );
 
+      print(zone.toString() + order.toString());
+
+      if ((zone == Zones.zoneIndustrielle || zone == Zones.mer) && order-1 == 3) {
+        await LoadPuzzle(zone);
+      } else if ((zone == Zones.mer && order-1 == 0) || (zone == Zones.foret && order-1 == 3)) {
+        await LoadAnimal(zone);
+      }
+
+
 
 
 
@@ -171,7 +240,7 @@ class MainState extends State<MainScreen> {
       bool? restarting = await Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context)  => MiniGameMainScreen(miniGameOrder: order, zone: zone, mainScreenRef: this as ref.MainState,)
+              builder: (context)  => miniGameMainScreen
           )
       );
 
@@ -185,6 +254,8 @@ class MainState extends State<MainScreen> {
 
         if (body.toString().compareTo("QuizSelectionBody") == 0) {
           await goToQuizMode();
+        } else if (body.toString().compareTo("LevelSelectionBody") == 0) {
+          await goToLevelSelectionBody(zone);
         }
 
         Loading.HideLoading(context);
@@ -406,7 +477,7 @@ class MainState extends State<MainScreen> {
 
 
 
-  void goToLevelSelectionBody(Zones zone) async {
+  FutureOr<void> goToLevelSelectionBody(Zones zone) async {
     Loading.ShowLoading(context);
 
 
@@ -681,7 +752,7 @@ class MainState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
 
-
+    Loading.HideLoading(context);
 
     onExitPressed = onExit;
 

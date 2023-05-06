@@ -26,9 +26,8 @@ class TurningPipes extends MiniGame with HasTappables{
   late Pipe firstPipe;
 
 
-  TurningPipes({required super.hud, super.context}){
+  TurningPipes({required super.hud, super.context, required super.level, required super.challenge}){
     zone = Zones.ville;
-    level = 0;
     challenge = 1;
     switch (difficulty){
       case Difficulty.EASY:
@@ -135,7 +134,14 @@ class TurningPipes extends MiniGame with HasTappables{
   void onMount() {
     // TODO: implement onMount
     super.onMount();
-    showTutorial();
+    showTutorial(null);
+  }
+
+  @override
+  void showTutorial(String? path) {
+    // TODO: implement showTutorial
+    super.showTutorial(path);
+    onStart();
   }
 
 

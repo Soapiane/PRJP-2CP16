@@ -14,7 +14,6 @@ class Quizz extends MiniGame {
   void onMount() {
     // TODO: implement onMount
     super.onMount();
-
   }
 
   @override
