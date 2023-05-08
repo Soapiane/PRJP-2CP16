@@ -48,13 +48,13 @@ class ArrangerVille extends MiniGame with HasCollisionDetection, TapDetector {
     setInitStars(initStars: 0);
     switch (difficulty) {
       case Difficulty.EASY:
-        MaxPoints = 124 + 80;
+        MaxPoints = 129 + 80;
         break;
       case Difficulty.MEDIUM:
-        MaxPoints = 151 + 12 * 10;
+        MaxPoints = 158 + 12 * 10;
         break;
       case Difficulty.HARD:
-        MaxPoints = 200 + 160;
+        MaxPoints = 213 + 160;
         break;
       default:
         break;

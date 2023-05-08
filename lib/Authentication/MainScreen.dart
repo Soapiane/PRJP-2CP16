@@ -880,7 +880,11 @@ class MainState extends State<MainScreen> {
           onTrophiesButtonTapped = () {
             showTrophies();
           };
+
+
+
         }
+
         onBackButtonTapped = () {
           setState(() {
             blur = ImageFilter.blur(
@@ -890,7 +894,6 @@ class MainState extends State<MainScreen> {
             body = body.lastScreen ?? body;
           });
         };
-
 
         if (body.toString().compareTo("LevelSelectionBody") == 0 ) {
           onBackButtonTapped = () {
