@@ -46,9 +46,11 @@ class Player extends SpriteAnimationComponent
     _velocity.y += _gravity; //the vertical movement only depends on gravity
     //dt : time elapsed since update got called
     if (gameRef.pause && !(gameRef.jumpInput)) {
+      gameRef.pause = false;
       gameRef.onLose();
     }
     if (gameRef.stop) {
+      gameRef.stop = false;
       _velocity.y = _gravity;
       gameRef.player.animation = gameRef.idle;
       _velocity.x = 0;

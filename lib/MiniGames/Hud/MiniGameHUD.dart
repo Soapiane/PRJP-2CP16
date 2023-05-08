@@ -376,7 +376,8 @@ class _MiniGameHUDState extends State<MiniGameHUD>{
     if (widget.countdown != null) startTimer();
   }
 
-  Widget createMenu({String? title}){
+  Widget createMenu({String? title, int? stars}){
+    stars ??= this.stars;
     return ScoreScreen(
       title: title,
       stars: stars,
@@ -439,10 +440,11 @@ class _MiniGameHUDState extends State<MiniGameHUD>{
   }
 
   void onLose(){
+    stars = 0;
     setState(() {
       stars = 0;
       countdownTimer?.cancel();
-      showDialog(barrierDismissible: false, context: context, builder: (BuildContext context) => createMenu(title: "Tu as perdu!!!"));
+      showDialog(barrierDismissible: false, context: context, builder: (BuildContext context) => createMenu(title: "Tu as perdu!!!", stars: 0));
     });
   }
 

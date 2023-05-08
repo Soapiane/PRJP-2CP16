@@ -48,13 +48,13 @@ class ArrangerZone extends MiniGame with HasCollisionDetection, TapDetector {
     setInitStars(initStars: 0);
     switch (difficulty) {
       case Difficulty.EASY:
-        MaxPoints = 109 + 9 * 10;
+        MaxPoints = 110 + 9 * 10;
         break;
       case Difficulty.MEDIUM:
-        MaxPoints = 135 + 13 * 10;
+        MaxPoints = 136 + 13 * 10;
         break;
       case Difficulty.HARD:
-        MaxPoints = 183 + 160;
+        MaxPoints = 184 + 160;
         break;
       default:
         break;
