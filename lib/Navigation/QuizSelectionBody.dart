@@ -45,17 +45,17 @@ class QuizSelectionBody extends Body {
         padding: EdgeInsets.only(left: seperation),
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
-          return ZoneCard(
+          return index != Zones.values.length ? ZoneCard(
             isLocked: quizzesInfo[index]["isLocked"] == 1 ? true : false,
             collectedStars: quizzesInfo[index]["stars"],
             zone: Zones.values[index],
             onTap: onCardTap,
-          );
+          ) : Visibility(child: SizedBox(width: seperation,), visible: false,);
         },
         separatorBuilder: (context, index) {
           return SizedBox(width: seperation,);
         },
-        itemCount: Zones.values.length,
+        itemCount: Zones.values.length + 1,
       ),
     );
   }

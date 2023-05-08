@@ -14,9 +14,11 @@ import 'package:projet2cp/MiniGames/Puzzle/PuzzleGame.dart';
 import 'package:projet2cp/MiniGames/Quizz/Quizz.dart';
 import 'package:projet2cp/MiniGames/Quizz/quizzGame.dart';
 import 'package:projet2cp/MiniGames/Recycler/RecyclerGame.dart';
+import 'package:projet2cp/MiniGames/RunnerForest/game.dart';
+import 'package:projet2cp/MiniGames/RunnerVille/game.dart';
 import 'package:projet2cp/MiniGames/TurningPipes/TurningPipes.dart';
 import 'package:projet2cp/Navigation/Zones.dart';
-import 'package:projet2cp/MiniGames/RunnerZoneIndustrielle/game.dart'as RunnerZoneIndustrielle;
+import 'package:projet2cp/MiniGames/RunnerZoneIndustrielle/game.dart';
 
 class MiniGameMainScreen extends StatelessWidget {
 
@@ -27,9 +29,11 @@ class MiniGameMainScreen extends StatelessWidget {
   late Widget mainScreen = SizedBox.shrink();
   bool blur = false;
   MainState mainScreenRef;
+  bool restart;
 
 
-  MiniGameMainScreen({super.key,required this.miniGameOrder,  required this.zone, required this.mainScreenRef}){
+
+  MiniGameMainScreen({super.key,required this.miniGameOrder,  required this.zone, required this.mainScreenRef,required this.restart}){
     backgroundImageUrl = zone.backgroundImagePath;
     getHUD();
   }
@@ -52,8 +56,21 @@ class MiniGameMainScreen extends StatelessWidget {
             {
               blur = true;
               mainScreen = GameWidget(game: TurningPipes(hud: hud, context: context,
+                zone: zone,
                 level: miniGameOrder-1,
                 challenge: 1,));
+            }
+            break;
+          case 2:
+            {
+              blur = true;
+              mainScreen = GameWidget(game: ArrangerVille(
+                hud: hud,
+                zone: zone,
+                level: miniGameOrder-1,
+                context: context,
+                challenge: 2,
+              ));
             }
             break;
           case 3:
@@ -77,9 +94,10 @@ class MiniGameMainScreen extends StatelessWidget {
                   hud: hud,
                   zone: zone,
                   level: miniGameOrder-1,
-                  buildContext: context,
+                  context: context,
                   restartQuizz: mainScreenRef.levelTaped,
                   challenge: 4,
+                  restart: restart!,
                 ),
               );
             }
@@ -89,6 +107,18 @@ class MiniGameMainScreen extends StatelessWidget {
       case Zones.zoneIndustrielle:
         switch (miniGameOrder) {
 
+          case 1:
+            {
+              blur = true;
+              mainScreen = GameWidget(game: ArrangerZone(
+                hud: hud,
+                zone: zone,
+                level: miniGameOrder-1,
+                context: context,
+                challenge: 9,
+              ));
+            }
+            break;
           case 2:
             {
               blur = true;
@@ -104,7 +134,7 @@ class MiniGameMainScreen extends StatelessWidget {
           case 3:
             {
               blur = true;
-              final game = PuzzleGame(hud: hud, zone: zone, level: 3, context: context, challenge: 11,);
+              final game = PuzzleGame(hud: hud, zone: zone, level: miniGameOrder-1, context: context, challenge: 11,);
               mainScreen = WillPopScope(
                   onWillPop: () async => false,
                   child: GameWidget(game: game,
@@ -125,9 +155,10 @@ class MiniGameMainScreen extends StatelessWidget {
                   hud: hud,
                   zone: zone,
                   level: miniGameOrder-1,
-                  buildContext: context,
+                  context: context,
                   restartQuizz: mainScreenRef.levelTaped,
                   challenge: 12,
+                  restart: restart!,
                 ),
               );
             }
@@ -136,6 +167,18 @@ class MiniGameMainScreen extends StatelessWidget {
         break;
       case Zones.foret:
         switch (miniGameOrder) {
+          case 1:
+            {
+              blur = true;
+              mainScreen = GameWidget(game: ArrangerForet(
+                hud: hud,
+                zone: zone,
+                level: miniGameOrder-1,
+                context: context,
+                challenge: 5,
+              ));
+            }
+            break;
           case 2:
             {
               blur = true;
@@ -170,9 +213,10 @@ class MiniGameMainScreen extends StatelessWidget {
                   hud: hud,
                   zone: zone,
                   level: miniGameOrder-1,
-                  buildContext: context,
+                  context: context,
                   restartQuizz: mainScreenRef.levelTaped,
                   challenge: 8,
+                  restart: restart!,
                 ),
               );
             }
@@ -226,7 +270,6 @@ class MiniGameMainScreen extends StatelessWidget {
           case 4:
             {
               blur = true;
-              blur = true;
               mainScreen = QuizzGame(
                 zone: zone,
                 gameRef: Quizz(
@@ -234,13 +277,30 @@ class MiniGameMainScreen extends StatelessWidget {
                   zone: zone,
                   level: miniGameOrder-1,
                   challenge: 16,
-                  buildContext: context,
+                  context: context,
                   restartQuizz: mainScreenRef.levelTaped,
+                  restart: restart!,
                 ),
               );
             }
             break;
         }
+        break;
+      case Zones.alea:{
+
+        blur = true;
+        mainScreen = QuizzGame(
+          zone: zone,
+          gameRef: Quizz(
+            hud: hud,
+            zone: zone,
+            level: miniGameOrder-1,
+            context: context,
+            restartQuizz: mainScreenRef.levelTaped,
+            restart: restart!,
+          ),
+        );
+      }
         break;
     }
 
@@ -253,8 +313,6 @@ class MiniGameMainScreen extends StatelessWidget {
   Widget build(BuildContext context) {
 
     getMainScreen(context);
-
-
 
 
     return Stack(

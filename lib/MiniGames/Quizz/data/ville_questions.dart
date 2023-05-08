@@ -6,39 +6,39 @@ List<QuestionModel> questionsVille = [
   QuestionModel(
       " La pollution de l'air en ville est la pollution causée par ",
       {
-        " Les usines ": false,
+        " La respiration des humains ": false,
         " Les voitures, les bus et les camions ": true,
-        " Les incendies ": false,
-        " Autres ": false,
+        " Les arbres ": false,
+        " Toutes les réponses ": false,
       },
       "quiz_v_q1.m4a"),
   QuestionModel(
-    "	Quels sont les principaux gaz polluants émis par les véhicules en ville ? ",
+    " Quels sont les principaux gaz polluants émis par les véhicules en ville ? ",
     {
       " Le dioxyde de carbone et l'oxyde d'azote ": true,
-      " Le méthane et le monoxyde de carbone ": false,
-      " Le dioxyde de soufre et le plomb ": false,
+      " L’oxygène ": false,
+      " L’eau ": false,
       "Aucune réponse ": false,
     },
     "quiz_v_q2.m4a",
   ),
   QuestionModel(
-    "	Si l'air de la ville est pollué on peut avoir des problèmes de:  ",
+    " Si l'air de la ville est pollué on peut avoir des problèmes de:  ",
     {
-      "	Respiration et de cœur ": true,
-      "	Digestion et de peau ": false,
-      "	Cerveau et de santé mentale ": false,
+      " Respiration et de cœur ": true,
+      " Mathématiques ": false,
+      " Connexion internet ": false,
       " L'air pollué ne cause pas de maladies ": false,
     },
     "quiz_v_q3.m4a",
   ),
   QuestionModel(
-    "	La pollution lumineuse dans les villes c'est quand :  ",
+    " La pollution lumineuse dans les villes c'est quand :  ",
     {
       " il y a trop de lumières la nuit.  ": true,
-      " les décorations lumineuses brillent trop. ": false,
-      " les panneaux publicitaires brillent trop. ": false,
-      " Les lumières des gratte-ciel sont trop fortes. ": false,
+      " Les ampoules se décomposent. ": false,
+      " le soleil brille trop. ": false,
+      " J’augmente la luminosité du téléphone. ": false,
     },
     "quiz_v_q4.m4a",
   ),
@@ -46,7 +46,7 @@ List<QuestionModel> questionsVille = [
       " La pollution sonore peux nous causer des :  ",
       {
         " Problèmes de sommeil ": true,
-        " Problèmes de vue et de concentration ": false,
+        " Problèmes de connexion. ": false,
         " Douleurs musculaires ": false,
         " La pollution sonore n'affecte pas la santé ": false,
       },
@@ -55,8 +55,8 @@ List<QuestionModel> questionsVille = [
       " Le recyclage des déchets c'est ",
       {
         " Réutiliser les déchets pour fabriquer des produits. ": true,
-        "	Transformer les déchets en énergie. ": false,
-        "	Détruire les déchets dans des incinérateurs. ": false,
+        " Planter des arbres": false,
+        " Détruire les déchets dans des incinérateurs. ": false,
         " Jeter les déchets par terre": false,
       },
       "quiz_v_q6.m4a"),
@@ -74,7 +74,7 @@ List<QuestionModel> questionsVille = [
       {
         " Ailleurs ": false,
         " Dans le bac de récupération ": true,
-        " Dans le bac à compost ": false,
+        " Par terre. ": false,
         " Dans la poubelle ": false,
       },
       "quiz_v_q8.m4a",
@@ -84,11 +84,11 @@ List<QuestionModel> questionsVille = [
   QuestionModel(
       " Où mets-tu une boîte de pizza en carton vide et sale? ",
       {
-        " Dans le bac de récupération ": false,
+        " Par terre, dehors. ": false,
         " Dans la poubelle ": false,
         " Dans le bac à compost ": true,
         " Aileurs": false,
-      },
+      }, 
       "quiz_v_q9.m4a",
       explanation:
           " Dans le bac à compost. Le carton souillé est compostable.\n Mais attention, il ne doit pas être ciré ni plastifié.",

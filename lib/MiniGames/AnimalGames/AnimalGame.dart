@@ -160,8 +160,8 @@ class AnimalGame extends MiniGame with HasDraggableComponents,HasCollisionDetect
     _parallax.parallax?.baseVelocity.setValues(20,0);
     score=0;
     add(animal
-      ..size = Vector2(80,64)
+      ..size = Vector2(size[1]/6*1.25,size[1]/6)
       ..animation= animation
-      ..position = Vector2(0, size[1] / 2 - 32));
+      ..position = Vector2(0, size[1] / 2 - size[1]/12));
   }
 }

@@ -10,12 +10,14 @@ import 'Poubelle.dart';
 class trash extends SvgComponent with DragCallbacks,CollisionCallbacks {
   late Poubelle premiere,deuxieme,troisieme,quatrieme;
   late int num;
+  late int NbTrash;
   late Vector2 size2;
   late Vector2 _positionOriginale;
   late Vector2 position2;
   late Recycler game;
   late Vector2 sizeAsset;
   trash({
+    required this.NbTrash,
     required this.game,
     required this.premiere,
     required this.deuxieme,
@@ -56,6 +58,7 @@ class trash extends SvgComponent with DragCallbacks,CollisionCallbacks {
     priority = 0;
     isDragged=_isDragged;
     if(premiere.isColliding || deuxieme.isColliding || troisieme.isColliding || quatrieme.isColliding){
+
       removeFromParent();
       if((premiere.isColliding && premiere.num==this.num ) || (deuxieme.isColliding && deuxieme.num==this.num ) || (troisieme.isColliding && troisieme.num==this.num )|| (quatrieme.isColliding && quatrieme.num==this.num )  ){
         print("good");
@@ -76,6 +79,13 @@ class trash extends SvgComponent with DragCallbacks,CollisionCallbacks {
       }else{
         print("bad");
       }
+      if(NbTrash==game.hud.maxPoints!){
+        if(game.hud.getStars()>0){
+          game.onFinished();
+        }else{
+          game.onLose();
+        }
+      }
     }else{
       this.position=_positionOriginale;
     }
@@ -94,6 +104,13 @@ class trash extends SvgComponent with DragCallbacks,CollisionCallbacks {
     _positionOriginale.x+=size2[0]/10*dt;
     if(_positionOriginale.x>size2[0]+this.width){
       removeFromParent();
+      if(NbTrash==game.hud.maxPoints!){
+        if(game.hud.getStars()>0){
+          game.onFinished();
+        }else{
+          game.onLose();
+        }
+      }
     }
   }
 }

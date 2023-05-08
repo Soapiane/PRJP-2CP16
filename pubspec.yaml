@@ -128,9 +128,15 @@ flutter:
     - assets/icons/
     - assets/stars/
     - assets/livre/book_svg/
+    - assets/livre/book_png/
     - assets/livre/icons/
     - assets/audio/
-    - assets/audio/quizz/
+    - assets/audios/
+    - assets/audios/RandomQuizz/
+    - assets/audios/MerQuizz/
+    - assets/audios/ForetQuizz/
+    - assets/audios/VilleQuizz/
+    - assets/audios/ZoneQuizz/
     - assets/images/Quizz/
     - assets/images/Quizz/earth/
     - assets/tutorials/turning_pipes/

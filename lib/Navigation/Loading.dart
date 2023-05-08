@@ -6,7 +6,7 @@ import 'package:projet2cp/TextGenerator.dart';
 
 class Loading extends StatefulWidget {
 
-  static bool isLoading = false;
+  static int isLoading = 0;
   bool progressBar;
   late _LoadingState state;
 
@@ -23,13 +23,13 @@ class Loading extends StatefulWidget {
         return loading;
       },
     );
-    isLoading = true;
+    isLoading++;
     return loading;
   }
 
   static void HideLoading(BuildContext context){
-    if (isLoading) Navigator.of(context).pop();
-    isLoading = false;
+    if (isLoading != 0) Navigator.of(context).pop();
+    isLoading--;
   }
 
   void updateProgress(double newValue){

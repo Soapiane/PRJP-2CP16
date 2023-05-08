@@ -47,11 +47,11 @@ class ZoneSelectionBody extends Body {
             onTap: () {
               onCardTap(Zones.values[index]);
             },
-            child: ZoneCard(
+            child: index != Zones.values.length-1 ? ZoneCard(
               collectedStars: starsCollected[index],
               maxStars: starsMax[index],
               zone: Zones.values[index],
-            ),
+            ) : Visibility(child: SizedBox(width: seperation,), visible: false,),
           );
         },
         separatorBuilder: (context, index) {

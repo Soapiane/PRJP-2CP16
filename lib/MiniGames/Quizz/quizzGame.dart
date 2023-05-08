@@ -1,51 +1,45 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter/painting.dart';
-
 import 'dart:ui';
-
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:projet2cp/MiniGames/MiniGame.dart';
 import 'package:projet2cp/MiniGames/Quizz/Quizz.dart';
 import 'package:projet2cp/MiniGames/Quizz/data/foret_questions.dart';
-import 'package:projet2cp/MiniGames/Quizz/data/mer_questions.dart';
 import 'package:projet2cp/MiniGames/Quizz/data/ville_questions.dart';
 import 'package:projet2cp/MiniGames/Quizz/data/zone_questions.dart';
 import 'package:projet2cp/MiniGames/Quizz/model/question_model.dart';
-import 'package:projet2cp/MiniGames/TutoScreen.dart';
+import 'package:projet2cp/MiniGames/Quizz/screens/pop_up.dart';
 import 'package:projet2cp/Navigation/Zones.dart';
-
-import 'screens/pop_up.dart';
-import 'screens/result_screen.dart';
+import 'package:projet2cp/MiniGames/Quizz/data/mer_questions.dart';
+import 'package:projet2cp/MiniGames/Quizz/data/random_quizz.dart';
 
 class QuizzGame extends StatefulWidget {
   final Zones zone;
   final Quizz? gameRef;
-  late List<QuestionModel> questions;
+  List<QuestionModel> questions = [];
   QuizzGame({super.key, required this.zone, this.gameRef}){
-
     switch (zone) {
-      case Zones.ville:
-        {
-          questions = questionsVille;
-        }
-        break;
-      case Zones.foret:
-        {
-          questions = questionsForet;
-        }
-        break;
-      case Zones.mer:
-        {
-          questions = questionsMer;
-        }
-        break;
-      case Zones.zoneIndustrielle:
-        {
-          questions = questionsZone;
-        }
+      case Zones.mer: {
+        questions = questionsMer;
+      }
+      break;
+      case Zones.foret: {
+        questions = questionsForet;
+      }
+      break;
+      case Zones.ville: {
+        questions = questionsVille;
+      }
+      break;
+      case Zones.zoneIndustrielle: {
+        questions = questionsZone;
+      }
+      break;
+      case Zones.alea : {
+        questions = questionsRandom;
+      }
     }
   }
 
@@ -68,22 +62,10 @@ class _QuizzGameState extends State<QuizzGame> {
   AudioPlayer audioPlayerExplanation = AudioPlayer();
   @override
   Widget build(BuildContext context) {
-
-    showTuto();
-
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: QuizzPage(widget.zone.backgroundImagePath, widget.questions),
     );
-  }
-
-  void showTuto() async{
-    await Future.delayed(Duration(milliseconds: 300), (){
-
-
-      showDialog(context: context, builder: (context) => TutoScreen(path: "assets/tutorials/quiz.png",));
-
-    });
   }
 
   Stack QuizzPage(String backGroundPath, List<QuestionModel> questions) {
@@ -97,13 +79,6 @@ class _QuizzGameState extends State<QuizzGame> {
         Container(
           height: height,
           width: width,
-          // decoration: BoxDecoration(
-          //   image: DecorationImage(
-          //     image: AssetImage(backGroundPath),
-          //     fit: BoxFit.cover,
-          //     opacity: 0.75,
-          //   ),
-          // ),
         ),
         Padding(
           padding: const EdgeInsets.all(7.0),
@@ -123,8 +98,8 @@ class _QuizzGameState extends State<QuizzGame> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
-                      height: 20,
-                      width: 40,
+                      height: height * 0.05,
+                      width: width * 0.05,
                       padding: const EdgeInsets.all(2.0),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20.0),
@@ -138,19 +113,25 @@ class _QuizzGameState extends State<QuizzGame> {
                           ),
                         ],
                       ),
-                      child: Text(
-                        '${index + 1}/${questions.length}',
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'AndikaNewBasic',
-                            color: Colors.white,
-                            fontSize: 12.0),
-                        textAlign: TextAlign.center,
+                      child: Center(
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(
+                            '${index + 1}/${questions.length}',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'AndikaNewBasic',
+                              fontSize: 11.0,
+                              color: Colors.white,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
                       ),
                     ),
                     GestureDetector(
                       child: Container(
-                        height: 60,
+                        height: height * 0.2,
                         width: width * 0.8,
                         padding: EdgeInsets.all(3.0),
                         decoration: BoxDecoration(
@@ -172,22 +153,22 @@ class _QuizzGameState extends State<QuizzGame> {
                             questions[index].question!,
                             style: const TextStyle(
                               color: Color.fromARGB(255, 255, 255, 255),
-                              fontSize: 12.0,
                               fontWeight: FontWeight.bold,
                               fontFamily: 'AndikaNewBasic',
                             ),
                             textAlign: TextAlign.center,
+                            overflow: TextOverflow.ellipsis,
                             maxLines: 2,
                           ),
                         ),
                       ),
                       onTap: () {
                         audioPlayer.play(AssetSource(
-                            'audio/quizz/${questions[index].audioPlayer!}'));
+                            'audios/${questions[index].audioPlayer!}'));
                       },
                     ),
-                    const SizedBox(
-                      height: 20.0,
+                    SizedBox(
+                      height: height * 0.05,
                     ),
                     Container(
                       width: width * 0.8,
@@ -204,20 +185,20 @@ class _QuizzGameState extends State<QuizzGame> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                const SizedBox(
-                                  height: 60,
+                                SizedBox(
+                                  height: height * 0.25,
                                 ),
                                 for (int i = 0; i < 2; i++)
                                   Center(
                                     child: SizedBox(
-                                      width: (width / 2) - 100,
+                                      width: (width * 0.8 / 2) - 50,
+                                      height: height * 0.2,
                                       child: MaterialButton(
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(20.0),
                                         ),
                                         elevation: 0.2,
-                                        height: 50,
                                         color: isPressed
                                             ? questions[index]
                                                     .answers!
@@ -267,7 +248,7 @@ class _QuizzGameState extends State<QuizzGame> {
                                                       null) {
                                                     audioPlayerExplanation.play(
                                                         AssetSource(
-                                                            'audio/quizz/${questions[index].audioPalyerExplanation!}'));
+                                                            'audios/${questions[index].audioPalyerExplanation!}'));
                                                     showDialog(
                                                       context: context,
                                                       builder: (context) {
@@ -301,10 +282,9 @@ class _QuizzGameState extends State<QuizzGame> {
                                                   if (questions[index]
                                                           .explanation !=
                                                       null) {
-                                                    //go to pop up screen
                                                     audioPlayerExplanation.play(
                                                         AssetSource(
-                                                            'audio/quizz/${questions[index].audioPalyerExplanation!}'));
+                                                            'audios/${questions[index].audioPalyerExplanation!}'));
                                                     showDialog(
                                                       context: context,
                                                       builder: (context) {
@@ -352,7 +332,6 @@ class _QuizzGameState extends State<QuizzGame> {
                                                 255, 243, 236, 236),
                                             fontWeight: FontWeight.bold,
                                             fontFamily: 'AndikaNewBasic',
-                                            fontSize: 12,
                                           ),
                                           maxLines: 2,
                                           textAlign: TextAlign.center,
@@ -368,8 +347,8 @@ class _QuizzGameState extends State<QuizzGame> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Visibility(
-                          visible: _buttonVisible,
+                        Opacity(
+                          opacity: _buttonVisible ? 1.0 : 0.0,
                           child: OutlinedButton(
                             onPressed: isPressed
                                 ? index + 1 == questions.length
@@ -378,29 +357,13 @@ class _QuizzGameState extends State<QuizzGame> {
                                         audioPlayer.release();
                                         audioPlayerExplanation.stop();
                                         audioPlayerExplanation.release();
-                                        // showDialog(
-                                        //     context: context,
-                                        //     builder: (context) {
-                                        //       return Stack(
-                                        //         children: [
-                                        //           BackdropFilter(
-                                        //             filter: ImageFilter.blur(
-                                        //                 sigmaX: 2, sigmaY: 2),
-                                        //             child: Container(
-                                        //               color: Colors.black
-                                        //                   .withOpacity(0.5),
-                                        //             ),
-                                        //           ),
-                                        //           ResultScreen(score),
-                                        //         ],
-                                        //       );
-                                        //     });
+
                                         if (widget.gameRef != null) {
                                           widget.gameRef!.onFinished();
                                         }
                                       }
                                     : () {
-                                        _controller.nextPage(
+                                        _controller!.nextPage(
                                             duration:
                                                 Duration(microseconds: 500),
                                             curve: Curves.linear);
@@ -412,15 +375,17 @@ class _QuizzGameState extends State<QuizzGame> {
                               shape: StadiumBorder(),
                               shadowColor: Colors.grey.withOpacity(0.5),
                             ),
-                            child: Text(
-                              index + 1 == questions.length
-                                  ? "See result"
-                                  : "Suivant",
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 11.0,
-                                fontFamily: 'AndikaNewBasic',
-                                fontWeight: FontWeight.bold,
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                index + 1 == questions.length
+                                    ? "Voir le résultat"
+                                    : "Suivant",
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'AndikaNewBasic',
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                           ),

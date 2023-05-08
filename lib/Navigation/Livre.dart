@@ -150,11 +150,16 @@ class _LivreState extends State<Livre> {
         child: Center(
           child: Stack(
             children: [
-              SvgPicture.asset(
-                "assets/livre/book_svg/page${index}.svg",
-                height: screenHeight,
-                width: screenWidth,
+              Container(
+              height: screenHeight,
+              width: screenWidth,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("assets/livre/book_png/page${index}.png"),
+                  fit: BoxFit.fill,
+                ),
               ),
+            ),
               ///arrow left
               Positioned(
                 top: 322*screenHeight/360,

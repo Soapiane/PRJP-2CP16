@@ -12,6 +12,7 @@ import 'Trash.dart';
 class TrashManager extends Component with HasGameRef{
   late trash Trash;
   late Vector2 size2;
+  int NbTrash=0;
   late final Vector2 position_spawn;//le 2 pour sauvegarder
   late Poubelle premiere,deuxieme,troisieme,quatrieme;
   late double size_tapisY;
@@ -35,39 +36,46 @@ class TrashManager extends Component with HasGameRef{
   late int Rand;
   late int num;
   void spawnTrash(){
-    random=new Random();
-    Rand = random.nextInt(16);
-    if(Rand>=0 && Rand<4){
-      num=1;
-    }else{
-      if(Rand>=4 && Rand<8){
-        num=2;
+    NbTrash++;
+    if(NbTrash<=gameRef.hud.maxPoints!){
+      random=new Random();
+      Rand = random.nextInt(16);
+      if(Rand>=0 && Rand<4){
+        num=1;
       }else{
-        if(Rand>=8 && Rand<12){
-          num=3;
+        if(Rand>=4 && Rand<8){
+          num=2;
         }else{
-          if(Rand>=12 && Rand<16){
-            num=4;
+          if(Rand>=8 && Rand<12){
+            num=3;
+          }else{
+            if(Rand>=12 && Rand<16){
+              num=4;
+            }
           }
         }
       }
+      Vector2 newPositionSpawn = Vector2.copy(position_spawn);
+      trash nouveau=new trash(
+        NbTrash: NbTrash,
+        game: this.gameRef,
+        premiere: premiere,
+        deuxieme: deuxieme,
+        troisieme: troisieme,
+        quatrieme: quatrieme,
+        num: num,
+        sizeAsset:Vector2(size2[0]/8,size_tapisY*3/5),
+        size2:size2,
+        position2: newPositionSpawn,
+      );
+      nouveau..svg=TabAsset[Rand]
+        ..size=Vector2(size2[0]/8,size_tapisY*3/5)
+        ..position=newPositionSpawn;
+      add(nouveau);
+    }else{
+      time.stop();
     }
-    Vector2 newPositionSpawn = Vector2.copy(position_spawn);
-    trash nouveau=new trash(
-      game: this.gameRef,
-      premiere: premiere,
-      deuxieme: deuxieme,
-      troisieme: troisieme,
-      quatrieme: quatrieme,
-      num: num,
-      sizeAsset:Vector2(size2[0]/8,size_tapisY*3/5),
-      size2:size2,
-      position2: newPositionSpawn,
-    );
-    nouveau..svg=TabAsset[Rand]
-      ..size=Vector2(size2[0]/8,size_tapisY*3/5)
-      ..position=newPositionSpawn;
-    add(nouveau);
+
 
   }
   @override
@@ -94,6 +102,7 @@ class TrashManager extends Component with HasGameRef{
   void reset(){
     time.stop();
     time.start();
+    NbTrash=0;
     children.whereType<trash>().forEach((trash) {
       trash.removeFromParent();
     });

@@ -11,6 +11,7 @@ class PopUpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     return Stack(
       children: <Widget>[
         GestureDetector(
@@ -22,7 +23,7 @@ class PopUpScreen extends StatelessWidget {
           child: Center(
             child: Container(
               height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
+              width: width,
               child: AlertDialog(
                 shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(20.0))),
@@ -36,7 +37,7 @@ class PopUpScreen extends StatelessWidget {
                       color: Color.fromARGB(255, 244, 244, 244),
                       fontWeight: FontWeight.bold,
                       fontFamily: 'AndikaNewBasic',
-                      fontSize: 12.0,
+                      fontSize: 15.0,
                       decoration: TextDecoration.underline,
                       decorationThickness: 2.0),
                   textAlign: TextAlign.center,
@@ -48,28 +49,27 @@ class PopUpScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Container(
-                          width: MediaQuery.of(context).size.width * 0.6,
+                          width: width * 0.6,
                           child: Text(
                             message!,
-                            style: const TextStyle(
+                            style: TextStyle(
                               color: Color.fromARGB(255, 255, 255, 255),
                               fontWeight: FontWeight.bold,
-                              fontSize: 12.0,
                               fontFamily: 'AndikaNewBasic',
                             ),
-                            maxLines: 9,
                             textAlign: TextAlign.center,
                             overflow: TextOverflow.ellipsis,
+                            maxLines: 6,
                           ),
                         ),
                         SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.05,
+                          width: width * 0.05,
                         ),
                         Image.asset(
                           (isCorrect)
                               ? 'assets/images/Quizz/earth/spreading_love.png'
                               : 'assets/images/Quizz/earth/medecine.png',
-                          width: (isCorrect) ? 90 : 100,
+                          width: (isCorrect) ? width * 0.15 : width * 0.15,
                         ),
                       ],
                     ),

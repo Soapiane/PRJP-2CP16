@@ -26,9 +26,7 @@ class TurningPipes extends MiniGame with HasTappables{
   late Pipe firstPipe;
 
 
-  TurningPipes({required super.hud, super.context, required super.level, required super.challenge}){
-    zone = Zones.ville;
-    challenge = 1;
+  TurningPipes({required super.hud, super.context, required super.level, required super.challenge, required super.zone}){
     switch (difficulty){
       case Difficulty.EASY:
         time = 60;

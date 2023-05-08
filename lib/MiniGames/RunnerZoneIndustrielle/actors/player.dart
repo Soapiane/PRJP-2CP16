@@ -10,6 +10,7 @@ import 'package:flame/game.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/src/services/keyboard_key.g.dart';
 import 'package:flutter/src/services/raw_keyboard.dart';
+import 'package:projet2cp/Navigation/LevelSelectionBody.dart';
 
 import '../game.dart';
 import 'platform.dart';
@@ -24,7 +25,6 @@ class Player extends SpriteAnimationComponent
   late Vector2 _minClamp = Vector2.zero();
   late Vector2 _maxClamp = Vector2.zero();
   //defining the constructor for Earth from Image
-  bool lost = false;
   Player({
     required Rect levelBounds,
   }) : super() {
@@ -37,6 +37,7 @@ class Player extends SpriteAnimationComponent
   FutureOr<void> onLoad() async {
     //when the object is loaded (appreas on screen)
     await add(CircleHitbox());
+
     return super.onLoad();
   }
 
@@ -45,13 +46,12 @@ class Player extends SpriteAnimationComponent
     _velocity.y += _gravity; //the vertical movement only depends on gravity
     //dt : time elapsed since update got called
     if (gameRef.pause && !(gameRef.jumpInput)) {
-      gameRef.stop = true;
+      gameRef.onLose();
     }
     if (gameRef.stop) {
       _velocity.y = _gravity;
       gameRef.player.animation = gameRef.idle;
       _velocity.x = 0;
-      print("LOOOOOSING");
       gameRef.onFinished();
     } else {
       if (_isOnGround) {
@@ -76,13 +76,13 @@ class Player extends SpriteAnimationComponent
       }
     }
 
-    if (gameRef.getPoints() * (100 / gameRef.MaxPoints) > 30) {
+    if (gameRef.getPoints() * (100 / gameRef.MaxPoints) > 40) {
       gameRef.setStars(stars: 1);
     }
-    if (gameRef.getPoints() * (100 / gameRef.MaxPoints) > 60) {
+    if (gameRef.getPoints() * (100 / gameRef.MaxPoints) > 70) {
       gameRef.setStars(stars: 2);
     }
-    if (gameRef.getPoints() * (100 / gameRef.MaxPoints) > 100) {
+    if (gameRef.getPoints() == gameRef.MaxPoints) {
       gameRef.setStars(stars: 3);
     }
 

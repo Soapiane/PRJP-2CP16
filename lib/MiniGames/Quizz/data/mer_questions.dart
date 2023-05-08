@@ -28,35 +28,35 @@ List<QuestionModel> questionsMer = [
   QuestionModel(
       " Qu'est-ce que la pollution marine ? ",
       {
-        " Les rajets de l'activité humaine ": true,
-        " Les rajets chimiques des usines": false,
+        " Les rejets de l'activité humaine ": true,
+        " Une espèce de poissons.": false,
         " Les excréments des animaux marins ": false,
         " Autre ": false,
-      },
+      }, 
       "MerQuizz/quiz_m_q3.m4a",
       explanation:
           "Comme c'est agréable de se baigner l'été dans l'océan, parmi les vagues ! En revanche, c'est tout de suite moins sympa quand on se retrouve nez à nez avec des déchets dans l'eau. Qu'ils soient en plastique, en verre, en tissu ou en métal, ils proviennent tous de l'activité humaine.",
       audioPalyerExplanation: "MerQuizz/quiz_m_r3.m4a"),
   QuestionModel(
-      "	Qu'est-ce qu'une marée noire ? ",
+      " Qu'est-ce qu'une marée noire ? ",
       {
         " Une marée très forte ": false,
-        " Une eau pleine de déchets ": false,
+        " Une marée propre": false,
         " Une énorme quantité de pétrole déversée dans la mer ": true,
-        " Une invasion d'algues toxiues ": false,
+        " Une invasion d'algues toxiques ": false,
       },
       "MerQuizz/quiz_m_q4.m4a",
       explanation:
           "Une marée noire est une catastrophe écologique.\nCe pétrole peut s'échapper d'un bateau ou d'une plateforme pétrolière endommagée et cause beaucoup de dégâts. ",
       audioPalyerExplanation: "MerQuizz/quiz_m_r4.m4a"),
   QuestionModel(
-      "	Qu'est-ce qu'une station d'épuration ? ",
+      " Qu'est-ce qu'une station d'épuration ? ",
       {
-        " Une usine qui nettoie les eaux usées ": false,
-        " Une machine qui nettoie les océans ": true,
+        " Une usine qui nettoie les eaux usées ": true,
+        " Une station qui nettoie les poissons": true,
         " Une usine qui mesure la température de l'eau ": false,
         " Une machine qui pollue la mer  ": false,
-      },
+      }, 
       "MerQuizz/quiz_m_q5.m4a",
       explanation:
           "Les stations d'épuration nettoient les eaux usées (des toilettes ou des cuisines) avant de les relâcher dans les rivières et les océans. Mais elles ne sont pas à 100% efficaces : des produits mauvais pour l'environnement restent et sont déversés dans la nature. ",
@@ -64,11 +64,11 @@ List<QuestionModel> questionsMer = [
   QuestionModel(
       " Combien y a-t-il d'océans le monde ? ",
       {
-        " 4 ": false,
+        " 1 ": false,
         " 5 ": true,
-        " 10 ": false,
-        " 7 ": false,
-      },
+        " 100 ": false,
+        " 900 ": false,
+      }, 
       "MerQuizz/quiz_m_q6.m4a",
       explanation:
           "Il s'agit de l'océan Arctique, du Pacifique, de l'Atlantique, de l'océan Indien et enfin de l'océan Austral qu'on appelle aussi Antarctique. ",
@@ -76,11 +76,11 @@ List<QuestionModel> questionsMer = [
   QuestionModel(
       " En majorité d'où viennent  les déchets des océans ? ",
       {
-        " Des bateaux ": false,
-        " Des rivages ": false,
+        " Des poissons ": false,
+        " De la forêt": false,
         " De l'intérieur des terres ": true,
-        " De la ville ": false,
-      },
+        " De nulle part ": false,
+      }, 
       "MerQuizz/quiz_m_q7_modif.m4a",
       explanation:
           "80% des déchets des océans viennent de l'intérieur des terres. 10% sont abandonnés sur les rivages et 10% sont jetés directement dans la mer.",
@@ -88,11 +88,11 @@ List<QuestionModel> questionsMer = [
   QuestionModel(
       " Pourquoi le plastique est un problème pour les océans ? ",
       {
-        " Les poissons n'aiment pas en manger ": false,
+        " Il ne se décompose jamais sous l’eau": false,
         " Il se décompose en petits morceaux ": true,
-        " Il empêche les bateaux d'avancer ": false,
+        " Le plastique n’est pas un probléme ": false,
         " Tout ce qui a été cité ": false,
-      },
+      }, 
       "MerQuizz/quiz_m_q8_modif.m4a",
       explanation:
           "Ces minuscules morceaux de plastique sont plein de produits toxiques et ils se retrouvent partout sur la Terre.",
@@ -122,12 +122,12 @@ List<QuestionModel> questionsMer = [
           "14 000 mammifères sont chaque année retrouvés morts sur les plages à cause de ça. Mais c'est bien plus en réalité puisque la très grande majorité meurent en mer.",
       audioPalyerExplanation: "MerQuizz/quiz_m_r10.m4a"),
   QuestionModel(
-      "Comment fonctionnent les hydroliennes ?",
+      "Les hydroliennes fonctionnent grâce a ",
       {
-        " Des turbines sous_marines": true,
-        " Des éoliennes installées en mer": false,
+        " Des turbines sous-marines ": true,
+        " Des panneaux solaires sous l’eau": false,
         " Des bassins d'eau le long des rivages": false,
-        " Autre": true,
+        " Autre": false,
       },
       "MerQuizz/quiz_m_q13.m4a",
       explanation:
@@ -139,7 +139,7 @@ List<QuestionModel> questionsMer = [
       " 1 ": false,
       " 693 ": true,
       " 999 ": false,
-      " 789 ": false,
+      " 0 ": false,
     },
     "MerQuizz/quiz_m_q14_modif.m4a",
   ),

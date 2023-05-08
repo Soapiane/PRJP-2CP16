@@ -8,6 +8,7 @@ import 'package:flame/game.dart';
 import 'package:flame_texturepacker/flame_texturepacker.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:projet2cp/Info/Difficulty.dart';
+import 'package:projet2cp/MiniGames/Hud/MiniGameHUD.dart';
 import 'package:projet2cp/MiniGames/Hud/ScoreScreen.dart';
 
 import 'actors/player.dart';
@@ -16,8 +17,8 @@ import 'package:projet2cp/MiniGames/MiniGame.dart';
 
 class ArrangerZone extends MiniGame with HasCollisionDetection, TapDetector {
   late Image spriteTrash;
-  late bool stop = false;
-  late bool pause = false;
+  late bool stop;
+  late bool pause;
   late Image spriteEarth;
   late int MaxPoints;
   late Image coin,
@@ -33,26 +34,27 @@ class ArrangerZone extends MiniGame with HasCollisionDetection, TapDetector {
       nuclearTrash,
       pollutingFact,
       attention;
-  late bool ActionChanged = false;
-  late bool jumpInput = false;
-  late bool hAxisInput = false;
+  late bool ActionChanged;
+  late bool jumpInput;
+  late bool hAxisInput;
   late Player player;
   Level? currentLevel;
   late SpriteAnimation running;
   late SpriteAnimation jumping;
   late SpriteAnimation idle;
+  Timer timer = Timer(1.0, repeat: false);
 
-  ArrangerZone({required super.hud}) {
+  ArrangerZone({required super.hud, required super.zone, required super.level, required super.challenge, required super.context}) {
     setInitStars(initStars: 0);
     switch (difficulty) {
       case Difficulty.EASY:
-        MaxPoints = 97;
+        MaxPoints = 109 + 9 * 10;
         break;
       case Difficulty.MEDIUM:
-        MaxPoints = 125;
+        MaxPoints = 135 + 13 * 10;
         break;
       case Difficulty.HARD:
-        MaxPoints = 223;
+        MaxPoints = 183 + 160;
         break;
       default:
         break;
@@ -62,13 +64,23 @@ class ArrangerZone extends MiniGame with HasCollisionDetection, TapDetector {
   }
 
   @override
+  void onLose() {
+    super.onLose();
+  }
+
+  @override
   void onRestart() {
     super.onRestart();
-    loadLevel("LevelZone1.tmx");
+    onLoad();
   }
 
   @override
   Future<void>? onLoad() async {
+    ActionChanged = false;
+    stop = false;
+    pause = false;
+    jumpInput = false;
+    hAxisInput = false;
     //method to run asynchronous initialization code for the component here level
     await Flame.device.setLandscape(); //mode landscape for better visualisation
     await Flame.device.fullScreen(); //hide bar
@@ -118,13 +130,13 @@ class ArrangerZone extends MiniGame with HasCollisionDetection, TapDetector {
     currentLevel?.removeFromParent(); //remove previous level
     switch (difficulty) {
       case Difficulty.EASY:
-        if (levelName == 'LevelForet2.tmx') {
-          levelName = 'FinalForet.tmx';
+        if (levelName == 'LevelZone2.tmx') {
+          levelName = 'FinalZone.tmx';
         }
         break;
       case Difficulty.MEDIUM:
-        if (levelName == 'LevelForet3.tmx') {
-          levelName = 'FinalForet.tmx';
+        if (levelName == 'LevelZone3.tmx') {
+          levelName = 'FinalZone.tmx';
         }
         break;
       case Difficulty.HARD:

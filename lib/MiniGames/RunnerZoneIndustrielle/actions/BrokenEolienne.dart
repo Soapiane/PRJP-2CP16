@@ -42,7 +42,7 @@ class BrokenEolienne extends SpriteComponent
     if (other is Player) {
       add(OpacityEffect.to(0.5, EffectController(duration: 0.5)));
       add(RemoveEffect());
-      gameRef.modifyPoints(points: 1);
+      gameRef.modifyPoints(points: 10);
       gameRef.ActionChanged = true;
     }
     super.onCollisionStart(intersectionPoints, other);

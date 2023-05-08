@@ -20,14 +20,14 @@ List<QuestionModel> questionsForet = [
         "  Perte de biodiversité  ": true,
         "  Diminution de gaz à effet de serre ": false,
         "  Lutte contre la pollution  ": false,
-        "Aucune réponse ": false,
+        "  Aucune réponse ": false,
       },
       "ForetQuizz/quiz_f_q2.m4a",
       explanation:
           "La déforestation a des impacts sur l'environnement, tels que la perte de biodiversité, les émissions accrues de gaz à effet de serre, la dégradation des sols et des ressources en eau.",
       audioPalyerExplanation: "ForetQuizz/quiz_f_r2.m4a"),
   QuestionModel(
-    "	Qu'est-ce que la surexploitation des ressources forestières ? ",
+    " Qu'est-ce que la surexploitation des ressources forestières ? ",
     {
       " L'exploitation forestière légale et durable  ": false,
       " L'utilisation excessive et non durable des ressources forestières ":
@@ -53,7 +53,7 @@ List<QuestionModel> questionsForet = [
           " La gestion durable des ressources forestières permet une utilisation plus efficace des ressources forestières, la protection de la biodiversité, le stockage du carbone et la lutte contre les changements climatiques.",
       audioPalyerExplanation: "ForetQuizz/quiz_f_r4.m4a"),
   QuestionModel(
-    "	Comment peut-on prévenir les incendies de forêt ? ",
+    " Comment peut-on prévenir les incendies de forêt ? ",
     {
       " En éliminant les sources d'allumage telles que les cigarettes ": true,
       " En jetant du verre et plastique dans les forêts ": false,
@@ -93,9 +93,9 @@ List<QuestionModel> questionsForet = [
   QuestionModel(
       "Qu'est-ce que la protection des forêts ? ",
       {
-        " La prévention des incendies de forêt ": false,
+        " Mettre en danger la biodiversité": false,
         " La gestion des écosystèmes forestiers ": true,
-        " La préservation des ressources forestières ": false,
+        " Polluer l’eau": false,
         " Aucune réponse ": false,
       },
       "ForetQuizz/quiz_f_q8.m4a",
@@ -114,13 +114,12 @@ List<QuestionModel> questionsForet = [
   QuestionModel(
       " Quel est le plus grand problème de la déforestation ? ",
       {
-        " Elle dégage des gaz à effets de serre ": false,
+        " Les arbres sont tristes.": false,
         " La menace des écosystèmes et de la biodiversité ": true,
-        " Bientôt, nous n'aurons plus assez d'arbres pour respirer": false,
+        " L’utilisation excessive du bois est bonne pour l’economie": false,
         " On ne pourra plus se promener en forêt": false,
       },
       "ForetQuizz/quiz_f_q10.m4a",
-      explanation:
           "Le plus grand problème de la déforestation c'est la menace des écosystèmes et la biodiversité",
       audioPalyerExplanation: "ForetQuizz/quiz_f_r10.m4a"),
   QuestionModel(
@@ -134,7 +133,7 @@ List<QuestionModel> questionsForet = [
           "Les feuilles d'arbres sont recouvertes de micro-poils et d'une pellicule un peu luisante, la cuticule. Ces poils et cette cuticule capturent une partie des particules polluantes de l'air, comme du ruban adhésif. ",
       audioPalyerExplanation: "ForetQuizz/quiz_f_r11.m4a"),
   QuestionModel(
-      "	Planter des arbres, ça aide à lutter contre le réchauffement climatique",
+      " Planter des arbres, ça aide à lutter contre le réchauffement climatique",
       {
         "vrai": true,
         "faux": false,

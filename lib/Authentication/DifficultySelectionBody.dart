@@ -96,6 +96,7 @@ class _DifficultySelectionBodyState extends State<_DifficultySelectionBody> {
     
     
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData().copyWith(
         colorScheme: ThemeData().colorScheme.copyWith(primary: Colors.green),
       ),

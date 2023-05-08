@@ -32,19 +32,16 @@ class Recycler extends MiniGame with HasDraggableComponents,HasCollisionDetectio
   late double size_poubelleX;
   late double size_poubelleY;
   late double size_tapis_Y;
-  late Zones zone;
   bool Started=false;
 
-  Recycler({required super.hud,required this.zone, required super.level, required super.context, required super.challenge}){
-    addTimer(seconds: time_of_the_game);
-    addPoints(maxPoints: time_of_the_game~/5);
+  Recycler({required super.hud,required super.zone, required super.context, required super.challenge, required super.level}){
     if(difficulty==Difficulty.EASY){
-      addPoints(maxPoints: (time_of_the_game~/5)-1);
+      addPoints(maxPoints:10);
     }else{
       if(difficulty==Difficulty.MEDIUM){
-        addPoints(maxPoints: (time_of_the_game~/4)-1);
+        addPoints(maxPoints:15);
       }else{
-        addPoints(maxPoints: (time_of_the_game~/3)-1);
+        addPoints(maxPoints: 20);
       }
     }
   }
@@ -176,12 +173,12 @@ class Recycler extends MiniGame with HasDraggableComponents,HasCollisionDetectio
 
     //le tapis
     if(difficulty==Difficulty.EASY){
-      time_interval=5;
+      time_interval=4.5;
     }else{
       if(difficulty==Difficulty.MEDIUM){
-        time_interval=4;
+        time_interval=3.5;
       }else{
-        time_interval=3;
+        time_interval=2.5;
       }
     }
     tapis
@@ -232,28 +229,24 @@ class Recycler extends MiniGame with HasDraggableComponents,HasCollisionDetectio
     add(troisieme);
     add(quatrieme);
 
-
-  }
-  void onBegin(){
-    Started=true;
-    add(Manager);
-    onStart();
+    showTutorial("assets/tutorials/recycler.png");
   }
 
   @override
-  void showTutorial(String? path) async {
-    // TODO: implement showTutorial
+  FutureOr<void> showTutorial(String? path) async {
     await super.showTutorial(path);
-    print("test");
     onBegin();
   }
 
-
-
+  void onBegin(){
+    Started=true;
+    add(Manager);
+  }
   @override
   void update(double dt) {
     // TODO: implement update
     super.update(dt);
+
   }
   @override
   void onTimeOut() {
@@ -276,7 +269,7 @@ class Recycler extends MiniGame with HasDraggableComponents,HasCollisionDetectio
   void onMount() {
     // TODO: implement onMount
     super.onMount();
-    showTutorial("assets/tutorials/recycler.png");
+
   }
 
 

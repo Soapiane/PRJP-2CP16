@@ -24,7 +24,7 @@ abstract class MiniGame extends FlameGame {
   int? challenge;
   BuildContext? context;
 
-   MiniGame({required this.hud, this.zone = Zones.ville, this.level = 1, this.challenge, this.context}){
+   MiniGame({required this.hud,required this.zone , this.level = 1, this.challenge, this.context}){
      hud.onMaxPointsReached = onMaxPointsReached;
      hud.onGameTimeOut = onTimeOut;
      hud.onGamePaused = onPaused;
@@ -40,6 +40,7 @@ abstract class MiniGame extends FlameGame {
 
     if (context != null) {
       await showDialog(
+        barrierDismissible: false,
         context: context!,
         builder: (context){
           return TutoScreen(path: path,);
@@ -220,27 +221,32 @@ abstract class MiniGame extends FlameGame {
 
         ///give the zone finishing trophy
         SharedPreferences prefs = await SharedPreferences.getInstance();
-        int allStars = (await DatabaseRepository().database!.rawQuery("SELECT SUM(stars) as Total FROM level GROUP BY zone_id")).toList()[Zones.ville.index]["Total"] as int;
-        int trophyAcquired = (await DatabaseRepository().database!.query(
-          "trophy",
-          where: "id = ?",
-          whereArgs: [zone.id],
-        )).toList()[0]["isCollected"] as int;
 
-        if (allStars == zoneInfo["levelsNb"]*3 && trophyAcquired == 0) {
-          DatabaseRepository().database!.update(
-            "trophy",
-            {
-              "isCollected": 1,
-            },
-            where: "id = ?",
-            whereArgs: [zone.id],
-          );
-          prefs.setString("newTrophy", (await DatabaseRepository().database!.query(
+
+        if (zone != Zones.alea) {
+          int allStars = (await DatabaseRepository().database!.rawQuery("SELECT SUM(stars) as Total FROM level GROUP BY zone_id")).toList()[zone.index]["Total"] as int;
+
+          int trophyAcquired = (await DatabaseRepository().database!.query(
             "trophy",
             where: "id = ?",
             whereArgs: [zone.id],
-          )).toList()[0]["title"] as String);
+          )).toList()[0]["isCollected"] as int;
+
+          if (allStars == zoneInfo["levelsNb"]*3 && trophyAcquired == 0) {
+            DatabaseRepository().database!.update(
+              "trophy",
+              {
+                "isCollected": 1,
+              },
+              where: "id = ?",
+              whereArgs: [zone.id],
+            );
+            prefs.setString("newTrophy", (await DatabaseRepository().database!.query(
+              "trophy",
+              where: "id = ?",
+              whereArgs: [zone.id],
+            )).toList()[0]["title"] as String);
+          }
         }
 
 
@@ -330,29 +336,34 @@ abstract class MiniGame extends FlameGame {
 
          }
 
-         ///give the zone finishing trophy
          SharedPreferences prefs = await SharedPreferences.getInstance();
-         int allStars = (await GuestRepository().database!.rawQuery("SELECT SUM(stars) as Total FROM level GROUP BY zone_id")).toList()[Zones.ville.index]["Total"] as int;
-         int trophyAcquired = (await GuestRepository().database!.query(
-           "trophy",
-           where: "id = ?",
-           whereArgs: [zone.id],
-         )).toList()[0]["isCollected"] as int;
 
-         if (allStars == zoneInfo["levelsNb"]*3 && trophyAcquired == 0) {
-           GuestRepository().database!.update(
-             "trophy",
-             {
-               "isCollected": 1,
-             },
-             where: "id = ?",
-             whereArgs: [zone.id],
-           );
-           prefs.setString("newTrophyGuest", (await GuestRepository().database!.query(
+         ///give the zone finishing trophy
+         if (zone != Zones.alea) {
+           int allStars = (await GuestRepository().database!.rawQuery("SELECT SUM(stars) as Total FROM level GROUP BY zone_id")).toList()[zone.index]["Total"] as int;
+
+           print("allStars: $allStars");
+           int trophyAcquired = (await GuestRepository().database!.query(
              "trophy",
              where: "id = ?",
              whereArgs: [zone.id],
-           )).toList()[0]["title"] as String);
+           )).toList()[0]["isCollected"] as int;
+
+           if (allStars == zoneInfo["levelsNb"]*3 && trophyAcquired == 0) {
+             GuestRepository().database!.update(
+               "trophy",
+               {
+                 "isCollected": 1,
+               },
+               where: "id = ?",
+               whereArgs: [zone.id],
+             );
+             prefs.setString("newTrophyGuest", (await GuestRepository().database!.query(
+               "trophy",
+               where: "id = ?",
+               whereArgs: [zone.id],
+             )).toList()[0]["title"] as String);
+           }
          }
 
 

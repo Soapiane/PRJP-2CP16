@@ -442,7 +442,7 @@ class _MiniGameHUDState extends State<MiniGameHUD>{
     setState(() {
       stars = 0;
       countdownTimer?.cancel();
-      showDialog(barrierDismissible: false, context: context, builder: (BuildContext context) => createMenu(title: "You lost!!!"));
+      showDialog(barrierDismissible: false, context: context, builder: (BuildContext context) => createMenu(title: "Tu as perdu!!!"));
     });
   }
 

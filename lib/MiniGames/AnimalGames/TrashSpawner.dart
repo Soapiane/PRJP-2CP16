@@ -86,9 +86,9 @@ class TrashSpawner extends Component with HasGameRef{
 
     int NbTrash;
     if(gameRef.zone==Zones.mer){
-      NbTrash=4;
+      NbTrash=5;
     }else{
-      NbTrash=4;
+      NbTrash=5;
     }
     Rand = random.nextInt(NbTrash)+1;
     if(gameRef.zone==Zones.mer){
@@ -106,8 +106,12 @@ class TrashSpawner extends Component with HasGameRef{
                 Vector2((gameRef.size[1] *100/400)*500/445, gameRef.size[1] *100/400);
 
           }else{
-            size3 =
-                Vector2( (gameRef.size[1] * 30 / 164)*783/661, gameRef.size[1] * 30 / 164);
+            if(Rand==4){
+              size3 =
+                  Vector2( (gameRef.size[1] * 30 / 164)*783/661, gameRef.size[1] * 30 / 164);
+            }else{
+              size3=Vector2.all(gameRef.size[1] *50/400);
+            }
           }
         }
       }
@@ -137,6 +141,9 @@ class TrashSpawner extends Component with HasGameRef{
             if (Rand == 4) {
               size3 = Vector2(
                   gameRef.size[0] * 20 / 220, gameRef.size[1] * 40 / 164);
+            }else{
+              size3=Vector2.all(gameRef.size[1] *50/400);
+
             }
           }
         }

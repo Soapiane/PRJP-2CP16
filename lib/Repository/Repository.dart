@@ -89,21 +89,31 @@ abstract class Repository {
       )
     ''');
 
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 5; i++) {
       int zone_id = await db.insert('zone', {
         'name': Zones.values[i].toString().split('.')[1],
         'stars': 0,
-        'levelsNb': 8,
+        'levelsNb': i !=4 ? 4 : 1,
         'levelReached': 0,
       });
 
-      for (int j = 0; j < 4; j++) {
+      if (i!=4) {
+        for (int j = 0; j < 4; j++) {
+          await db.insert('level', {
+            'level': j,
+            'isLocked': j == 0 ? 0 : 1,
+            'stars': 0,
+            'zone_id': zone_id,
+            'isQuiz': j == 3 ? 1 : 0,
+          });
+        }
+      } else {
         await db.insert('level', {
-          'level': j,
-          'isLocked': j == 0 ? 0 : 1,
+          'level': 3,
+          'isLocked': 0,
           'stars': 0,
           'zone_id': zone_id,
-          'isQuiz': j == 3 ? 1 : 0,
+          'isQuiz': 1,
         });
       }
     }

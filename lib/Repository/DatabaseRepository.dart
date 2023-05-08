@@ -341,10 +341,14 @@ class DatabaseRepository extends Repository {
           map = Map<String, dynamic>.from(snapshot.value);
         });
 
-        level = compareLevels(map, _levels[map["level"]]);
+        level = compareLevels(map, zone != Zones.alea ? _levels[map["level"]] : _levels[0]);
         updateLevel(level);
         uploadLevel(level);
-        _levels[map["level"]] = level;
+        if (zone != Zones.alea) {
+          _levels[map["level"]] = level;
+        } else {
+          _levels[0] = level;
+        }
       }
 
       ///syncing the zone
@@ -366,49 +370,52 @@ class DatabaseRepository extends Repository {
 
       ///syncing the trophies
 
-      SharedPreferences prefs = await SharedPreferences.getInstance();
 
-      Map zoneInfo = (await DatabaseRepository().database!.query(
-        "zone",
-        where: "id = ?",
-        whereArgs: [zone.id],
-      ))[0];
+      if (zone != Zones.alea) {
+        Map zoneInfo = (await DatabaseRepository().database!.query(
+          "zone",
+          where: "id = ?",
+          whereArgs: [zone.id],
+        ))[0];
 
-      int trophyAcquired = (await DatabaseRepository().database!.query(
-        "trophy",
-        where: "id = ?",
-        whereArgs: [Zones.ville.id],
-      ))
-          .toList()[0]["isCollected"] as int;
+        int trophyAcquired = (await DatabaseRepository().database!.query(
+          "trophy",
+          where: "id = ?",
+          whereArgs: [zone.id],
+        ))
+            .toList()[0]["isCollected"] as int;
 
-      if (allStars == zoneInfo["levelsNb"] * 3 && trophyAcquired == 0) {
-        DatabaseRepository().database!.update(
-              "trophy",
-              {
-                "isCollected": 1,
-              },
-              where: "id = ?",
-              whereArgs: [Zones.ville.id],
-            );
-        prefs.setInt("newTrophy", Zones.ville.index);
+        if (allStars == zoneInfo["levelsNb"] * 3 && trophyAcquired == 0) {
+          DatabaseRepository().database!.update(
+                "trophy",
+                {
+                  "isCollected": 1,
+                },
+                where: "id = ?",
+                whereArgs: [zone.id],
+              );
+        }
+
+        trophyAcquired = (await DatabaseRepository().database!.query(
+          "trophy",
+          where: "id = ?",
+          whereArgs: [zone.id],
+        ))
+            .toList()[0]["isCollected"] as int;
+
+        FirebaseDatabase(databaseURL: databaseLink)
+            .reference()
+            .child("users")
+            .child(FirebaseAuth.instance.currentUser!.uid)
+            .child("trophies")
+            .child("trophy${zone.id.toString()}")
+            .update({
+          "isCollected": trophyAcquired,
+        });
       }
 
-      trophyAcquired = (await DatabaseRepository().database!.query(
-        "trophy",
-        where: "id = ?",
-        whereArgs: [Zones.ville.id],
-      ))
-          .toList()[0]["isCollected"] as int;
 
-      FirebaseDatabase(databaseURL: databaseLink)
-          .reference()
-          .child("users")
-          .child(FirebaseAuth.instance.currentUser!.uid)
-          .child("trophies")
-          .child("trophy${Zones.ville.id.toString()}")
-          .update({
-        "isCollected": trophyAcquired,
-      });
+
     }
   }
 
@@ -437,7 +444,7 @@ class DatabaseRepository extends Repository {
             remoteChallenge = Map<String, dynamic>.from(snapshot.value);
           });
 
-          if (localChallenge["state"] == 0 ) {
+          if (localChallenge["state"] <= remoteChallenge["state"] ) {
             await DatabaseRepository().database!.update(
               "challenge",
               {
@@ -446,7 +453,7 @@ class DatabaseRepository extends Repository {
               where: "id = ?",
               whereArgs: [localChallenge["id"]],
             );
-          } else if (remoteChallenge["state"] == 0) {
+          } else {
             await ref.child("challenge${localChallenge["id"] as int}")
                 .update({
               "state" : localChallenge["state"],

@@ -40,7 +40,6 @@ class PuzzleGame extends MiniGame with HasTappables,HasDraggableComponents {
   late double Yfin = Ydebut + taille; //results
   late SpriteSheet spritesheet;
   late SpriteComponent Originale = SpriteComponent();
-  late Zones zone;
   late int time=300;
   late double TimeShown;
 
@@ -92,7 +91,7 @@ class PuzzleGame extends MiniGame with HasTappables,HasDraggableComponents {
 
   }
   late int LevelDiff;
-  PuzzleGame({required super.hud,required this.zone, required super.context,
+  PuzzleGame({required super.hud,required super.zone, required super.context,
     required super.level, required super.challenge}){
     setInitStars(initStars: 0);
     hud.useBar=true;

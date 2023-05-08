@@ -124,7 +124,7 @@ class MainState extends State<MainScreen> {
 
     String user = FirebaseAuth.instance.currentUser != null ? "" : "Guest";
 
-      String? trophy = prefs.getString("newTrophy$user");
+      String? trophy =  prefs.getString("newTrophy$user");
       if (trophy != null) {
 
         prefs.remove("newTrophy$user");
@@ -195,13 +195,73 @@ class MainState extends State<MainScreen> {
 
   }
 
-  void levelTaped(bool unlocked, Zones zone, int order) async {
-    if (unlocked){
 
+  FutureOr<void> loadArrangerForet() async {
+
+    await Flame.images.load("Runner_Forest/foret.png");
+    await Flame.images.load("Runner_Forest/looking_curious.png");
+    await Flame.images.load("Runner_Forest/captured_rabbit.png");
+    await Flame.images.load("Runner_Forest/plant_umpty.png");
+    await Flame.images.load("Runner_Forest/tap.png");
+    await Flame.images.load("Runner_Forest/fixed_tap.png");
+    await Flame.images.load("Runner_Forest/fixed_organic_trash.png");
+    await Flame.images.load("Runner_Forest/organic_trash.png");
+    await Flame.images.load("Runner_Forest/fixed_captured_rabbit.png");
+    await Flame.images.load("Runner_Forest/fixed_plant_umpty.png");
+    await Flame.images.load("Runner_Forest/coin.png");
+    await Flame.images.load("Runner_Forest/leaf_coin.png");
+    await Flame.images.load('Runner_Forest/plastic_tash.png');
+    await Flame.images.load("Runner_Forest/fixed_plastic_trash.png");
+    await Flame.images.load("Runner_Forest/avertissement.png");
+  }
+
+  FutureOr<void> loadArrangerVille() async {
+    await Flame.images.load("Runner_Ville/ville.png");
+    await Flame.images.load("Runner_Ville/looking_curious.png");
+    await Flame.images.load("Runner_Ville/fixed_organic_trash.png");
+    await Flame.images.load("Runner_Ville/organic_trash.png");
+    await Flame.images.load("Runner_Ville/coin.png");
+    await Flame.images.load("Runner_Ville/leaf_coin.png");
+    await Flame.images.load('Runner_Ville/plastic_tash.png');
+    await Flame.images.load("Runner_Ville/fixed_plastic_trash.png");
+    await Flame.images.load("Runner_Ville/car.png");
+    await Flame.images.load("Runner_Ville/lamp.png");
+    await Flame.images.load("Runner_Ville/house.png");
+    await Flame.images.load("Runner_Ville/paper_trash.png");
+    await Flame.images.load("Runner_Ville/fixed_car.png");
+    await Flame.images.load("Runner_Ville/fixed_lamp.png");
+    await Flame.images.load("Runner_Ville/fixed_house.png");
+    await Flame.images.load("Runner_Ville/fixed_paper_trash.png");
+    await Flame.images.load("Runner_Ville/avertissement.png");
+  }
+
+  FutureOr<void> loadArrangerZoneIndustrielle() async {
+    await Flame.images.load("Runner_Zone/foret.png");
+    await Flame.images.load("Runner_Zone/looking_curious.png");
+    await Flame.images.load("Runner_Zone/coin.png");
+    await Flame.images.load("Runner_Zone/leaf_coin.png");
+    await Flame.images.load('Runner_Zone/plastic_tash.png');
+    await Flame.images.load("Runner_Zone/fixed_plastic_trash.png");
+    await Flame.images.load("Runner_Zone/paper_trash.png");
+    await Flame.images.load("Runner_Zone/fixed_paper_trash.png");
+    await Flame.images.load("Runner_Zone/fixed_paper_trash.png");
+    await Flame.images.load("Runner_Zone/broken_eolienne.png");
+    await Flame.images.load("Runner_Zone/fixed_broken_eolienne.png");
+    await Flame.images.load("Runner_Zone/avertissement.png");
+    await Flame.images.load("Runner_Zone/fixed_broken_eolienne.png");
+    await Flame.images.load("Runner_Zone/fixed_polluting_factory.png");
+    await Flame.images.load("Runner_Zone/nuclear_trash.png");
+    await Flame.images.load("Runner_Zone/polluting_factory.png");
+  }
+
+
+  void levelTaped(bool unlocked, Zones zone, int order, {bool? restart}) async {
+    if (unlocked){
+      restart ??= false;
       Loading.ShowLoading(context);
 
 
-      MiniGameMainScreen miniGameMainScreen = MiniGameMainScreen(miniGameOrder: order, zone: zone, mainScreenRef: this as ref.MainState,);
+      MiniGameMainScreen miniGameMainScreen = MiniGameMainScreen(miniGameOrder: order, zone: zone, mainScreenRef: this as ref.MainState, restart: restart!,);
 
 
       for (int i=0; i<=3; i++) {
@@ -226,13 +286,17 @@ class MainState extends State<MainScreen> {
 
       print(zone.toString() + order.toString());
 
-      if ((zone == Zones.zoneIndustrielle || zone == Zones.mer) && order-1 == 3) {
+      if ((zone == Zones.zoneIndustrielle || zone == Zones.mer) && order == 3) {
         await LoadPuzzle(zone);
-      } else if ((zone == Zones.mer && order-1 == 0) || (zone == Zones.foret && order-1 == 3)) {
+      } else if ((zone == Zones.mer && order == 1) || (zone == Zones.foret && order == 3)) {
         await LoadAnimal(zone);
+      } else if (zone == Zones.foret && order == 1) {
+        await loadArrangerForet();
+      } else if (zone == Zones.ville && order == 2){
+        await loadArrangerVille();
+      } else if (zone == Zones.zoneIndustrielle && order ==  1) {
+        await loadArrangerZoneIndustrielle();
       }
-
-
 
 
 
@@ -249,9 +313,12 @@ class MainState extends State<MainScreen> {
 
       if (!restarting) {
         print("SYNCING");
+
         Loading.ShowLoading(text: "synchronisation...", context);
         await DatabaseRepository().sync(); //this one is to sync the challenges
         SharedPreferences prefs = await SharedPreferences.getInstance();
+
+        Loading.HideLoading(context);
 
         if (body.toString().compareTo("QuizSelectionBody") == 0) {
           await goToQuizMode();
@@ -259,9 +326,9 @@ class MainState extends State<MainScreen> {
           await goToLevelSelectionBody(zone);
         }
 
-        Loading.HideLoading(context);
-
         getNotification(prefs);
+
+
       }
     }
   }
@@ -709,6 +776,7 @@ class MainState extends State<MainScreen> {
         register();
       },
       showErrorDialog: showError,
+      mainContext: context,
     );
 
 
@@ -753,7 +821,6 @@ class MainState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
 
-    Loading.HideLoading(context);
 
     onExitPressed = onExit;
 
@@ -783,6 +850,7 @@ class MainState extends State<MainScreen> {
       }
       break;
       case "ModeSelectionBody":{
+        accountButtonVisible = true;
         onBackButtonTapped = null;
 
           onBookButtonTapped = () {
@@ -835,6 +903,7 @@ class MainState extends State<MainScreen> {
     }
 
     if (FirebaseAuth.instance.currentUser == null) {
+      print("LOGGING IN");
       accountButtonVisible = false;
     }
 
@@ -874,8 +943,6 @@ class MainState extends State<MainScreen> {
       ),
     );
 
-
-    Loading.HideLoading(context);
 
 
 
@@ -992,6 +1059,7 @@ class MainState extends State<MainScreen> {
 
   void goToLogIn() async {
 
+    Loading.ShowLoading(context);
     bool result = await InternetConnectionChecker().hasConnection;
     if(result == true) {
 
@@ -1012,10 +1080,10 @@ class MainState extends State<MainScreen> {
         context,
       );
 
+      Loading.HideLoading(context);
 
       changeBodyWithNoBlur(newBody: logInBody);
     } else {
-      Loading.HideLoading(context);
       showError("Pas de connexion internet!");
     }
 
@@ -1023,14 +1091,14 @@ class MainState extends State<MainScreen> {
 
 
   void logIn() async {
-
     bool result = await InternetConnectionChecker().hasConnection;
     if(result == true) {
+      Loading.HideLoading(context);
       changeBodyWithBlur(newBody: modeSelectionBody);
     } else {
-      Loading.HideLoading(context);
       showError(MainScreen.networkErrorString);
     }
+
   }
 
   void goToRegister() async {
@@ -1051,7 +1119,7 @@ class MainState extends State<MainScreen> {
 
       changeBodyWithNoBlur(newBody: registerBody);
     } else {
-      Loading.HideLoading(context);
+      
       showError(MainScreen.networkErrorString);
     }
   }
@@ -1060,11 +1128,12 @@ class MainState extends State<MainScreen> {
 
       bool result = await InternetConnectionChecker().hasConnection;
       if(result == true) {
+        Loading.HideLoading(context);
         changeBodyWithNoBlur(newBody: difficultySelectionBody);
       } else {
-        Loading.HideLoading(context);
         showError(MainScreen.networkErrorString);
       }
+
   }
 
   void showError(String error){
@@ -1084,15 +1153,12 @@ class MainState extends State<MainScreen> {
 
 
 
-    await Future.delayed(Duration(milliseconds: 500),(){});
+    await Future.delayed(Duration(milliseconds: 300),(){});
 
     for (var i = 1; i < 60; ++i) {
 
-      await precachePicture(
-        ExactAssetPicture(
-          SvgPicture.svgStringDecoderBuilder,
-          "assets/livre/book_svg/page$i.svg",
-        ),
+      await precacheImage(
+        Image.asset("assets/livre/book_png/page$i.png").image,
         context,
       );
 
