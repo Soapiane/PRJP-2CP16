@@ -59,7 +59,12 @@ class ArrangerForet extends MiniGame with HasCollisionDetection, TapDetector {
     }
     addPoints(maxPoints: MaxPoints);
     setInitStars(initStars: 0);
+
+
+
   }
+
+
 
   @override
   void onRestart() {
@@ -122,6 +127,14 @@ class ArrangerForet extends MiniGame with HasCollisionDetection, TapDetector {
     return super.onLoad();
   }
 
+  @override
+  void onMount() async {
+    // TODO: implement onMount
+    super.onMount();
+
+    await Future.delayed(Duration(milliseconds: 100), () => showTutorial("assets/tutorials/runner_foret.png"));
+  }
+
   void loadLevel(String levelName) {
     //method used to switch between levels
     currentLevel?.removeFromParent(); //remove previous level
@@ -142,6 +155,8 @@ class ArrangerForet extends MiniGame with HasCollisionDetection, TapDetector {
     }
     currentLevel = Level(levelName);
     add(currentLevel!); //displays it on screen
+
+
   }
 
   @override

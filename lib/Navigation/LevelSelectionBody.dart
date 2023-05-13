@@ -220,7 +220,7 @@ class LevelSelectionBody extends Body {
                           "assets/images/Quiz_level_selection.svg",
                           levelsInfo[3]["isLocked"] == 0 ? levelsInfo[3]["stars"] : -1, //  3,
                           context,
-                          level: 1,),
+                          level: 4,),
                         const SizedBox(
                           width: 4,
                         ),

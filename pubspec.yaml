@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.0.1+2
+version: 1.0.2+3
 
 environment:
   sdk: '>=2.19.2 <3.0.0'
@@ -57,7 +57,6 @@ dependencies:
   game_levels_scrolling_map: ^0.0.7
   flutter_svg: ^1.1.6
   flutter_svg_provider: ^1.0.3
-  dcdg: ^4.1.0
   internet_connection_checker: ^1.0.0+1
   loading_animation_widget: ^1.2.0+4
   audioplayers: ^4.0.1
@@ -67,6 +66,8 @@ dependency_overrides:
 
 
 dev_dependencies:
+
+  flutter_launcher_icons: "^0.13.1"
   flutter_test:
     sdk: flutter
 
@@ -77,6 +78,10 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
 
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon.png"
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -127,7 +132,6 @@ flutter:
     - assets/trophies/
     - assets/icons/
     - assets/stars/
-    - assets/livre/book_svg/
     - assets/livre/book_png/
     - assets/livre/icons/
     - assets/audio/

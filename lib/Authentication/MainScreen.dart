@@ -320,9 +320,9 @@ class MainState extends State<MainScreen> {
 
         Loading.HideLoading(context);
 
-        if (body.toString().compareTo("QuizSelectionBody") == 0) {
+        if (body.runtimeType.toString().compareTo("QuizSelectionBody") == 0) {
           await goToQuizMode();
-        } else if (body.toString().compareTo("LevelSelectionBody") == 0) {
+        } else if (body.runtimeType.toString().compareTo("LevelSelectionBody") == 0) {
           await goToLevelSelectionBody(zone);
         }
 
@@ -822,6 +822,9 @@ class MainState extends State<MainScreen> {
   Widget build(BuildContext context) {
 
 
+    print(body.runtimeType.toString());
+
+
     onExitPressed = onExit;
 
     logInBody.mainContext = context;
@@ -832,7 +835,7 @@ class MainState extends State<MainScreen> {
     Function? onBackButtonTapped, onChallengeButtonTapped, onTrophiesButtonTapped, onBookButtonTapped;
 
 
-    switch (body.toString()){
+    switch (body.runtimeType.toString()){
       case "AuthMainBody":{
         accountButtonVisible = false;
         onBackButtonTapped = null;
@@ -862,7 +865,7 @@ class MainState extends State<MainScreen> {
       break;
       default:{
 
-        if (body.toString().compareTo("LogInBody") != 0 && body.toString().compareTo("RegisterBody") != 0 ) {
+        if (body.runtimeType.toString().compareTo("LogInBody") != 0 && body.runtimeType.toString().compareTo("RegisterBody") != 0 ) {
           onBookButtonTapped = () {
             openTheBook();
           };
@@ -872,7 +875,7 @@ class MainState extends State<MainScreen> {
 
 
         accountButtonVisible = true;
-        if (body.toString().compareTo("ZoneSelectionBody") == 0 || body.toString().compareTo("LevelSelectionBody") == 0 ) {
+        if (body.runtimeType.toString().compareTo("ZoneSelectionBody") == 0 || body.runtimeType.toString().compareTo("LevelSelectionBody") == 0 ) {
           onChallengeButtonTapped = () {
 
             showChallenges();
@@ -895,7 +898,7 @@ class MainState extends State<MainScreen> {
           });
         };
 
-        if (body.toString().compareTo("LevelSelectionBody") == 0 ) {
+        if (body.runtimeType.toString().compareTo("LevelSelectionBody") == 0 ) {
           onBackButtonTapped = () {
             goToAdventureMode();
           };
@@ -915,7 +918,7 @@ class MainState extends State<MainScreen> {
 
 
 
-    // onBackButtonTapped = body.toString().compareTo("AuthMainBody") == 0 ? null : (){
+    // onBackButtonTapped = body.runtimeType.toString().compareTo("AuthMainBody") == 0 ? null : (){
     //   setState(() {
     //     blur = ImageFilter.blur(
     //       sigmaX: body.lastScreen!.isBlured ? blurRadius : 0,
@@ -996,6 +999,7 @@ class MainState extends State<MainScreen> {
     Function? onTrophiesButtonTapped,
     Function? onBookButtonTapped,
   }){
+
     ButtonGenerator buttonGenerator = ButtonGenerator(context: context);
     double topPadding = buttonGenerator.calculateY(10);
     double horizontalPadding = buttonGenerator.calculateX(21);

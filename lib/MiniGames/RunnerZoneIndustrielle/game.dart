@@ -63,6 +63,16 @@ class ArrangerZone extends MiniGame with HasCollisionDetection, TapDetector {
     setInitStars(initStars: 0);
   }
 
+
+
+  @override
+  void onMount() async {
+    // TODO: implement onMount
+    super.onMount();
+
+    await Future.delayed(Duration(milliseconds: 100), () => showTutorial("assets/tutorials/runner.png"));
+  }
+
   @override
   void onLose() {
     super.onLose();
