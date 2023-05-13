@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.0.0+1
+version: 1.0.2+3
 
 environment:
   sdk: '>=2.19.2 <3.0.0'
@@ -37,23 +37,37 @@ dependencies:
 
   cupertino_icons: ^1.0.2
   flame: ^1.6.0
+  flame_svg: 1.7.1
   flame_tiled: ^1.9.1
+  flame_texturepacker: ^2.1.0
 
   sqflite: ^2.2.6
+  shared_preferences: ^2.1.0
+
+
+  uuid: ^3.0.7
 
   firebase_auth: ^1.0.0
   firebase_core_platform_interface: 4.5.1
   firebase_core: ^1.10.0
+  firebase_database: ^7.1.0
+
+  connectivity_plus: ^2.3.0
 
   game_levels_scrolling_map: ^0.0.7
   flutter_svg: ^1.1.6
   flutter_svg_provider: ^1.0.3
+  internet_connection_checker: ^1.0.0+1
+  loading_animation_widget: ^1.2.0+4
+  audioplayers: ^4.0.1
 
 dependency_overrides:
   xml: ^6.1.0
 
 
 dev_dependencies:
+
+  flutter_launcher_icons: "^0.13.1"
   flutter_test:
     sdk: flutter
 
@@ -64,6 +78,10 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
 
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon.png"
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -80,15 +98,83 @@ flutter:
     - family: PoppinsMedium
       fonts:
         - asset: assets/fonts/Poppins-Medium.ttf
+    - family: AndikaNewBasicBold
+      fonts:
+        - asset: assets/fonts/AndikaNewBasic-B.ttf
+    - family: AndikaNewBasic
+      fonts:
+        - asset: assets/fonts/AndikaNewBasic-R.ttf
+    - family: AndikaNewBasicItalic
+      fonts:
+        - asset: assets/fonts/AndikaNewBasic-I.ttf
 
   assets:
     - assets/
+    - assets/terra/
     - assets/images/
     - assets/images/TurningPipes/
     - assets/tiles/
     - assets/zones/
     - assets/zones/cards/
+    - assets/zones/backgrounds/
     - assets/hud/
+    - assets/hud/score_screen/
+    - assets/hud/score_screen/stars/
+    - assets/hud/pause_screen/
+    - assets/avatars/
+    - assets/modes/
+    - assets/nav_buttons/
+    - assets/collectables/stars/
+    - assets/collectables/trophies/
+    - assets/settings/
+    - assets/profile/
+    - assets/defis/
+    - assets/trophies/
+    - assets/icons/
+    - assets/stars/
+    - assets/livre/book_png/
+    - assets/livre/icons/
+    - assets/audio/
+    - assets/audios/
+    - assets/audios/RandomQuizz/
+    - assets/audios/MerQuizz/
+    - assets/audios/ForetQuizz/
+    - assets/audios/VilleQuizz/
+    - assets/audios/ZoneQuizz/
+    - assets/images/Quizz/
+    - assets/images/Quizz/earth/
+    - assets/tutorials/turning_pipes/
+    - assets/tutorials/
+    - assets/images/Recycler/backgrounds/
+    - assets/images/Recycler/poubelles/
+    - assets/images/Recycler/backgrounds/
+    - assets/images/Recycler/dechets/EWASTE/
+    - assets/images/Recycler/dechets/GLASS/
+    - assets/images/Recycler/dechets/METAL/
+    - assets/images/Recycler/dechets/ORGANIC/
+    - assets/images/Recycler/dechets/PAPER/
+    - assets/images/Recycler/dechets/PLASTIC/
+    - assets/images/Recycler/
+    - assets/images/Puzzle/images/
+    - assets/images/Puzzle/images/zone_industrielle/2x2/
+    - assets/images/Puzzle/images/zone_industrielle/3x3/
+    - assets/images/Puzzle/images/zone_industrielle/4x4/
+    - assets/images/Puzzle/images/zone_industrielle/images/
+    - assets/images/Puzzle/images/Mer/images/
+    - assets/images/Puzzle/images/Mer/2x2/
+    - assets/images/Puzzle/images/Mer/3x3/
+    - assets/images/Puzzle/images/Mer/4x4/
+    - assets/images/backgrounds/
+    - assets/images/AnimalGames/images/
+    - assets/images/AnimalGames/images/Bird/
+    - assets/images/AnimalGames/images/layersBird/
+    - assets/images/AnimalGames/images/layersTurtle/
+    - assets/images/AnimalGames/images/trashBird/
+    - assets/images/AnimalGames/images/trashTurtle/
+    - assets/images/AnimalGames/images/turtle/
+    - assets/images/Runner_Forest/
+    - assets/images/Runner_Zone/
+    - assets/images/Runner_Ville/
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

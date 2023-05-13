@@ -13,7 +13,7 @@ class TextStyles {
         color: color.color,
         fontSize: fontSize,
         fontWeight: FontWeight.bold,
-        fontFamily: 'PoppinsBold'
+        fontFamily: 'AndikaNewBasic'
     );
   }
 

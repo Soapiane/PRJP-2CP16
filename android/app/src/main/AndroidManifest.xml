@@ -1,7 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.projet.eco.projet2cp">
+    <uses-permission android:name="android.permission.INTERNET" />
    <application
-        android:label="projet2cp"
+        android:label="Terra Quest"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

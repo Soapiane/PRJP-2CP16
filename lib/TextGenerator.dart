@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:projet2cp/ButtonGenerator.dart';
+import 'package:projet2cp/Couple.dart';
 import 'package:projet2cp/Generator.dart';
 import 'package:projet2cp/Margin.dart';
 import 'package:projet2cp/Color.dart' as color;
@@ -13,20 +14,20 @@ import 'package:projet2cp/main.dart' as main;
 class TextGenerator extends Generator {
   TextGenerator({required super.context});
 
-  ({ Widget widget, Text text}) generateTextView({
+  Couple generateTextView({
     double? xPos,
     double? yPos,
     required List<String> texts,
     List<Function>? onSpansTap,
     double fontSize = 20,
-    String fontFamily = 'PoppinsBold',
+    String fontFamily = 'AndikaNewBasicBold',
     color.Color color = color.Color.white,
     TextStyle? textStyle,
     TextStyle? linkStyle,
   }){
 
 
-    Text textView = Text("");
+    TextSpan textView = TextSpan();
     onSpansTap??=[];
     textStyle ??= TextStyle(
       color: color.color,
@@ -69,7 +70,7 @@ class TextGenerator extends Generator {
           ),
         );
 
-        if (i==0) textView = textSpan as Text;
+        if (i==0) textView = textSpan;
       } else {
         textsSpan.add(
           TextSpan(
@@ -86,8 +87,10 @@ class TextGenerator extends Generator {
 
 
     Widget textWidget = DefaultTextStyle(
+      textAlign: TextAlign.center,
       style: textStyle,
       child: RichText(
+        textAlign: TextAlign.center,
         text: TextSpan(
           style: textStyle,
           children: textsSpan,
@@ -102,18 +105,18 @@ class TextGenerator extends Generator {
 
 
 
-      return (widget: Positioned(
+      return Couple( Positioned(
         left: coords.x,
         top:  coords.y,
         child: textWidget,
-      ),text: textView);
+      ), textView);
     }
 
-    return (widget: textWidget, text: textView);
+    return Couple( textWidget,  textView);
 
   }
 
-  ({Widget widget, TextField textField}) generateTextField({
+  Couple generateTextField({
     required double height,
     required double width,
     double? xPos,
@@ -136,20 +139,6 @@ class TextGenerator extends Generator {
     Vector2 dims = calculateXY(width, height);
     double rightButtonDim = 0;
 
-    Widget showPasswordBtn = const SizedBox.shrink();
-    if (rightButtonImagePath != null) {
-      rightButtonDim = dims.y / 2;
-      showPasswordBtn = buttonGenerator.generateImageButtom(
-        height: rightButtonDim,
-        width: rightButtonDim,
-        imagePath: rightButtonImagePath,
-        paddingHorizontal: rightButtonPaddingHorizontal,
-        paddingVertical: rightButtonPaddingVertical,
-        borderRadius: BorderRadius.circular(cornerRadius),
-        backgroundColor: color.Color.whiteFront,
-        elevation: 0,
-      );
-    }
 
     icon ??= Icons.person;
     margin??=Margin(context: super.context);
@@ -195,8 +184,24 @@ class TextGenerator extends Generator {
       ),
     );
 
+
+    Widget showPasswordBtn = const SizedBox.shrink();
+    if (rightButtonImagePath != null) {
+      rightButtonDim = dims.y / 2;
+      showPasswordBtn = buttonGenerator.generateImageButtom(
+          height: rightButtonDim,
+          width: rightButtonDim,
+          imagePath: rightButtonImagePath,
+          paddingHorizontal: rightButtonPaddingHorizontal,
+          paddingVertical: rightButtonPaddingVertical,
+          borderRadius: BorderRadius.circular(cornerRadius),
+          backgroundColor: color.Color.whiteFront,
+          elevation: 0,
+      );
+    }
+
     return
-      ( widget: Container(
+      Couple(Container(
       margin: EdgeInsets.fromLTRB(margin.left, margin.top , margin.right, margin.bottom),
       width: dims.x,
       height: dims.y,
@@ -222,7 +227,8 @@ class TextGenerator extends Generator {
           ],
         ),
       ),
-      ), textField: textField,
+      ),
+        textField,
     );
   }
 

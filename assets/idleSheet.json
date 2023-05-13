@@ -1,0 +1,52 @@
+{"frames": {
+
+"Idle (1).png":
+{
+	"frame": {"x":0,"y":0,"w":614,"h":502},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":614,"h":502},
+	"sourceSize": {"w":614,"h":502}
+},
+"Idle (2).png":
+{
+	"frame": {"x":614,"y":0,"w":614,"h":501},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":614,"h":501},
+	"sourceSize": {"w":614,"h":501}
+},
+"Idle (3).png":
+{
+	"frame": {"x":1228,"y":0,"w":614,"h":502},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":614,"h":502},
+	"sourceSize": {"w":614,"h":502}
+},
+"Idle (4).png":
+{
+	"frame": {"x":0,"y":502,"w":614,"h":502},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":614,"h":502},
+	"sourceSize": {"w":614,"h":502}
+},
+"Idle (5).png":
+{
+	"frame": {"x":614,"y":502,"w":614,"h":503},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":614,"h":503},
+	"sourceSize": {"w":614,"h":503}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "idleSheet.png",
+	"format": "RGBA8888",
+	"size": {"w":1842,"h":1005},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:36987a61d09a8bcb9d27049b69c45d7b:4bd87f4779483b8316994f5fdd0b0ae0:53335a2a2c65d35576aeedf97eec5494$"
+}
+}

@@ -1,13 +1,15 @@
-
-
 import 'dart:async';
 import 'dart:ui';
-
+import 'package:flame/cache.dart';
+import 'package:flame/components.dart';
+import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flutter/material.dart';
-import 'package:projet2cp/Difficulty.dart';
+import 'package:projet2cp/Info/Difficulty.dart';
 import 'package:projet2cp/MiniGames/MiniGame.dart';
+import 'package:projet2cp/MiniGames/TutoScreen.dart';
+import 'package:projet2cp/Navigation/Zones.dart';
 import 'SolutionPipe.dart';
 import 'Pipe.dart';
 
@@ -20,9 +22,11 @@ class TurningPipes extends MiniGame with HasTappables{
   static const double tileSize = 61.0;
   late bool finished;
   late int time;
+  late Component background;
+  late Pipe firstPipe;
 
 
-  TurningPipes({required super.hud}){
+  TurningPipes({required super.hud, super.context, required super.level, required super.challenge, required super.zone}){
     switch (difficulty){
       case Difficulty.EASY:
         time = 60;
@@ -36,6 +40,8 @@ class TurningPipes extends MiniGame with HasTappables{
     }
     addTimer(seconds: time);
     setInitStars(initStars: 3);
+
+
 
   }
 
@@ -88,13 +94,62 @@ class TurningPipes extends MiniGame with HasTappables{
     _mapComponent.center = size/2;
 
 
+
     loadPipes();
+
+    firstPipe = normals[0];
+    for (Pipe pipe in normals){
+      if (pipe.posX < firstPipe.posX){
+        firstPipe = pipe;
+      }
+    }
+
+    var image = await Flame.images.load('TurningPipes/background.png');
+
+    background = SpriteComponent.fromImage(
+      image,
+      position: Vector2(firstPipe.posX - (tileSize/2), firstPipe.posY - tileSize),
+      size: Vector2(8*tileSize, 4*tileSize),
+    );
+    add(background);
+
+
+
+
+    loadPipesOnScreen();
+
 
 
     shufflePipes();
+
+
+  }
+
+
+
+
+  @override
+  void onMount() {
+    // TODO: implement onMount
+    super.onMount();
+    showTutorial(null);
+  }
+
+  @override
+  void showTutorial(String? path) {
+    // TODO: implement showTutorial
+    super.showTutorial(path);
     onStart();
+  }
 
 
+  void loadPipesOnScreen(){
+    for (var pipe in normals){
+      add(pipe);
+    }
+    for (var pipe in solutions){
+      add(pipe);
+    }
   }
 
   void loadPipes(){
@@ -131,7 +186,7 @@ class TurningPipes extends MiniGame with HasTappables{
           }
       );
       normals.add(normalPipe);
-      add(normalPipe);
+      // add(normalPipe);
 
 
     }
@@ -169,12 +224,11 @@ class TurningPipes extends MiniGame with HasTappables{
           },
       );
       solutions.add(solutionPipe);
-      add(solutionPipe);
+      // add(solutionPipe);
 
 
     }
 
-    print("Solution pipes count: " + solutions.length.toString());
 
   }
 
@@ -189,6 +243,7 @@ class TurningPipes extends MiniGame with HasTappables{
   }
 
   void checkSolution(){
+    modifyPoints(points: 1);
     finished = true;
     for (var pipe in solutions) {
       if (!pipe.isSolved()){
@@ -196,7 +251,6 @@ class TurningPipes extends MiniGame with HasTappables{
         break;
       }
     }
-    print("FINISHED: " + finished.toString());
     if (finished){
       onFinished();
     }
@@ -213,6 +267,7 @@ class TurningPipes extends MiniGame with HasTappables{
   @override
   void render(Canvas canvas) {
     super.render(canvas);
+    // background.render(canvas, position: background.srcPosition, size: background.srcSize);
   }
 
   @override
