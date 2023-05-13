@@ -194,7 +194,7 @@ class MiniGameMainScreen extends StatelessWidget {
           case 3:
             {
               blur = true;
-              mainScreen = GameWidget(game: Recycler(
+              mainScreen = GameWidget(game: AnimalGame(
                 hud: hud,
                 zone: zone,
                 level: miniGameOrder-1,
@@ -205,7 +205,6 @@ class MiniGameMainScreen extends StatelessWidget {
             break;
           case 4:
             {
-              blur = true;
               blur = true;
               mainScreen = QuizzGame(
                 zone: zone,

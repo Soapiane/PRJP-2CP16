@@ -28,7 +28,7 @@ class MiniGameHUD extends StatefulWidget{
   int initialPoints, initialStars;
   String pointsAsset, pointsText;
   late _MiniGameHUDState state;
-  Function? onGameTimeOut, onGamePaused, resumeGame, restartGame, onMaxPointsReached;
+  Function? onGameTimeOut, onGamePaused, resumeGame, restartGame, onMaxPointsReached, onExit;
   Function(int)?  onStarsModified;
   Function(int, int)? onPointsModified;
   Function(Duration)? onTimeUpdate;
@@ -83,6 +83,7 @@ class MiniGameHUD extends StatefulWidget{
   BuildContext getHudContext(){
     return state.context;
   }
+
 
 
 
@@ -483,7 +484,7 @@ class _MiniGameHUDState extends State<MiniGameHUD>{
 
     menu = PauseScreen(
       onQuit: (){
-
+        if (widget.onExit != null) widget.onExit!.call();
         Navigator.of(context).pop();
         Navigator.pop(context);
       },

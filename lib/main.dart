@@ -9,7 +9,6 @@ import 'package:projet2cp/Info/Info.dart';
 import 'package:projet2cp/SplashScreen/SplashScreen.dart';
 import 'package:projet2cp/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:dcdg/dcdg.dart';
 
 
 

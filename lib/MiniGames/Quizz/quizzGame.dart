@@ -57,9 +57,23 @@ class _QuizzGameState extends State<QuizzGame> {
   bool _buttonVisible = false;
   Color falseAnswer = Color.fromARGB(255, 254, 48, 48);
 
+
+
+
   int score = 0;
   AudioPlayer audioPlayer = AudioPlayer();
   AudioPlayer audioPlayerExplanation = AudioPlayer();
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    widget.gameRef!.hud.onExit = () {
+      audioPlayer.stop();
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

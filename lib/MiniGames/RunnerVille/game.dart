@@ -62,6 +62,16 @@ class ArrangerVille extends MiniGame with HasCollisionDetection, TapDetector {
     setInitStars(initStars: 0);
     addPoints(maxPoints: MaxPoints);
   }
+
+
+  @override
+  void onMount() async {
+    // TODO: implement onMount
+    super.onMount();
+
+    await Future.delayed(Duration(milliseconds: 100), () => showTutorial("assets/tutorials/runner.png"));
+  }
+
   @override
   void onRestart() {
     onLoad();
