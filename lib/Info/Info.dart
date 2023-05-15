@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:projet2cp/Info/Avatar.dart';
@@ -10,14 +12,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 class Info {
 
 
-  static bool sound = true;
+  static bool sound = false;
   static Difficulty difficulty = Difficulty.EASY;
   static Language language = Language.french;
   late Avatar _avatar = Avatar.avatar0;
   static late SharedPreferences _prefs;
 
 
-  static void iniState() async {
+  static FutureOr<void> iniState() async {
     _prefs = await SharedPreferences.getInstance();
     sound = _prefs.getBool("sound") ?? true;
     difficulty = Difficulty.values[_prefs.getInt("difficulty") ?? 0];

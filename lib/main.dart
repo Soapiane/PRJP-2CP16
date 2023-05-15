@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:projet2cp/Authentication/MainScreen.dart';
 import 'package:projet2cp/Info/Info.dart';
+import 'package:projet2cp/Sound.dart';
 import 'package:projet2cp/SplashScreen/SplashScreen.dart';
 import 'package:projet2cp/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -43,20 +44,24 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  Info.iniState();
+  await Info.iniState();
+
+  await Sound().iniState();
+
 
   setLandscapeMode();
 
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatelessWidget with WidgetsBindingObserver{
   const MyApp({super.key});
+
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-
+   WidgetsBinding.instance.addObserver(this);
 
 
     return MaterialApp(
@@ -67,6 +72,20 @@ class MyApp extends StatelessWidget {
       ),
       home: SplashScreen(),
     );
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // TODO: implement didChangeAppLifecycleState
+    super.didChangeAppLifecycleState(state);
+
+    print(state.toString());
+    if (state == AppLifecycleState.resumed) {
+      Sound().playSound();
+    } else {
+
+      Sound().audioPlayer.pause();
+    }
   }
 
 

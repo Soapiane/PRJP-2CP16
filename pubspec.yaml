@@ -60,6 +60,11 @@ dependencies:
   internet_connection_checker: ^1.0.0+1
   loading_animation_widget: ^1.2.0+4
   audioplayers: ^4.0.1
+  firebase_storage: ^10.3.11
+  downloads_path_provider_28: ^0.1.2
+  permission_handler: ^8.3.0
+  dio: ^4.0.4
+  fluttertoast: ^8.0.8
 
 dependency_overrides:
   xml: ^6.1.0

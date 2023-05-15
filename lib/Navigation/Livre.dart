@@ -1,12 +1,18 @@
 
 import 'package:audioplayers/audioplayers.dart';
+import 'package:dio/dio.dart';
+import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:projet2cp/Navigation/Loading.dart';
 import 'package:projet2cp/Sound.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class Livre extends StatefulWidget {
   const Livre({Key? key}) : super(key: key);
@@ -18,7 +24,63 @@ class Livre extends StatefulWidget {
 class _LivreState extends State<Livre> {
 
 
+  static const String _LIVRE_URL = "https://firebasestorage.googleapis.com/v0/b/projet2cp-1c628.appspot.com/o/Mon%20livre%20vert.pdf?alt=media&token=675eb624-75e9-44cb-a5b3-e7547ab867b0";
 
+  void downloadBook() async {
+
+    Loading loading = Loading.ShowLoading(context, progressBar: true, text: "Téléchargement du livre...");
+
+    Map<Permission, PermissionStatus> statuses = await [
+      Permission.storage,
+      Permission.manageExternalStorage,
+    ].request();
+
+
+    if (statuses[Permission.storage]!.isGranted) {
+      var dir = await DownloadsPathProvider.downloadsDirectory;
+      if (dir != null) {
+        String savename = "mon livre vert.pdf";
+        String savePath = dir.path + "/$savename";
+        print(savePath);
+        //output:  /storage/emulated/0/Download/banner.png
+
+        try {
+          await Dio().download(
+              _LIVRE_URL,
+              savePath,
+              onReceiveProgress: (received, total) {
+                if (total != -1) {
+                  loading.updateProgress(received / total);
+                }
+              });
+          print("File is saved to download folder.");
+
+          Fluttertoast.showToast(
+            msg: " 'Mon livre vert' a été téléchargé avec succès",
+            toastLength: Toast.LENGTH_SHORT,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.black,
+            textColor: Colors.white,
+            fontSize: 16.0,
+          );
+        } on DioError catch (e) {
+
+          Fluttertoast.showToast(
+            msg: " Un problème est survenu lors du téléchargement de 'Mon livre vert' ",
+            toastLength: Toast.LENGTH_SHORT,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.black,
+            textColor: Colors.white,
+            fontSize: 16.0,
+          );
+
+          print(e.message);
+        }
+      }
+    }
+
+    Loading.HideLoading(context);
+  }
 
   final audioPlayer=AudioPlayer();
   Future playAudio() async{
@@ -135,6 +197,9 @@ class _LivreState extends State<Livre> {
   Widget build(BuildContext context) {
 
 
+
+
+
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
     return WillPopScope(
@@ -184,7 +249,6 @@ class _LivreState extends State<Livre> {
                 ),
               ),
               ///arrow right
-
               Positioned(
                 top: 322*screenHeight/360,
                 left: 647*screenWidth/800,
@@ -207,7 +271,6 @@ class _LivreState extends State<Livre> {
                   ),
                 ),
               ),
-
               ///Bouton Ville
               !VilleButton ? Positioned(
                 top: 6*screenHeight/360,
@@ -515,10 +578,27 @@ class _LivreState extends State<Livre> {
                   ),
                 ),
               ),
+              ///Bouton telecharger
+              Positioned(
+                top: 13*screenHeight/360,
+                left: 216*screenWidth/800,
+                child:  GestureDetector(
+                  onTap: (){
+
+                    downloadBook();
+
+                  },
+                  child: SvgPicture.asset(
+                    "assets/nav_buttons/download.svg",
+                    height: 45*screenHeight/360,
+                    width: 45*screenWidth/800,
+                  ),
+                ),
+              ),
               ///Bouton Son
               _hasSound() ? Positioned(
                 top: 13*screenHeight/360,
-                left: 395*screenWidth/800,
+                left: 432*screenWidth/800,
                 child:  GestureDetector(
                   onTap:playAudio,
                   child: SvgPicture.asset(
