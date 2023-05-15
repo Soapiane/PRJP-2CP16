@@ -81,7 +81,6 @@ class _SplashState extends State<SplashScreen>{
 
     await loadAssetsToCache(context);
 
-    await Sound().iniState();
 
 
     await Future.delayed(Duration(milliseconds: 2000),(){

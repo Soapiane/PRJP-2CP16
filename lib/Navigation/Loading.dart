@@ -11,7 +11,7 @@ class Loading extends StatefulWidget {
   late _LoadingState state;
 
   Loading({Key? key, String? text, required this.progressBar}) : super(key: key){
-    state = _LoadingState(progressBar: progressBar);
+    state = _LoadingState(progressBar: progressBar, text: text);
   }
 
   static Loading ShowLoading(BuildContext context, {String? text, bool progressBar = false}){
