@@ -62,6 +62,8 @@ class Level extends Component with HasGameRef<ArrangerVille> {
   }
 
   void spawnComponents(RenderableTiledMap tiledMap) {
+    //The actions folder represent the actions that the player can do in the game, like picking up trash, or add trash cans to houses, or shut off lamps in the street
+    //the actors folder represent the actors that are in the game, like the player, the platforms, the walls, the pause that makes him lose, the earth, the trash, the coins, the attention signs
     /*In this method we get from the tiledMap each group of objects {Platforms, SpawnCopmponents} and for each one of them, 
     we retreive the objects propretties their size, position, priority from the TiledMap and call the constructor for each one of them, 
     with these attributes and the sprite sheet where the spritee propreties are in the class of the object */

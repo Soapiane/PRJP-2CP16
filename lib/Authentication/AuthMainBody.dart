@@ -54,7 +54,7 @@ class AuthMainBody extends Body {
             width: 216,
             xPos: 97,
             yPos: 256,
-            text: "Se Connecter",
+            text: "Se connecter",
             backgroundColor: color.Color.blue,
             onTap: (){
               onConnexionPressed.call();
@@ -78,8 +78,8 @@ class AuthMainBody extends Body {
 
   Future<void> onPlayPressed(BuildContext context) async {
     Loading.ShowLoading(context);
+    //opens the guest dp
     await GuestRepository().openDB();
-    await GuestRepository().printDB();
     Loading.HideLoading(context);
     onPlay.call();
   }

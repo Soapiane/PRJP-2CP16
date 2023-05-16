@@ -23,16 +23,17 @@ class AnimalGame extends MiniGame with HasDraggableComponents,HasCollisionDetect
   late Timer timer=Timer(time_of_the_game,onTick:EndIt,repeat: false);
 
   AnimalGame({required super.zone, required super.hud, required super.context, required super.level, required super.challenge}) {
-    setPointsAsset(asset: "assets/images/AnimalGames/images/heart.svg");
-    setPointsString(name: "coeur");
-    addPoints(maxPoints:3);
+    setPointsAsset(asset: "assets/images/AnimalGames/images/heart.svg");//nous utiliserons des coeurs
+    setPointsString(name: "coeur");//nom de l'asset
+    addPoints(maxPoints:3);//le maximum de coeur
     hud.useBar=true;
     timer.start();
   }
   late TrashSpawner _trashSpawner;
   late ParallaxComponent _parallax,parallaxComponent;
+  ///NOUS UTILISONS DES PARALLAX POUR LE BACKGROUND
   late Images images_jeu;
-  late double score=0;
+  late double score=0;//SCORE initial
   late TextPaint _scoreText=TextPaint(style: const TextStyle(color: Colors.black,fontSize: 25));
   late Vector2 Vector=Vector2(20, 0);
   @override
@@ -41,11 +42,13 @@ class AnimalGame extends MiniGame with HasDraggableComponents,HasCollisionDetect
     super.onLoad();
     Flame.device.fullScreen();
     Flame.device.setLandscape();
+    //AJOUT DE L'ANIMAL
     animal = Animal(size2: size,gameRef: this);
     animal
       ..size = Vector2(80,64)
       ..position = Vector2(0, size[1] / 2 - 32);
     if(zone==Zones.mer){
+      //DANS CE CAS CE SERA LE JEU DE LA TORTUE
       final spritesTurtle = [1, 2, 3, 4, 5,6,7,8]
           .map((i) => Sprite.load('AnimalGames/images/turtle/tortue$i.png'));
        animation = SpriteAnimation.spriteList(
@@ -68,12 +71,14 @@ class AnimalGame extends MiniGame with HasDraggableComponents,HasCollisionDetect
         velocityMultiplierDelta: Vector2(1.5, 0),
       );
     }else{
+      //DANS CE CAS CE SERA LE JEU DE L'OISEAU
       final spritesBird = [1, 2, 3, 4, 5,6,7,8,9]
           .map((i) => Sprite.load('AnimalGames/images/Bird/bird$i.png'));
       animation = SpriteAnimation.spriteList(
         await Future.wait(spritesBird),
         stepTime: 0.1,
       );
+      //ANIMATION
       animal..animation=animation;
       _parallax = await ParallaxComponent.load(
         [
@@ -93,10 +98,12 @@ class AnimalGame extends MiniGame with HasDraggableComponents,HasCollisionDetect
     _trashSpawner = TrashSpawner(
         sprites: images, size2: size, gameRef: this);
     parallaxComponent=_parallax;
+    //AJOUT DE L'ANIMAL
     add(animal);
+    //AJOUT DU PARALLAX
     add(_parallax);
 
-
+    //AJOUT DU TUTORIEL
     showTutorial(zone == Zones.foret ? "assets/tutorials/bird.png" : "assets/tutorials/turtle.png");
   }
 
@@ -124,7 +131,7 @@ class AnimalGame extends MiniGame with HasDraggableComponents,HasCollisionDetect
   void update(double dt) {
     // TODO: implement update
     super.update(dt);
-    if(Started){
+    if(Started){ //SI LE JEU A COMMENCE
       if(!theEnd) {
         score+=60*dt;
         timer.update(dt);
@@ -132,6 +139,7 @@ class AnimalGame extends MiniGame with HasDraggableComponents,HasCollisionDetect
         _parallax.parallax?.baseVelocity.setZero();
         animal.x+=size[0]/5*dt;
         if(animal.x>size[0]){
+          ///FIN DU JEU
           theEnd=false;
           animal.removeFromParent();
           onFinished();

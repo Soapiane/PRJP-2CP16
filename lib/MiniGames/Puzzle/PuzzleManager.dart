@@ -25,7 +25,7 @@ class PuzzleManager extends Component{
   PuzzleManager({required this.level,required this.spriteSheet,required this.sizeScr ,required this.Xdebut,required this.Ydebut,required this.taille});
   @override
   void onMount() {
-    // TODO: implement onMount
+    // Des que le puzzleManager Mount on Spawn une piece
     super.onMount();
     PuzzleFinished=false;
     index=this.level*this.level;
@@ -36,9 +36,9 @@ class PuzzleManager extends Component{
     SpawnNew();
   }
   void SpawnNew(){
-    if(index==0){
+    if(index==0){//si l'index est 0 le puzzle est termine
       PuzzleFinished=true;
-    }else{
+    }else{//sinon
       Random random = new Random();
       int randomNumber = random.nextInt(index);
       add(Pieces[randomNumber]

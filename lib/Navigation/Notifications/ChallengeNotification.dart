@@ -8,6 +8,8 @@ import 'package:projet2cp/TextGenerator.dart';
 
 class ChallengeNotification extends StatelessWidget {
 
+  ///the pop up that appears when a new challenges has been acquired at the end of each level
+
   String title;
 
   ChallengeNotification({Key? key, required this.title}) : super(key: key);

@@ -32,7 +32,6 @@ import 'package:projet2cp/Navigation/QuizSelectionBody.dart';
 import 'package:projet2cp/Navigation/Settings.dart';
 import 'package:projet2cp/Navigation/Trophies.dart';
 import 'package:projet2cp/Navigation/Warning.dart';
-import 'package:projet2cp/Navigation/Zone/ZoneBody.dart';
 import 'package:projet2cp/Navigation/ZoneSelectionBody.dart';
 import 'package:projet2cp/ButtonGenerator.dart';
 import 'package:projet2cp/ImageGenerator.dart';
@@ -55,6 +54,11 @@ import 'package:projet2cp/Authentication/MainScreen.dart' as ref;
 
 
 class MainScreen extends StatefulWidget {
+
+
+  /**
+   * this widget handls all all the navigation between the bodies
+   */
 
 
 
@@ -99,6 +103,7 @@ class MainState extends State<MainScreen> {
 
 
   void goToAvatarSelectionBody() async {
+    //loading the assets for avatar selection body
 
     Loading.ShowLoading(context);
 
@@ -116,6 +121,7 @@ class MainState extends State<MainScreen> {
 
     Loading.HideLoading(context);
 
+    //change the body to avatar selection body but without blur
     changeBodyWithNoBlur(newBody: avatarSelectionBody);
   }
 
@@ -125,6 +131,7 @@ class MainState extends State<MainScreen> {
     String user = FirebaseAuth.instance.currentUser != null ? "" : "Guest";
 
       String? trophy =  prefs.getString("newTrophy$user");
+      //if a n ew trophy is acquired, then a notification will appear
       if (trophy != null) {
 
         prefs.remove("newTrophy$user");
@@ -133,6 +140,7 @@ class MainState extends State<MainScreen> {
 
       }
 
+      //same thing with challenges
       String? challenge = prefs.getString("newChallenge$user");
       if (challenge != null) {
 
@@ -144,6 +152,7 @@ class MainState extends State<MainScreen> {
   }
 
   Future<void> LoadAnimal(Zones zone) async {
+    //load the animals games assets
     if(zone==Zones.mer){
       await Flame.images.loadAll([
         'AnimalGames/images/trashTurtle/trash2.png',
@@ -168,6 +177,7 @@ class MainState extends State<MainScreen> {
   }
 
   FutureOr<void> LoadPuzzle(Zones zone) async {
+    //loads the puzzle game assets
     int LevelDiff;
     if(Info.difficulty==Difficulty.EASY){
       LevelDiff=2;
@@ -196,6 +206,7 @@ class MainState extends State<MainScreen> {
   }
 
 
+  //the next three function load the assets of eco-runner game
   FutureOr<void> loadArrangerForet() async {
 
     await Flame.images.load("Runner_Forest/foret.png");
@@ -256,7 +267,10 @@ class MainState extends State<MainScreen> {
 
 
   void levelTaped(bool unlocked, Zones zone, int order, {bool? restart}) async {
+    //this function is called when a level is selected
+    //first we check if it's not locked
     if (unlocked){
+
       restart ??= false;
       Loading.ShowLoading(context);
 
@@ -264,6 +278,7 @@ class MainState extends State<MainScreen> {
       MiniGameMainScreen miniGameMainScreen = MiniGameMainScreen(miniGameOrder: order, zone: zone, mainScreenRef: this as ref.MainState, restart: restart!,);
 
 
+      //here we load the game assets
       for (int i=0; i<=3; i++) {
 
         await precachePicture(
@@ -302,6 +317,8 @@ class MainState extends State<MainScreen> {
 
       Loading.HideLoading(context);
 
+      //then we run the game
+
       bool? restarting = await Navigator.push(
           context,
           MaterialPageRoute(
@@ -309,8 +326,11 @@ class MainState extends State<MainScreen> {
           )
       );
 
+      //the next logic is after quitting the game
+
       restarting ??= false;
 
+      //if we quit the game without the restart logic, we sync the saved progress with the cloud
       if (!restarting) {
         print("SYNCING");
 
@@ -341,6 +361,8 @@ class MainState extends State<MainScreen> {
 
   Future<List<List<int>>> getZonesInfo() async {
 
+    //get zones info from local db for the zone selection screen
+
     List<int> starsCollected = [], starsMax = [];
 
     User? user = FirebaseAuth.instance.currentUser;
@@ -367,6 +389,10 @@ class MainState extends State<MainScreen> {
   void goToAdventureMode() async {
 
     Loading.ShowLoading(context);
+
+    //loads the assets and get the zones info fron the zone selection screen in adventure mode
+
+
 
     List<int> starsCollected = [], starsMax = [];
     List<List<int>> zonesInfo = await getZonesInfo();
@@ -446,6 +472,8 @@ class MainState extends State<MainScreen> {
 
   Future<List<Map>> getQuizzesInfo() async {
 
+    //get info of quizzes info from local db for quiz mode
+
     List<Map> quizzes = [];
 
     User? user = FirebaseAuth.instance.currentUser;
@@ -486,6 +514,7 @@ class MainState extends State<MainScreen> {
 
   FutureOr<void> goToQuizMode() async {
 
+    //gets necessary info and assets for the quiz mode
     List<Map> quizzesInfo = await getQuizzesInfo();
 
 
@@ -547,6 +576,8 @@ class MainState extends State<MainScreen> {
 
   FutureOr<void> goToLevelSelectionBody(Zones zone) async {
     Loading.ShowLoading(context);
+
+    //gets necessary info and assets to go to the level selection screen of the selected zone
 
 
     List<Map> levelsinfo = [];
@@ -698,6 +729,7 @@ class MainState extends State<MainScreen> {
   }
 
   void changeBodyWithBlur({required Body newBody, Body? lastBody}){
+    //changes the body and adds blur effect to the background
     setState(() {
 
       blur = ImageFilter.blur(
@@ -709,6 +741,7 @@ class MainState extends State<MainScreen> {
   }
 
   void changeBodyWithNoBlur({required Body newBody, Body? lastBody}){
+    //changes the body removes blur effect from the background
     setState(() {
 
       blur = ImageFilter.blur(
@@ -721,6 +754,7 @@ class MainState extends State<MainScreen> {
 
 
   void changeBody({required Body newBody, Body? lastBody}){
+    //change the body
       lastBody ??= body;
       newBody.lastScreen = lastBody;
       body = newBody;
@@ -741,10 +775,7 @@ class MainState extends State<MainScreen> {
 
 
 
-    // zoneSelectionBody = ZoneSelectionBody(
-    //   onCardTap: goToZoneBody,
-    // );
-
+    //initializing the body of each screen to prepare it for when it's called
     modeSelectionBody = ModeSelectionBody(
       onModeSelected: (mode){
         if (mode == Mode.adventure) {
@@ -806,6 +837,9 @@ class MainState extends State<MainScreen> {
 
 
 
+    //the first body is either the mode selection body when the user is signed in
+    //or the main auth body for when there's no user signed in
+
     body = widget.signedIn ? modeSelectionBody : authMainBody;
 
 
@@ -835,6 +869,7 @@ class MainState extends State<MainScreen> {
     Function? onBackButtonTapped, onChallengeButtonTapped, onTrophiesButtonTapped, onBookButtonTapped;
 
 
+    //here we set what will appear and will not appear from the elements of the foreground based on the body
     switch (body.runtimeType.toString()){
       case "AuthMainBody":{
         accountButtonVisible = false;
@@ -908,6 +943,8 @@ class MainState extends State<MainScreen> {
       break;
     }
 
+
+    //the account button will always be invisible if the user is not signed in
     if (FirebaseAuth.instance.currentUser == null) {
       print("LOGGING IN");
       accountButtonVisible = false;
@@ -917,16 +954,6 @@ class MainState extends State<MainScreen> {
 
 
 
-
-    // onBackButtonTapped = body.runtimeType.toString().compareTo("AuthMainBody") == 0 ? null : (){
-    //   setState(() {
-    //     blur = ImageFilter.blur(
-    //       sigmaX: body.lastScreen!.isBlured ? blurRadius : 0,
-    //       sigmaY: body.lastScreen!.isBlured ? blurRadius : 0,
-    //     );
-    //     body = body.lastScreen ?? body;
-    //   });
-    // };
 
 
     Widget foreground = createForeground(
@@ -969,6 +996,7 @@ class MainState extends State<MainScreen> {
   }
 
   Future<void> signOut() async {
+    //when singing out, we delete the db and and sign out the user
     if (FirebaseAuth.instance.currentUser != null) {
       await DatabaseRepository().signOut();
     } else {
@@ -977,6 +1005,7 @@ class MainState extends State<MainScreen> {
   }
 
   void onExit(){
+    //when existing, we go the main auth screen
     setState(() {
       Navigator.of(context).pop();
       body.lastScreen = authMainBody;
@@ -999,6 +1028,10 @@ class MainState extends State<MainScreen> {
     Function? onTrophiesButtonTapped,
     Function? onBookButtonTapped,
   }){
+
+    //the buttons will be visible based on the value of the functions passed
+    //for example, if the onBackButtonTapped function is defined, then the back button will be visible
+    //otherwise, it won't
 
     ButtonGenerator buttonGenerator = ButtonGenerator(context: context);
     double topPadding = buttonGenerator.calculateY(10);
@@ -1066,6 +1099,8 @@ class MainState extends State<MainScreen> {
 
   void goToLogIn() async {
 
+    //after clicking se connecter, we load the assets and go to the logInBody
+
     Loading.ShowLoading(context);
     bool result = await InternetConnectionChecker().hasConnection;
     if(result == true) {
@@ -1098,6 +1133,7 @@ class MainState extends State<MainScreen> {
 
 
   void logIn() async {
+    //when the log in process is successful, we go the mode selection screen, otherwise an error will appear if there's no internet
     bool result = await InternetConnectionChecker().hasConnection;
     if(result == true) {
       Loading.HideLoading(context);
@@ -1109,6 +1145,8 @@ class MainState extends State<MainScreen> {
   }
 
   void goToRegister() async {
+
+    //we load the assets and go the register screen
 
 
 
@@ -1133,6 +1171,7 @@ class MainState extends State<MainScreen> {
 
   void register() async {
 
+    //if the registration is finished, we go to select the difficulty
       bool result = await InternetConnectionChecker().hasConnection;
       if(result == true) {
         Loading.HideLoading(context);
@@ -1144,6 +1183,7 @@ class MainState extends State<MainScreen> {
   }
 
   void showError(String error){
+    //this function shows the error message
     Loading.HideLoading(context);
     setState(() {
       showDialog(
@@ -1155,6 +1195,8 @@ class MainState extends State<MainScreen> {
   }
 
   void openTheBook() async {
+
+    //loads the pages of the book and then goes to the book
 
     Loading loading = Loading.ShowLoading(context, progressBar: true);
 
@@ -1188,6 +1230,8 @@ class MainState extends State<MainScreen> {
 
   void showProfileSetting() async{
 
+    //loads the assets to show the profile settings pop up
+
     Loading.ShowLoading(context);
 
     for (int i=0; i<=9; i++) {
@@ -1215,6 +1259,9 @@ class MainState extends State<MainScreen> {
 
   void showChallenges() async {
 
+
+    //loads the assets and ifo to show the challenges list pop up
+
     Loading.ShowLoading(context);
 
     List<List<String>> challenges = await getChallenges();
@@ -1233,6 +1280,8 @@ class MainState extends State<MainScreen> {
   }
 
   Future<List<List<String>>> getChallenges() async {
+
+    //gets the challenges info fron db
 
     List<String> Rea = [], NonRea = [];
 
@@ -1296,6 +1345,8 @@ class MainState extends State<MainScreen> {
 
 
   void showTrophies() async {
+
+    //loads the assets and info from db to show the trophies list pop up
 
 
 

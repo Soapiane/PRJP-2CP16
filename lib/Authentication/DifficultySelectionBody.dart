@@ -137,7 +137,9 @@ class _DifficultySelectionBodyState extends State<_DifficultySelectionBody> {
 
   Future<void> _onContinue() async {
 
+    //save selection on local storage
     Info.setDifficulty(Difficulty.values[selected]);
+    //upload the choice to online
     DatabaseRepository().uploadUserInfo();
     widget.onContinue?.call();
   }

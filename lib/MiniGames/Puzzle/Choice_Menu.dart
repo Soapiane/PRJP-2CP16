@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:projet2cp/MiniGames/MiniGame.dart';
 import 'PuzzleGame.dart';
 import 'package:projet2cp/Navigation/Zones.dart';
+
+
+/// CETTE CLASSE REPRESENTE LE MENU DU CHOIX DU PUZZLE QUE NOUS INTEGRONS SUR UN OVERLAY
 class PuzzleChoice extends StatefulWidget {
   static const String id = 'PuzzleChoice';
   final MiniGame gameRef;

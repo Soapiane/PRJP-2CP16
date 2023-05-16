@@ -6,6 +6,8 @@ import 'package:projet2cp/Color.dart' as color;
 import 'package:projet2cp/Info/Language.dart';
 
 class StandardWidgets {
+
+  //a class that contains functions that generates standard buttons like the settings button, back button....etc
   BuildContext context;
   late ButtonGenerator buttonGenerator;
   double dim = 45;

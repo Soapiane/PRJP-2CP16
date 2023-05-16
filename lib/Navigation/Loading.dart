@@ -6,6 +6,8 @@ import 'package:projet2cp/TextGenerator.dart';
 
 class Loading extends StatefulWidget {
 
+  ///the class the shows and hide the loading pop up
+
   static int isLoading = 0;
   bool progressBar;
   late _LoadingState state;

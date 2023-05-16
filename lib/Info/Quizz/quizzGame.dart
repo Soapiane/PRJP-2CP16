@@ -15,6 +15,7 @@ import 'package:projet2cp/Navigation/Zones.dart';
 import 'package:projet2cp/MiniGames/Quizz/data/mer_questions.dart';
 import 'package:projet2cp/MiniGames/Quizz/data/random_quizz.dart';
 
+//write comments for this class
 
 //This class is the main class of the game Quizz that gets the game zone and the game reference and the questions of the game
 class QuizzGame extends StatefulWidget {

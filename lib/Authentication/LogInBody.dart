@@ -95,6 +95,7 @@ class LogInBody extends Body {
                       margin: formMargin,
                       onTap: (){
                         Loading.ShowLoading(mainContext!);
+                        //trying to log in
                         FirebaseAuth.instance.signInWithEmailAndPassword(
                             email: email.second.controller!.text,
                           password: password.second.controller!.text,
@@ -102,10 +103,13 @@ class LogInBody extends Body {
                           FirebaseAuthException error = e as FirebaseAuthException;
                           if (checkErrors(error, ["wrong-password", "invalid-email", "user-disabled", "user-not-found"])
                           || e.toString().contains("Given String is empty or null")) {
+                            //if email or password are wrong
                             showErrorDialog("Email ou mot de passe incorrect");
                           } else if (e.toString().contains("A network error")){
+                            //if network error
                             showErrorDialog(MainScreen.networkErrorString);
                           } else {
+                            //if other problems
                             showErrorDialog("Une erreur s'est produite");
                           }
                         });
@@ -142,8 +146,11 @@ class LogInBody extends Body {
 
 
     void _onConnexion() async {
+    //opens the user db
       await DatabaseRepository().openDB();
+      //downlloads the user info from the cloud
       await DatabaseRepository().download();
+      //excute changes in the MainScreen
       onConnexion.call();
     }
 

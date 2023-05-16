@@ -12,6 +12,8 @@ import 'package:uuid/uuid.dart';
 
 class GuestRepository extends Repository {
 
+  //this class manages the Guest player information
+
   static final GuestRepository _instance = GuestRepository._internal();
 
   factory GuestRepository() {
@@ -23,6 +25,7 @@ class GuestRepository extends Repository {
 
   @override
   Future<String> getDBPath() async {
+    //returns the path for the guest player db
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, 'guest.db');
     return path;

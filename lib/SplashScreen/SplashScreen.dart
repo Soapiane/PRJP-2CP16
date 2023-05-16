@@ -74,11 +74,14 @@ class _SplashState extends State<SplashScreen>{
 
 
 
+    //opening local Database
     await DatabaseRepository().openDB();
 
+    //syncing the cloud with the local
     await DatabaseRepository().sync();
 
 
+    //loading next screen assets
     await loadAssetsToCache(context);
 
 
@@ -87,6 +90,7 @@ class _SplashState extends State<SplashScreen>{
 
 
 
+      //wait 2 seconds an go to the next screen
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(

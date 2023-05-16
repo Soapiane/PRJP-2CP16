@@ -2,6 +2,10 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:projet2cp/Info/Info.dart';
 
 class Sound {
+
+
+  //a singleton that controls the background music
+
   static final Sound _instance = Sound._internal();
 
   // using a factory is important

@@ -7,6 +7,9 @@ import 'package:projet2cp/Info/User.dart';
 import 'package:projet2cp/Navigation/Profile/Profile.dart';
 
 class ChangeAvatar extends StatelessWidget {
+
+  ///the change avatar pop up in the profile settings
+
   const ChangeAvatar({Key? key}) : super(key: key);
 
   static const double borderRadius = 20;

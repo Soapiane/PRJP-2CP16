@@ -7,6 +7,12 @@ import 'package:projet2cp/TextGenerator.dart';
 
 class Warning extends StatelessWidget {
 
+  /**
+   *
+   *   the warning Pop up class
+   */
+
+
   final String text;
   Function() onOk;
 

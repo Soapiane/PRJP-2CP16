@@ -27,14 +27,15 @@ class Recycler extends MiniGame with HasDraggableComponents,HasCollisionDetectio
   late SpriteComponent tapis=SpriteComponent();
   late String strBack;
   late Svg svgInstance1,svgInstance2,svgInstance3,svgInstance4;
-  int time_of_the_game=60;//in secs
-  late double time_interval;
-  late double size_poubelleX;
-  late double size_poubelleY;
-  late double size_tapis_Y;
-  bool Started=false;
+  int time_of_the_game=60;//temps du jeu
+  late double time_interval;//LAPSE DE TEMPS ENTRE 2 DECHETS
+  late double size_poubelleX;//HAUTEUR DE LA POUBELLE
+  late double size_poubelleY;//LARGEUR DE LA POUBELLE
+  late double size_tapis_Y;//HAUTEUR DU TAPIS
+  bool Started=false;//booleen qui indique le debut dujeu
 
   Recycler({required super.hud,required super.zone, required super.context, required super.challenge, required super.level}){
+    ///REGLAGE DES PARAMETRES DU JEU
     if(difficulty==Difficulty.EASY){
       addPoints(maxPoints:10);
     }else{
@@ -50,9 +51,10 @@ class Recycler extends MiniGame with HasDraggableComponents,HasCollisionDetectio
     await super.onLoad();
     Flame.device.fullScreen();
     Flame.device.setLandscape();
-    //audio
+    //audio a faire dans le version futures
     //SpriteSheet
     if(zone==Zones.foret){
+      ///SI NOUS SOMMES DANS LA ZONE FORET
       strBack="backForet";
       svgInstance1 = await Svg.load("images/Recycler/poubelles/noir.svg");
       svgInstance2= await Svg.load("images/Recycler/poubelles/bleu.svg");
@@ -72,6 +74,8 @@ class Recycler extends MiniGame with HasDraggableComponents,HasCollisionDetectio
       }
     }else {
       if (zone == Zones.zoneIndustrielle) {
+        ///SI NOUS SOMMES DANS LA ZONE INDUSTRIELLE
+
         strBack = "backIndu";
         svgInstance1 = await Svg.load(
             "images/Recycler/poubelles/orange.svg");
@@ -99,6 +103,7 @@ class Recycler extends MiniGame with HasDraggableComponents,HasCollisionDetectio
         }
       } else {
         if (zone == Zones.mer) {
+          ///SI NOUS SOMMES DANS LA MER
           strBack = "backMer";
           svgInstance1 = await Svg.load(
               "images/Recycler/poubelles/noir.svg");
@@ -126,6 +131,8 @@ class Recycler extends MiniGame with HasDraggableComponents,HasCollisionDetectio
           }
         } else {
           if(zone==Zones.ville){
+            ///SI NOUS SOMMES DANS LA VILLE
+
             strBack = "backVille";
             svgInstance1 = await Svg.load(
                 "images/Recycler/poubelles/noir.svg");
@@ -172,6 +179,7 @@ class Recycler extends MiniGame with HasDraggableComponents,HasCollisionDetectio
 
 
     //le tapis
+    ///LA DIFFICULTE
     if(difficulty==Difficulty.EASY){
       time_interval=4.5;
     }else{
@@ -181,6 +189,7 @@ class Recycler extends MiniGame with HasDraggableComponents,HasCollisionDetectio
         time_interval=2.5;
       }
     }
+    ///LE TAPIS
     tapis
       ..sprite=await loadSprite("Recycler/tapis.png")
       ..size=Vector2(size[0], size_tapis_Y)
@@ -189,27 +198,36 @@ class Recycler extends MiniGame with HasDraggableComponents,HasCollisionDetectio
     //les poubelles
     size_poubelleX=size[0]/8;
     size_poubelleY=size_poubelleX*358/249;
+    //LE GAP ENTRE
     double gap=(size[0]-4*size_poubelleX)/5;
+    //LA PREMIERE POUBELLE
     premiere =
         Poubelle(position: Vector2(gap+size_poubelleX*1/2, size[1] - size_poubelleY/2-size_tapis_Y), num: 1); //size[0]/10 za3ma la moitie ta3 size[0]/10 pour rapprocher
     premiere
       ..svg =  svgInstance1
       ..size = Vector2(size_poubelleX,size_poubelleY);
+    //LA DEUXIEME POUBELLE
     deuxieme = Poubelle(
         position: Vector2(gap*2+size_poubelleX*3/2, size[1] - size_poubelleY/2-size_tapis_Y), num: 2);
     deuxieme
       ..svg =  svgInstance2
       ..size = Vector2(size_poubelleX,size_poubelleY);
+    //LA TROISIEME POUBELLE
+
     troisieme =
         Poubelle(position: Vector2(gap*3+2*size_poubelleX+size_poubelleX*1/2, size[1] - size_poubelleY/2-size_tapis_Y), num: 3);
     troisieme
       ..svg =  svgInstance3
       ..size = Vector2(size_poubelleX,size_poubelleY);
+    //LA QUATRIEME POUBELLE
+
     quatrieme =
         Poubelle(position: Vector2(gap*4+3*size_poubelleX+size_poubelleX*1/2, size[1] - size_poubelleY/2-size_tapis_Y), num: 4);
     quatrieme
       ..svg =svgInstance4
       ..size = Vector2(size_poubelleX,size_poubelleY);
+
+    //LE MANAGER
     Manager = TrashManager(
       time_interval: time_interval,
         TabAsset:AssetsTrash,
@@ -222,23 +240,24 @@ class Recycler extends MiniGame with HasDraggableComponents,HasCollisionDetectio
         position_spawn:Vector2(-3*size[0]/8, size[1]-size_tapis_Y*2/3),
         size_tapisY: size_tapis_Y
     );
-
-    //adding
+    ///L'AJOUT DES POUBELLES
     add(premiere);
     add(deuxieme);
     add(troisieme);
     add(quatrieme);
-
+    //AFFICHAGE DU TUTORIEL
     showTutorial("assets/tutorials/recycler.png");
   }
 
   @override
   FutureOr<void> showTutorial(String? path) async {
+    //FONCTION POUR AFFICHER LE TUTORIEL
     await super.showTutorial(path);
     onBegin();
   }
 
   void onBegin(){
+    //DEBUT DU JEU
     Started=true;
     add(Manager);
   }
@@ -257,10 +276,12 @@ class Recycler extends MiniGame with HasDraggableComponents,HasCollisionDetectio
     //gameOver;
   }
   void reset() {
+    //FONCTION POUR RESET LE MANAGER
       Manager.reset();
   }
   @override
   void onRestart() {
+    //FONCTION POUR RECOMMENCER LE JEU
     super.onRestart();
     reset();
   }

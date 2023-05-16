@@ -22,6 +22,8 @@ import 'package:projet2cp/MiniGames/RunnerZoneIndustrielle/game.dart';
 
 class MiniGameMainScreen extends StatelessWidget {
 
+  ///the screen that will be shown to the user
+
   final int miniGameOrder;
   late MiniGameHUD hud;
   final Zones zone;
@@ -34,7 +36,10 @@ class MiniGameMainScreen extends StatelessWidget {
 
 
   MiniGameMainScreen({super.key,required this.miniGameOrder,  required this.zone, required this.mainScreenRef,required this.restart}){
+    //background is defined based of the zone
     backgroundImageUrl = zone.backgroundImagePath;
+
+    //hud init
     getHUD();
   }
 
@@ -47,7 +52,7 @@ class MiniGameMainScreen extends StatelessWidget {
 
 
   void getMainScreen(BuildContext context){
-    //chose the game based on the zone and the order
+    //chose the game based on the zone and the order of the level
 
     switch (zone) {
       case Zones.ville:
@@ -311,6 +316,7 @@ class MiniGameMainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
+    //we get the main screen from this function
     getMainScreen(context);
 
 

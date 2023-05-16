@@ -110,6 +110,8 @@ class RegisterBody extends Body {
                     onTap: (){
 
                       Loading.ShowLoading(mainContext!);
+
+                      //trying to  create account
                       FirebaseAuth.instance.createUserWithEmailAndPassword(
                         email: email.second.controller!.text,
                         password: password.second.controller!.text,
@@ -117,12 +119,15 @@ class RegisterBody extends Body {
                         FirebaseAuthException error = e as FirebaseAuthException;
                         if (checkErrors(error, ["email-already-in-use", "invalid-email", "operation-not-allowed"])
                             || e.toString().contains("Given String is empty or null")) {
+                          //if the problem is the input
                           showErrorDialog("Probléme dans l'email ou le mot de passe");
                         } else if (checkErrors(error, ["weak-password"])) {
                           showErrorDialog("Le mot de passe est trop faible");
                         } else if (e.toString().contains("A network error")){
+                          //if it's internet problem
                           showErrorDialog(MainScreen.networkErrorString);
                         } else {
+                          //if other problems
                           showErrorDialog("Une erreur s'est produite");
                         }
                       });
@@ -137,9 +142,13 @@ class RegisterBody extends Body {
     );
   }
   Future<void> register() async {
+    //saves the user name in local storage
     user.User().setName(userName.second.controller!.text);
+    //creates database for the user
     await DatabaseRepository().openDB();
+    //uploads newly created db to the cloud
     await DatabaseRepository().upload();
+    //excute changes that will happen in MainScreen after register
     onRegister.call();
   }
 

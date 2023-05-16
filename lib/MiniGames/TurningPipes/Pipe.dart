@@ -34,6 +34,11 @@ enum Type {
 class Pipe extends SpriteComponent with Tappable{
 
 
+  /**
+   * each pipe has an angel and position and a type
+   * there's locked pipes which are the side ones that represents the source and the destination
+   */
+
 
 
 
