@@ -40,12 +40,15 @@ Future<void> main() async {
 
   WidgetsFlutterBinding.ensureInitialized(); //this line is to make sure that the main widget is fully initialized
 
+  //Firebase (backend) initialization
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  //Info class initialization
   await Info.iniState();
 
+  //sound controller initialization
   await Sound().iniState();
 
 
@@ -70,7 +73,7 @@ class MyApp extends StatelessWidget with WidgetsBindingObserver{
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: SplashScreen(),
+      home: SplashScreen(),//calling the splash screen
     );
   }
 
@@ -79,6 +82,7 @@ class MyApp extends StatelessWidget with WidgetsBindingObserver{
     // TODO: implement didChangeAppLifecycleState
     super.didChangeAppLifecycleState(state);
 
+    //stop and resume the sound when leaving the game
     print(state.toString());
     if (state == AppLifecycleState.resumed) {
       Sound().playSound();

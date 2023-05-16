@@ -12,6 +12,10 @@ import 'package:flutter_svg_provider/flutter_svg_provider.dart' as svg_provider;
 import 'package:projet2cp/main.dart' as main;
 
 class TextGenerator extends Generator {
+
+
+  //class that generates responsive text fields
+
   TextGenerator({required super.context});
 
   Couple generateTextView({

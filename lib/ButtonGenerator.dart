@@ -13,6 +13,7 @@ import 'package:projet2cp/Triple.dart';
 class ButtonGenerator extends Generator{
 
 
+  //a class that contains functions that generates responsive text and image buttons
 
 
   ButtonGenerator({required super.context});

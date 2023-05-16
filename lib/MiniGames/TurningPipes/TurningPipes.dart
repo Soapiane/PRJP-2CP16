@@ -21,7 +21,7 @@ class TurningPipes extends MiniGame with HasTappables{
   late List<Pipe> normals = [];
   static const double tileSize = 61.0;
   late bool finished;
-  late int time;
+  late int time = 180;
   late Component background;
   late Pipe firstPipe;
 
@@ -29,13 +29,13 @@ class TurningPipes extends MiniGame with HasTappables{
   TurningPipes({required super.hud, super.context, required super.level, required super.challenge, required super.zone}){
     switch (difficulty){
       case Difficulty.EASY:
-        time = 60;
+        time = time;
         break;
       case Difficulty.MEDIUM:
-        time = 30;
+        time = time~/2;
         break;
       case Difficulty.HARD:
-        time = 15;
+        time = time~/3;
         break;
     }
     addTimer(seconds: time);
@@ -56,7 +56,9 @@ class TurningPipes extends MiniGame with HasTappables{
 
   @override
   void onTimeUpdate(Duration duration) {
-    // TODO: implement onTimeUpdate
+
+
+    //the stars will change based on the time spent solving the puzzle
     super.onTimeUpdate(duration);
     if(duration.inSeconds < 0){
       setStars(stars: 0);
@@ -71,7 +73,7 @@ class TurningPipes extends MiniGame with HasTappables{
 
   @override
   void onTimeOut() {
-    // TODO: implement onTimeOut
+    //if the time is out, the player will lose and gets zero stars
     super.onTimeOut();
     setStars(stars: 0);
   }
@@ -115,11 +117,12 @@ class TurningPipes extends MiniGame with HasTappables{
 
 
 
-
+    //loading the pipes on the screen
     loadPipesOnScreen();
 
 
 
+    //shuffling the pipes
     shufflePipes();
 
 
@@ -130,15 +133,17 @@ class TurningPipes extends MiniGame with HasTappables{
 
   @override
   void onMount() {
-    // TODO: implement onMount
     super.onMount();
+
+
+    //show the tuto screen when the game is loaded
     showTutorial(null);
   }
 
   @override
-  void showTutorial(String? path) {
+  void showTutorial(String? path) async {
     // TODO: implement showTutorial
-    super.showTutorial(path);
+    await super.showTutorial(path);
     onStart();
   }
 
@@ -243,6 +248,7 @@ class TurningPipes extends MiniGame with HasTappables{
   }
 
   void checkSolution(){
+    //the game is solved when all the solution pipes are solved
     modifyPoints(points: 1);
     finished = true;
     for (var pipe in solutions) {

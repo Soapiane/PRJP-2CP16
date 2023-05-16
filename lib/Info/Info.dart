@@ -12,6 +12,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 class Info {
 
 
+  /**
+   *
+   * this class contains all the info that both guest and user players have
+   *
+   */
+
   static bool sound = false;
   static Difficulty difficulty = Difficulty.EASY;
   static Language language = Language.french;
@@ -20,6 +26,8 @@ class Info {
 
 
   static FutureOr<void> iniState() async {
+
+    //get the info from local storage
     _prefs = await SharedPreferences.getInstance();
     sound = _prefs.getBool("sound") ?? true;
     difficulty = Difficulty.values[_prefs.getInt("difficulty") ?? 0];
@@ -28,6 +36,7 @@ class Info {
 
 
 
+  //setters and getters
 
 
   static void setDifficulty(Difficulty value) {

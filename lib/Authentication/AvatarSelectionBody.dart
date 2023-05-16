@@ -138,11 +138,14 @@ class _AvatarSelectionBodyState extends State<_AvatarSelectionBody> {
   }
 
   Future<void> _onFinally() async {
+    //saves avatar in local storage
     user.User().setAvatar(Avatar.values[_selectedIndex]);
     Loading.ShowLoading(context);
     bool result = await InternetConnectionChecker().hasConnection;
+    //id there's internet, the avatar will be uploaded
     if (result) await DatabaseRepository().uploadUserInfo();
     Loading.HideLoading(context);
+    //execute the function sent by MainScreen
     widget.onFinally.call();
   }
 

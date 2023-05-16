@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:projet2cp/Generator.dart';
 
 class Margin {
+  //a class the encapsulates the margin properties
+
   double? _left, _top, _right, _bottom;
   BuildContext context;
   late Generator generator;

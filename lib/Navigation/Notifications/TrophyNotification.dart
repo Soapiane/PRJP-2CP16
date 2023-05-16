@@ -8,6 +8,9 @@ import 'package:projet2cp/TextGenerator.dart';
 
 class TrophyNotification extends StatelessWidget {
 
+
+
+  ///the pop up that appears when a new trophy is colleted
   String title;
 
   TrophyNotification({Key? key, required this.title}) : super(key: key);

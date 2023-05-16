@@ -5,6 +5,8 @@ import 'package:sqflite/sqflite.dart';
 
 abstract class Repository {
 
+  //core local database management
+
 
   static const List<String> _challenges = [
     "Prendre une bouteille réutilisable au lieu des bouteilles en plastique pendant 1 journée",
@@ -28,6 +30,7 @@ abstract class Repository {
 
   Database? database;
 
+  //to show database, used for tests
   Future<void> printDB() async {
     if (database != null) {
 
@@ -89,6 +92,8 @@ abstract class Repository {
       )
     ''');
 
+
+    //inserting zones,the last one is the for the random quiz
     for (int i = 0; i < 5; i++) {
       int zone_id = await db.insert('zone', {
         'name': Zones.values[i].toString().split('.')[1],
@@ -96,6 +101,9 @@ abstract class Repository {
         'levelsNb': i !=4 ? 4 : 1,
         'levelReached': 0,
       });
+
+      //inserting levels of each zone, the 4th one is the quiz and the first one is unlocked
+      //except of the 5th zone, only one level and it's the random quiz
 
       if (i!=4) {
         for (int j = 0; j < 4; j++) {
@@ -118,6 +126,8 @@ abstract class Repository {
       }
     }
 
+
+    //inserting trophies
     for (Trophy e in Trophy.values) {
       await db.insert('trophy', {
         'isCollected': 0,
@@ -126,6 +136,7 @@ abstract class Repository {
     }
 
 
+    //inserting challenges
     for (String challenge in _challenges) {
       await db.insert('challenge', {
         'state': 0,
@@ -139,7 +150,6 @@ abstract class Repository {
 
 
 
-    print("it's creating db");
 
 
   }
@@ -147,6 +157,7 @@ abstract class Repository {
   Future<String> getDBPath();
 
   Future<Database> initDB() async {
+    //this function opens the database, if it doesn't exist, it gets created
     final path = await getDBPath();
     return await openDatabase(path, version: 1, onCreate: createDB);
   }
@@ -172,6 +183,9 @@ abstract class Repository {
   Future<void> getUserInfo();
   Future<void> saveUserInfo();
 
+
+  //these are the update functions, these update the values of the database
+  //you give a HashMap and values in the local DB will be replaced with the map values
   Future<void> updateZone(Map zone) async {
     database!.update('zone', {
       'stars': zone["stars"],

@@ -7,7 +7,6 @@ import 'package:projet2cp/ImageGenerator.dart';
 import 'package:projet2cp/Navigation/Body.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart' as svg_provider;
 import 'package:projet2cp/Navigation/Loading.dart';
-import 'package:projet2cp/Navigation/Zone/ZoneBody.dart';
 import 'package:projet2cp/ButtonGenerator.dart';
 import 'package:projet2cp/Generator.dart';
 import 'package:projet2cp/Repository/DatabaseRepository.dart';
@@ -19,6 +18,8 @@ import 'package:projet2cp/Color.dart' as color;
 import 'package:sqflite/sqflite.dart';
 
 class ZoneSelectionBody extends Body {
+
+  //this class creates a list of cards, each card represents a zone and contains basic info (stars collected, name, picture...etc)
 
 
   Function(Zones zone) onCardTap;
@@ -33,6 +34,7 @@ class ZoneSelectionBody extends Body {
 
   @override
   Widget build(BuildContext context) {
+
     ButtonGenerator buttonGenerator = ButtonGenerator(context: context);
 
     double seperation = buttonGenerator.calculateX(65);
@@ -69,6 +71,8 @@ class ZoneSelectionBody extends Body {
 
 
 class ZoneCard extends StatelessWidget {
+
+  //view of the zone card
 
   int collectedStars, maxStars;
   Zones zone;

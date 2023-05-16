@@ -5,6 +5,8 @@ class Generator {
 
 
 
+
+  //Generators super class
   BuildContext context;
   late double deviceWidth, deviceHeight;
 
@@ -16,6 +18,8 @@ class Generator {
 
 
   }
+
+  //functions to calculate responsive wdith and height
 
 
   double calculateX(double? x){

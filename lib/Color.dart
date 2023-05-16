@@ -3,6 +3,8 @@ import 'package:flutter/painting.dart' as p;
 
 enum Color {
 
+  //all the colors used in the game
+
   oceanBlueDark(color: p.Color(0xff19806D)),
   oceanBlue(color: p.Color(0xff25BEA1)),
   goldenYellowDark(color: p.Color(0xffB29200)),

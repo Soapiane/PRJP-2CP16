@@ -13,6 +13,8 @@ import 'package:uuid/uuid.dart';
 
 class DatabaseRepository extends Repository {
 
+  //this class manages the authenticated user information (syncing, saving, updating, downloading...etc)
+
   static final DatabaseRepository _instance = DatabaseRepository._internal();
 
   factory DatabaseRepository() {
@@ -21,10 +23,13 @@ class DatabaseRepository extends Repository {
 
   DatabaseRepository._internal();
 
+
   static const String databaseLink = "https://projet2cp-1c628-default-rtdb.europe-west1.firebasedatabase.app/";
+
 
   @override
   Future<String> getDBPath() async {
+    //sends path to user local db
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, '${FirebaseAuth.instance.currentUser!.uid}.db');
     return path;
@@ -32,6 +37,7 @@ class DatabaseRepository extends Repository {
 
   @override
   Future<void> openDB() async {
+
     if (database == null) {
       if (FirebaseAuth.instance.currentUser != null) {
         database = await initDB();
@@ -61,6 +67,7 @@ class DatabaseRepository extends Repository {
 
   @override
   Future<void> saveUserInfo() async {
+    //saves user info into the local storage
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('name', user
         .User()
@@ -73,6 +80,7 @@ class DatabaseRepository extends Repository {
   }
 
   Future<void> updateUserInfo() async {
+    //get the user info from the cloud
     await FirebaseDatabase(databaseURL: databaseLink).reference().child("users")
         .child(FirebaseAuth.instance.currentUser!.uid).once()
         .then((DataSnapshot snapshot) {
@@ -83,6 +91,7 @@ class DatabaseRepository extends Repository {
 
 
   Future<void> upload() async {
+    //uploads everything to the cloud
     await uploadUserInfo();
 
     print("it's uploading 1");
@@ -112,6 +121,7 @@ class DatabaseRepository extends Repository {
   }
 
   void uploadChallenges() async {
+    //only uploads challenges
 
     bool result = await InternetConnectionChecker().hasConnection;
     if (result) {
@@ -124,6 +134,7 @@ class DatabaseRepository extends Repository {
   }
 
   Future<void> uploadUserInfo() async {
+    //only uploads user info
     await FirebaseDatabase(databaseURL: databaseLink).reference()
         .child("users")
         .child(FirebaseAuth.instance.currentUser!.uid)
@@ -140,6 +151,7 @@ class DatabaseRepository extends Repository {
   }
 
   Future<void> fetchAndUploadZone(Zones zone) async {
+    //get from local and uploads "zone" to the cloud
     List<Map> _zone = await database!.query('zone',
       where: 'id = ?',
       whereArgs: [zone.id],
@@ -149,6 +161,7 @@ class DatabaseRepository extends Repository {
   }
 
   Future<void> uploadZone(Map zone) async {
+    //uploads "zone" to the cloud
     await FirebaseDatabase(databaseURL: databaseLink).reference().child("users")
         .child(FirebaseAuth.instance.currentUser!.uid).child("zones").child(
         zone["name"])
@@ -162,6 +175,7 @@ class DatabaseRepository extends Repository {
   }
 
   Future<void> fetchAndUploadLevel(Zones zone, int level) async {
+    //get from local and uploads level'th level of the "zone" to the cloud
     List<Map> _level = await database!.query('level',
       where: 'zone_id = ? AND level = ?',
       whereArgs: [zone.id, level],
@@ -170,6 +184,7 @@ class DatabaseRepository extends Repository {
   }
 
   Future<void> uploadLevel(Map level) async {
+    //uploads level to the cloud
     await FirebaseDatabase(databaseURL: databaseLink).reference()
         .child("users")
         .child(FirebaseAuth.instance.currentUser!.uid)
@@ -188,6 +203,8 @@ class DatabaseRepository extends Repository {
   }
 
   Future<void> fetchAndUploadTrophy(Trophy trophy) async {
+
+    //get from local and uploads "trophy" to the cloud
     List<Map> _trophy = await database!.query('trophy',
       where: 'id = ?',
       whereArgs: [trophy.index],
@@ -196,6 +213,7 @@ class DatabaseRepository extends Repository {
   }
 
   Future<void> uploadTrophy(Map trophy) async {
+    //uploads "trophy" to the cloud
     await FirebaseDatabase(databaseURL: databaseLink).reference()
         .child("users")
         .child(FirebaseAuth.instance.currentUser!.uid)
@@ -207,6 +225,7 @@ class DatabaseRepository extends Repository {
   }
 
   Future<void> uploadChallenge(Map challenge) async {
+    //uploads "challenge" to the cloud
     await FirebaseDatabase(databaseURL: databaseLink).reference()
         .child("users")
         .child(FirebaseAuth.instance.currentUser!.uid)
@@ -219,6 +238,7 @@ class DatabaseRepository extends Repository {
 
 
   Future<void> download() async {
+    //downloads everything from the cloud
     await updateUserInfo();
 
 
@@ -267,6 +287,7 @@ class DatabaseRepository extends Repository {
 
 
     Future<void> downloadAndUpdateZone(Zones zone) async {
+      //downloads "zone" from the cloud
       await FirebaseDatabase(databaseURL: databaseLink).reference().child(
           "users").child(FirebaseAuth.instance.currentUser!.uid).child("zones")
           .child(zone.toString().split(".")[1]).once()
@@ -277,6 +298,7 @@ class DatabaseRepository extends Repository {
 
 
     Future<void> downloadAndUpdateLevel(Zones zone, int level) async {
+    //downloads level'th level of "zone" from the cloud
       await FirebaseDatabase(databaseURL: databaseLink).reference()
           .child("users")
           .child(FirebaseAuth.instance.currentUser!.uid)
@@ -290,6 +312,7 @@ class DatabaseRepository extends Repository {
 
 
     Future<void> fetchAndDownloadTrophy(Trophy trophy) async {
+    //downloads "trophy" from the cloud
       await FirebaseDatabase(databaseURL: databaseLink).reference().child(
           "users").child(FirebaseAuth.instance.currentUser!.uid).child(
           "trophies").child(trophy.id.toString()).once().then((
@@ -300,6 +323,10 @@ class DatabaseRepository extends Repository {
 
 
     Map compareLevels(Map lvl1, Map lvl2) {
+    //compares between two HashMaps that contains Level info
+      //returns the level that is advanced more
+      //an unlocked level is more advanced than a locked one
+      //the level with the higher number of star is more advanced (in case both are unlocked)
       if (lvl1["isLocked"] == 1 && lvl2["isLocked"] == 0) {
         return lvl2 as Map<String, dynamic>;
       } else if (lvl1["isLocked"] == 0 && lvl2["isLocked"] == 1) {
@@ -313,6 +340,8 @@ class DatabaseRepository extends Repository {
 
 
     Future<void> syncZone(Zones zone) async {
+
+    //syncing "zone" info between cloud and remote
 
       bool result = await InternetConnectionChecker().hasConnection;
       if (result) {
@@ -351,7 +380,7 @@ class DatabaseRepository extends Repository {
         }
       }
 
-      ///syncing the zone
+      ///syncing the zone info
 
       int allStars = (await DatabaseRepository().database!.rawQuery(
               "SELECT SUM(stars) as Total FROM level GROUP BY zone_id"))
@@ -421,6 +450,7 @@ class DatabaseRepository extends Repository {
 
 
     Future<void> syncChallenges(Function onDone) async {
+    //synces the challenges info between local and remote
 
       bool result = await InternetConnectionChecker().hasConnection;
     if (result) {
@@ -444,6 +474,7 @@ class DatabaseRepository extends Repository {
             remoteChallenge = Map<String, dynamic>.from(snapshot.value);
           });
 
+          //the challenge with a more advanced state will be kept
           if (localChallenge["state"] <= remoteChallenge["state"] ) {
             await DatabaseRepository().database!.update(
               "challenge",
@@ -479,6 +510,7 @@ class DatabaseRepository extends Repository {
     }
 
     Future<void> sync() async {
+    //synces everything between local and cloud
       if (FirebaseAuth.instance.currentUser != null) {
       bool result = await InternetConnectionChecker().hasConnection;
       if (result == true) {

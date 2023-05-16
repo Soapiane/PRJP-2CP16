@@ -8,7 +8,13 @@ import 'package:projet2cp/Repository/GuestRepository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Guest extends Info {
+
+
+  ///add the functionality of saving the avatar to local storage
+
   static final Guest _instance = Guest._internal();
+
+
 
 
 

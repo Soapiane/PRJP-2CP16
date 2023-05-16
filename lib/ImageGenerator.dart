@@ -9,6 +9,7 @@ import 'package:flutter_svg_provider/flutter_svg_provider.dart' as svg_provider;
 class ImageGenerator extends Generator{
 
 
+  //class that generates responsive image views
   ImageGenerator({required super.context});
 
 

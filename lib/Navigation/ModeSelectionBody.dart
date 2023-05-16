@@ -9,6 +9,9 @@ import 'package:projet2cp/TextGenerator.dart';
 
 class ModeSelectionBody extends Body {
 
+  //a view with only two buttons, the quiz mode button and the adventure mode button
+
+
   final Function(Mode)? onModeSelected;
 
 

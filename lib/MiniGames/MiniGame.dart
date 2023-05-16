@@ -17,6 +17,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class MiniGame extends FlameGame {
 
+  ///the super function for the all the mini-games
+
   final MiniGameHUD hud;
   final Difficulty difficulty = Info.difficulty;
   late Zones zone;
@@ -34,6 +36,8 @@ abstract class MiniGame extends FlameGame {
      hud.restartGame = onRestart;
      hud.onTimeUpdate = onTimeUpdate;
    }
+
+   //function that shows the tutorial screen
   FutureOr<void> showTutorial(String? path) async {
 
 
@@ -49,6 +53,8 @@ abstract class MiniGame extends FlameGame {
     }
   }
 
+
+  //these functions can and will be overridden to change their behavior based on the needs of each game
    void onTimeUpdate(Duration duration){
    }
 
@@ -93,13 +99,13 @@ abstract class MiniGame extends FlameGame {
 
      hud.onFinished();
 
+     //saving the progress of the level at the end
      await saveProgress();
 
+
+     //id there's a user logged in, syncing will happen
      if (FirebaseAuth.instance.currentUser != null){
-       await DatabaseRepository().printDB();
        await DatabaseRepository().syncZone(zone);
-     } else {
-        await GuestRepository().printDB();
      }
 
      Loading.HideLoading(hud.getHudContext());

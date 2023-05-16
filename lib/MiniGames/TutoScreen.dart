@@ -6,6 +6,10 @@ import 'package:projet2cp/TextGenerator.dart';
 
 class TutoScreen extends StatelessWidget {
 
+
+
+  ///a screen with the tutorial pic as background and the continue button
+
   late String? path;
 
   TutoScreen({Key? key,  this.path }) : super(key: key);

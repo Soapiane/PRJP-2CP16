@@ -7,7 +7,6 @@ import 'package:projet2cp/ImageGenerator.dart';
 import 'package:projet2cp/Navigation/Body.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart' as svg_provider;
 import 'package:projet2cp/Navigation/Loading.dart';
-import 'package:projet2cp/Navigation/Zone/ZoneBody.dart';
 import 'package:projet2cp/ButtonGenerator.dart';
 import 'package:projet2cp/Generator.dart';
 import 'package:projet2cp/Repository/DatabaseRepository.dart';
@@ -22,6 +21,9 @@ import 'package:sqflite/sqflite.dart';
 
 
 class QuizSelectionBody extends Body {
+
+  /// same as [ZoneSelectionBody], but dedicated for the the quizzes, so the info that are visible are
+  /// image of the zone, stars of the quiz, and the locked quiz view
 
 
   Function(bool unlocked, Zones zone, int order) onCardTap;

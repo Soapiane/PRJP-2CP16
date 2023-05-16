@@ -7,6 +7,12 @@ import 'package:projet2cp/Repository/DatabaseRepository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class User extends Info {
+
+
+  /**
+   * extends [Info] super class and adds the syncing feature to avatar
+   * along with the name attribute and it's saving + syncing features
+   */
   static final User _instance = User._internal();
 
   late String _name = "";
