@@ -20,6 +20,13 @@ class PuzzlePiece extends SpriteComponent with DragCallbacks {
   double Ydebut;
   double taille;
   late Vector2 positionOriginale;
+  /*
+   Pour comprendre le code il fait regarder les grilles des puzzle
+   nous avons utilise des blocs de 400x400px avec 240 px pour le carre principal de la piece
+   et 60 px pour le bord sortant
+   Ce qui nous donne des ratio speciaux que nous avons suivit adapte au design fournit
+   */
+  //CONSTRUCTEUR
   PuzzlePiece({required this.Level,required this.ind,required this.puzzleManager,required this.sizeScr,required this.Xdebut,required this.Ydebut,required this.taille}){
      Xtab=(ind%Level) ;
      Ytab=ind~/(Level);
@@ -71,6 +78,7 @@ class PuzzlePiece extends SpriteComponent with DragCallbacks {
   double CalculerFakeH_TQ(double H){
     if(Ytab>0){
       return H*4/2.39;
+      //CECI EST LE MEME RATIO QUE L'EQUIPE DE DESIGN A CREE
 
     }else{
       return  H*4/2.39;
@@ -78,7 +86,7 @@ class PuzzlePiece extends SpriteComponent with DragCallbacks {
   }
   @override
   void onDragStart(DragStartEvent event) {
-    // TODO: implement onDragStart
+    /// CETTE FONCTION EST UTILISE LORSQUE L'ENFANT TOUCHE LA PIECE DE PUZZLE
     super.onDragStart(event);
     positionOriginale=this.position.clone();
     _isDragged = true;
@@ -86,7 +94,7 @@ class PuzzlePiece extends SpriteComponent with DragCallbacks {
   }
   @override
   void onDragUpdate(DragUpdateEvent event) {
-    // TODO: implement onDragUpdate
+    /// CETTE FONCTION EST UTILISE TANTQUE L'ENFANT A LA PIECE DE PUZZLE EN MAIN
     super.onDragUpdate(event);
     if(fixed==false){
       position+=event.delta;
@@ -95,7 +103,8 @@ class PuzzlePiece extends SpriteComponent with DragCallbacks {
   }
   @override
   void onDragEnd(DragEndEvent event) {
-    // TODO: implement onDragEnd
+
+    /// CETTE FONCTION EST UTILISE LORSQUE L'ENFANT LACHE LA PIECE DE PUZZLE
     super.onDragEnd(event);
     _isDragged = false;
     priority = 0;
@@ -107,13 +116,15 @@ class PuzzlePiece extends SpriteComponent with DragCallbacks {
           this.y > this.CalculateY(Ydebut + (ind ~/ Level) * taille / Level) - 20 && fixed==false) {
         this.puzzleManager.SpawnNew();
         fixed=true;
-
+        //dans ce cas la piece de puzzle est bien place dont on la fixe
         this.position=Vector2(this.CalculateX(Xdebut + (taille / Level) * (ind % Level)),this.CalculateY(Ydebut + (ind ~/ Level) * taille / Level));
       } else {
         this.position = this.positionOriginale.clone();
+        //Mal place
       }
     }else{
       this.position=this.positionOriginale.clone();
+      //Mal place
     }
   }
 }

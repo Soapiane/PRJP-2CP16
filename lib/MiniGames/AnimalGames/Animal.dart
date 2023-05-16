@@ -14,7 +14,7 @@ class Animal extends SpriteAnimationComponent with DragCallbacks,CollisionCallba
   late Vector2 size2;//size of the screen
   late AnimalGame gameRef;
   Animal({ required this.size2,required this.gameRef});
-  late ShapeHitbox hitbox;
+  late ShapeHitbox hitbox;//La hitbox de l'animal
   @override
   Future<void> onLoad() async {
     priority=10;
@@ -24,27 +24,28 @@ class Animal extends SpriteAnimationComponent with DragCallbacks,CollisionCallba
     hitbox = RectangleHitbox()
       ..paint = defaultPaint
       ..collisionType=CollisionType.passive
-      ..renderShape = false
-    ..isSolid=true;
+      ..renderShape = false//ne pas l'afficher
+    ..isSolid=true;//rend la hitbox solide
+    //ajout de la hitbox
     add(hitbox);
   }
   @override
   void onDragStart(DragStartEvent event) {
-    // TODO: implement onDragStart
+    /// CETTE FONCTION EST UTILISE LORSQUE L'ENFANT TOUCHE LA PIECE DE PUZZLE
     super.onDragStart(event);
     _isDragged = false;
     priority = 10;
   }
   @override
   void onDragEnd(DragEndEvent event) {
-    // TODO: implement onDragEnd
+    /// CETTE FONCTION EST UTILISE LORSQUE L'ENFANT LACHE LA PIECE DE PUZZLE
     super.onDragEnd(event);
     _isDragged = false;
     priority = 0;
   }
   @override
   void onDragUpdate(DragUpdateEvent event) {
-    // TODO: implement onDragUpdate
+    /// CETTE FONCTION EST UTILISE TANTQUE L'ENFANT A LA PIECE DE PUZZLE EN MAIN
     super.onDragUpdate(event);
     if(this.position.y<=size2[1]-this.size[1]-20 && this.position.y>= 20){
       position.y+=event.delta.y;
@@ -57,7 +58,7 @@ class Animal extends SpriteAnimationComponent with DragCallbacks,CollisionCallba
 
         }
       }
-
+      ///POUR NE PAS DEPLACER LA TORTUE SI ELLE SORT DU CADRE PRECISE DE L'ECRAN
     }
   }
   @override
@@ -90,7 +91,7 @@ class Animal extends SpriteAnimationComponent with DragCallbacks,CollisionCallba
     ));
     if(gameRef.getPoints()==0){
       print("You have no hearts left");
-      gameRef.onLose();
+      gameRef.onLose();//le joueur a perdu car il ne lui reste plus de vie
     }
   }
   @override

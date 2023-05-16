@@ -9,18 +9,18 @@ import 'Trash.dart';
 import 'AnimalGame.dart';
 class TrashSpawner extends Component with HasGameRef{
   // The timer which runs the enemy spawner code at regular interval of time.
-  late Timer _timer;
-  late Trash _trash;
-  late Vector2 size2;
+  late Timer _timer;//LE TIMER QUI FAIT SPAWN
+  late Trash _trash;//LE DECHET
+  late Vector2 size2;//LA TAILLE DE L'ECRAN
   late Vector2 positionOfTrash;
   // Controls for how long EnemyManager should stop spawning new enemies.
-  late Timer _freezeTimer;
+  late Timer _freezeTimer;//UN TIMER AU DEBUT POUR DEMARRER LE TIMER PRINCIPAL
   late Images sprites;
   late int Rand;
   late int Rand_Positioning;
   late double randomDouble ;
   final double trashSize =40;
-  late int Y;
+  late int Y;//
   final int min=0;
   late int spawnLevel;
   late double Speed;
@@ -82,8 +82,10 @@ class TrashSpawner extends Component with HasGameRef{
   }
   void _spawnTrash(){
     Random random = Random();
+    //1 CHANCE SUR 2 QUE CE SOIT RANDOM
+    //1 CHANCE SUR 2 QUE CA SPAWN DANS LE MEME Y QUE L'ANIMAL
     Rand_Positioning =  Random().nextInt(2) ;
-
+    //determinaison du nombre de dechets pour chaque zone
     int NbTrash;
     if(gameRef.zone==Zones.mer){
       NbTrash=5;
@@ -117,6 +119,7 @@ class TrashSpawner extends Component with HasGameRef{
       }
         randomDouble = min + Random().nextDouble() * ((size2[1]-trashSize) -min);
       if(Rand_Positioning==0){
+        //POSITION RANDOM
         positionOfTrash=Vector2(size2[0], randomDouble);
       }else{
         positionOfTrash=Vector2(size2[0], gameRef.animal.y);
@@ -126,6 +129,7 @@ class TrashSpawner extends Component with HasGameRef{
         ..position=positionOfTrash..size=size3;
       add(_trash);
     }else {
+      //POSITION DE L'ANIMAL
       if (Rand == 1) {
         size3 =
             Vector2(gameRef.size[0] * 17.74 / 220, gameRef.size[1] * 31 / 164);
@@ -161,6 +165,7 @@ class TrashSpawner extends Component with HasGameRef{
         ..sprite = Sprite(sprites.fromCache('AnimalGames/images/trashBird/trash${Rand}.png'))
         ..position = positionOfTrash
         ..size = size3;
+      //AJOUT DU DECHET
       add(_trash);
     }
   }

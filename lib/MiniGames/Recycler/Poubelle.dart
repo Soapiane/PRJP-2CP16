@@ -28,6 +28,8 @@ class Poubelle extends SvgComponent with CollisionCallbacks {
   }
   @override
   void onCollisionStart(
+      ///CETTE FONCTION EST APPELE DES QUE LA COLISION COMMENCE
+
       Set<Vector2> intersectionPoints,
       PositionComponent other,
       ) {
@@ -45,8 +47,10 @@ class Poubelle extends SvgComponent with CollisionCallbacks {
     hitbox.paint.color = _collisionStartColor;
     is_hit=true;
   }
+
   @override
   void onCollisionEnd(PositionComponent other) {
+    ///CETTE FONCTION EST APPELE DES QUE LA COLISION SE TERMINE
     super.onCollisionEnd(other);
     if (!isColliding){
       hitbox.paint.color = _defaultColor;

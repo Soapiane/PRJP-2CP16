@@ -6,7 +6,7 @@ import 'package:flame/game.dart';
 import 'package:flame/components.dart';
 class Trash extends SpriteComponent with CollisionCallbacks {
   late Vector2 size2;
-  late double Speed;
+  late double Speed;//VITESSE DES DECHETS
   Trash({required this.size2,required this.Speed})
       :super(size: Vector2.all(100));
   bool _isDragged=false;
@@ -24,6 +24,7 @@ class Trash extends SpriteComponent with CollisionCallbacks {
       ..paint = defaultPaint
       ..renderShape = false
     ..isSolid=true;
+    //AJOUT DE LA HITBOX
     add(hitbox);
   }
   @override
@@ -31,8 +32,8 @@ class Trash extends SpriteComponent with CollisionCallbacks {
     // TODO: implement update
     super.update(dt);
     position.x-=this.Speed*dt;
-
     if(position.x< -this.width){
+      //LE DECHET A DEPASSE L'ECRAN
       this.removeFromParent();
     }
   }
