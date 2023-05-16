@@ -1,5 +1,6 @@
 import '../model/question_model.dart';
 
+//the list of the questions of the quizz of zone which is a list of QuestionModel objects
 List<QuestionModel> questionsZone = [
   QuestionModel(
       "Une énergie renouvelable est une energie :",

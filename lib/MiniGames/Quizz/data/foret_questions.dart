@@ -1,6 +1,8 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:projet2cp/MiniGames/Quizz/model/question_model.dart';
 
+//The list of the questions of the quizz of forest zone which is a list of QuestionModel objects
+
 List<QuestionModel> questionsForet = [
   QuestionModel(
       "Qu'est-ce que la déforestation ? ",
@@ -120,7 +122,8 @@ List<QuestionModel> questionsForet = [
         " On ne pourra plus se promener en forêt": false,
       },
       "ForetQuizz/quiz_f_q10.m4a",
-          explanation: "Le plus grand problème de la déforestation c'est la menace des écosystèmes et la biodiversité",
+      explanation:
+          "Le plus grand problème de la déforestation c'est la menace des écosystèmes et la biodiversité",
       audioPalyerExplanation: "ForetQuizz/quiz_f_r10.m4a"),
   QuestionModel(
       " Planter des arbres, ça aide à lutter contre la pollution ",

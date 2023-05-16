@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../model/question_model.dart';
+//The list of the questions of the quizz of ville zone which is a list of QuestionModel objects
 
 List<QuestionModel> questionsVille = [
   QuestionModel(
@@ -88,7 +89,7 @@ List<QuestionModel> questionsVille = [
         " Dans la poubelle ": false,
         " Dans le bac à compost ": true,
         " Aileurs": false,
-      }, 
+      },
       "VilleQuizz/quiz_v_q9.m4a",
       explanation:
           " Dans le bac à compost. Le carton souillé est compostable.\n Mais attention, il ne doit pas être ciré ni plastifié.",

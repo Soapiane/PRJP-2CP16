@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 
+//this class is used to display a pop up screen when the user answers a question and there is an explanation of the answer
 class PopUpScreen extends StatelessWidget {
   final String? message;
   final bool isCorrect;
@@ -28,11 +29,15 @@ class PopUpScreen extends StatelessWidget {
                 shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(20.0))),
                 backgroundColor: (isCorrect)
-                    ? Color.fromARGB(255, 113, 173, 56)
-                    : Color.fromARGB(255, 254, 48, 48),
+                    ? Color.fromARGB(255, 113, 173,
+                        56) //the screen is green if the answer is right
+                    : Color.fromARGB(255, 254, 48,
+                        48), //ths screen is red if the answer is wrong
                 titlePadding: const EdgeInsets.all(5.0),
                 title: Text(
-                  (isCorrect) ? 'Bravo!' : 'Oupss!',
+                  (isCorrect)
+                      ? 'Bravo!'
+                      : 'Oupss!', //based on the answer being correct or false
                   style: const TextStyle(
                       color: Color.fromARGB(255, 244, 244, 244),
                       fontWeight: FontWeight.bold,
@@ -53,6 +58,7 @@ class PopUpScreen extends StatelessWidget {
                           child: Text(
                             message!,
                             style: TextStyle(
+                              //here the explanation is displayed
                               color: Color.fromARGB(255, 255, 255, 255),
                               fontWeight: FontWeight.bold,
                               fontFamily: 'AndikaNewBasic',
@@ -66,6 +72,7 @@ class PopUpScreen extends StatelessWidget {
                           width: width * 0.05,
                         ),
                         Image.asset(
+                          //the image being a sick earth and a love spreading one based on the answer being corect or false
                           (isCorrect)
                               ? 'assets/images/Quizz/earth/spreading_love.png'
                               : 'assets/images/Quizz/earth/medecine.png',
@@ -74,6 +81,7 @@ class PopUpScreen extends StatelessWidget {
                       ],
                     ),
                     const Text(
+                      //go back to the questions
                       "Appuyez pour continuer",
                       style: TextStyle(
                           color: Colors.white,

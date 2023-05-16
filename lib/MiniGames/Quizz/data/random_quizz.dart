@@ -1,4 +1,5 @@
 import 'package:projet2cp/MiniGames/Quizz/model/question_model.dart';
+//The list of the questions of the quizz of random mode which is a list of QuestionModel objects
 
 List<QuestionModel> questionsRandom = [
   QuestionModel(

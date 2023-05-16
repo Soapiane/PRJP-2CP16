@@ -1,4 +1,5 @@
 import 'package:projet2cp/MiniGames/Quizz/model/question_model.dart';
+//The list of the questions of the quizz of mer zone which is a list of QuestionModel objects
 
 List<QuestionModel> questionsMer = [
   QuestionModel(
@@ -32,7 +33,7 @@ List<QuestionModel> questionsMer = [
         " Une espèce de poissons.": false,
         " Les excréments des animaux marins ": false,
         " Autre ": false,
-      }, 
+      },
       "MerQuizz/quiz_m_q3.m4a",
       explanation:
           "Comme c'est agréable de se baigner l'été dans l'océan, parmi les vagues ! En revanche, c'est tout de suite moins sympa quand on se retrouve nez à nez avec des déchets dans l'eau. Qu'ils soient en plastique, en verre, en tissu ou en métal, ils proviennent tous de l'activité humaine.",
@@ -56,7 +57,7 @@ List<QuestionModel> questionsMer = [
         " Une station qui nettoie les poissons": false,
         " Une usine qui mesure la température de l'eau ": false,
         " Une machine qui pollue la mer  ": false,
-      }, 
+      },
       "MerQuizz/quiz_m_q5.m4a",
       explanation:
           "Les stations d'épuration nettoient les eaux usées (des toilettes ou des cuisines) avant de les relâcher dans les rivières et les océans. Mais elles ne sont pas à 100% efficaces : des produits mauvais pour l'environnement restent et sont déversés dans la nature. ",
@@ -68,7 +69,7 @@ List<QuestionModel> questionsMer = [
         " 5 ": true,
         " 100 ": false,
         " 900 ": false,
-      }, 
+      },
       "MerQuizz/quiz_m_q6.m4a",
       explanation:
           "Il s'agit de l'océan Arctique, du Pacifique, de l'Atlantique, de l'océan Indien et enfin de l'océan Austral qu'on appelle aussi Antarctique. ",
@@ -80,7 +81,7 @@ List<QuestionModel> questionsMer = [
         " De la forêt": false,
         " De l'intérieur des terres ": true,
         " De nulle part ": false,
-      }, 
+      },
       "MerQuizz/quiz_m_q7_modif.m4a",
       explanation:
           "80% des déchets des océans viennent de l'intérieur des terres. 10% sont abandonnés sur les rivages et 10% sont jetés directement dans la mer.",
@@ -92,7 +93,7 @@ List<QuestionModel> questionsMer = [
         " Il se décompose en petits morceaux ": true,
         " Le plastique n’est pas un probléme ": false,
         " Tout ce qui a été cité ": false,
-      }, 
+      },
       "MerQuizz/quiz_m_q8_modif.m4a",
       explanation:
           "Ces minuscules morceaux de plastique sont plein de produits toxiques et ils se retrouvent partout sur la Terre.",

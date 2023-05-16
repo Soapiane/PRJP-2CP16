@@ -15,31 +15,40 @@ import 'package:projet2cp/Navigation/Zones.dart';
 import 'package:projet2cp/MiniGames/Quizz/data/mer_questions.dart';
 import 'package:projet2cp/MiniGames/Quizz/data/random_quizz.dart';
 
+//write comments for this class
+
+//This class is the main class of the game Quizz that gets the game zone and the game reference and the questions of the game
 class QuizzGame extends StatefulWidget {
   final Zones zone;
   final Quizz? gameRef;
   List<QuestionModel> questions = [];
-  QuizzGame({super.key, required this.zone, this.gameRef}){
+  QuizzGame({super.key, required this.zone, this.gameRef}) {
+    //the questions are chosen according to the zone, they are stored in the data file
     switch (zone) {
-      case Zones.mer: {
-        questions = questionsMer;
-      }
-      break;
-      case Zones.foret: {
-        questions = questionsForet;
-      }
-      break;
-      case Zones.ville: {
-        questions = questionsVille;
-      }
-      break;
-      case Zones.zoneIndustrielle: {
-        questions = questionsZone;
-      }
-      break;
-      case Zones.alea : {
-        questions = questionsRandom;
-      }
+      case Zones.mer:
+        {
+          questions = questionsMer;
+        }
+        break;
+      case Zones.foret:
+        {
+          questions = questionsForet;
+        }
+        break;
+      case Zones.ville:
+        {
+          questions = questionsVille;
+        }
+        break;
+      case Zones.zoneIndustrielle:
+        {
+          questions = questionsZone;
+        }
+        break;
+      case Zones.alea:
+        {
+          questions = questionsRandom;
+        }
     }
   }
 
@@ -51,19 +60,16 @@ class _QuizzGameState extends State<QuizzGame> {
   GlobalKey<_QuizzGameState> homePageKey = GlobalKey<_QuizzGameState>();
   late int rounds = 0;
   Color secondColor = Color.fromRGBO(81, 140, 250, 1);
-  final PageController _controller = PageController(initialPage: 0);
+  final PageController _controller = PageController(
+      initialPage: 0); //page controller to navigate between the questions
   bool isPressed = false;
   Color trueAnswer = Color.fromARGB(255, 113, 173, 56);
   bool _buttonVisible = false;
   Color falseAnswer = Color.fromARGB(255, 254, 48, 48);
 
-
-
-
   int score = 0;
   AudioPlayer audioPlayer = AudioPlayer();
   AudioPlayer audioPlayerExplanation = AudioPlayer();
-
 
   @override
   void initState() {
@@ -83,6 +89,7 @@ class _QuizzGameState extends State<QuizzGame> {
   }
 
   Stack QuizzPage(String backGroundPath, List<QuestionModel> questions) {
+    //This is the main page of the game where the questions are displayed and the answers are checked and the score is calculated
     if (widget.gameRef != null) {
       widget.gameRef!.addPoints(maxPoints: questions.length);
     }
@@ -131,6 +138,7 @@ class _QuizzGameState extends State<QuizzGame> {
                         child: FittedBox(
                           fit: BoxFit.scaleDown,
                           child: Text(
+                            //this is used to count questions in list
                             '${index + 1}/${questions.length}',
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
@@ -164,6 +172,7 @@ class _QuizzGameState extends State<QuizzGame> {
                           alignment: Alignment.center,
                           padding: const EdgeInsets.all(4.0),
                           child: Text(
+                            //get the current question
                             questions[index].question!,
                             style: const TextStyle(
                               color: Color.fromARGB(255, 255, 255, 255),
@@ -188,6 +197,7 @@ class _QuizzGameState extends State<QuizzGame> {
                       width: width * 0.8,
                       margin: const EdgeInsets.only(bottom: 8.0),
                       child: Column(
+                        //thiis index conditions are used to check if the question has 2 or 4 answers (two or four option buttons)
                         children: [
                           for (int j = 0;
                               j <
@@ -236,7 +246,9 @@ class _QuizzGameState extends State<QuizzGame> {
                                                 setState(() {
                                                   isPressed = true;
                                                 });
-                                                _buttonVisible = true;
+                                                //after the option button is pressed
+                                                _buttonVisible =
+                                                    true; //this makes the suivant/resultat button visible
                                                 audioPlayer.stop();
                                                 audioPlayer.release();
 
@@ -251,8 +263,10 @@ class _QuizzGameState extends State<QuizzGame> {
                                                         ? i + j + 1
                                                         : i + j]
                                                     .value) {
+                                                  //here value is set to true
                                                   score += 1;
                                                   if (widget.gameRef != null) {
+                                                    //the score is modified
                                                     widget.gameRef!
                                                         .modifyPoints(
                                                             points: 1);
@@ -260,6 +274,7 @@ class _QuizzGameState extends State<QuizzGame> {
                                                   if (questions[index]
                                                           .explanation !=
                                                       null) {
+                                                    //if the answer is correct and there is an explanation
                                                     audioPlayerExplanation.play(
                                                         AssetSource(
                                                             'audios/${questions[index].audioPalyerExplanation!}'));
@@ -281,6 +296,7 @@ class _QuizzGameState extends State<QuizzGame> {
                                                                         0.5),
                                                               ),
                                                             ),
+                                                            //the pop up screen for the explanation of the question if there is one
                                                             PopUpScreen(
                                                               questions[index]
                                                                   .explanation!,
@@ -293,6 +309,7 @@ class _QuizzGameState extends State<QuizzGame> {
                                                     );
                                                   }
                                                 } else {
+                                                  //if the answer is wrong
                                                   if (questions[index]
                                                           .explanation !=
                                                       null) {
@@ -331,6 +348,7 @@ class _QuizzGameState extends State<QuizzGame> {
                                                 }
                                               },
                                         child: Text(
+                                          //get the option's text
                                           questions[index]
                                               .answers!
                                               .keys
@@ -363,6 +381,7 @@ class _QuizzGameState extends State<QuizzGame> {
                       children: [
                         Opacity(
                           opacity: _buttonVisible ? 1.0 : 0.0,
+                          //this button allows the user to go to the next question or to see the result if it is the last question after answering the current question
                           child: OutlinedButton(
                             onPressed: isPressed
                                 ? index + 1 == questions.length
@@ -392,6 +411,7 @@ class _QuizzGameState extends State<QuizzGame> {
                             child: FittedBox(
                               fit: BoxFit.scaleDown,
                               child: Text(
+                                //if it is the last question, the button will show "Voir le résultat" else it will show "Suivant"
                                 index + 1 == questions.length
                                     ? "Voir le résultat"
                                     : "Suivant",
